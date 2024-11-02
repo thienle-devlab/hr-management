@@ -1,0 +1,19 @@
+﻿@model HR_Management.Models.Nhanvien
+
+<h2>Xác Nhận Xóa Nhân Viên</h2>
+
+<div>
+    <h4>Nhân Viên: @Model.TenNhanVien</h4>
+    <p>Bạn có chắc chắn muốn xóa nhân viên này?</p>
+    <p>
+        <strong>Mã Nhân Viên:</strong> @Model.MaNhanVien
+    </p>
+</div>
+
+<form asp-action="DeleteNV" method="post">
+    <input type="hidden" name="maNhanVien" value="@Model.MaNhanVien" />
+    <div>
+        <input type="submit" value="Xóa" class="btn btn-danger" />
+        <a asp-action="ListNV" class="btn btn-secondary">Hủy Bỏ</a>
+    </div>
+</form>

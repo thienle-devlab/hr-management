@@ -1,0 +1,28 @@
+﻿@model IEnumerable<HR_Management.Models.Taikhoan>
+
+<h1>Danh Sách Tài Khoản</h1>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Tên Tài Khoản</th>
+            <th>Mã Nhân Viên</th>
+            <th>Trạng Thái</th>
+            <th>Hành Động</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var account in Model)
+        {
+            <tr>
+                <td>@account.Username</td>
+                <td>@account.MaNhanVien</td> 
+                <td>@account.TrangThai</td>
+                <td>
+                    <a href="@Url.Action("Edit", "Account", new { id = account.MaNhanVien })">Chỉnh Sửa</a> |
+                    <a href="@Url.Action("Delete", "Account", new { id = account.MaNhanVien })">Xóa</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

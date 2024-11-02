@@ -1,0 +1,77 @@
+﻿@model HR_Management.Models.Nhanvien
+@{
+    ViewBag.Title = "Thêm Nhân Viên";
+}
+
+<h2>Thêm Nhân Viên</h2>
+
+<form asp-action="CreateNV" method="post" enctype="multipart/form-data">
+    <div class="form-group">
+        <label asp-for="MaNhanVien" class="control-label"></label>
+        <input asp-for="MaNhanVien" class="form-control" />
+        <span asp-validation-for="MaNhanVien" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="TenNhanVien" class="control-label"></label>
+        <input asp-for="TenNhanVien" class="form-control" />
+        <span asp-validation-for="TenNhanVien" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="NgaySinh" class="control-label"></label>
+        <input asp-for="NgaySinh" class="form-control" type="date" />
+        <span asp-validation-for="NgaySinh" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="GioiTinh" class="control-label"></label>
+        <select asp-for="GioiTinh" class="form-control">
+            <option value="True">Nam</option>
+            <option value="False">Nữ</option>
+        </select>
+        <span asp-validation-for="GioiTinh" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="AnhDaiDienFile" class="control-label"></label>
+        <input asp-for="AnhDaiDienFile" class="form-control" type="file" />
+        <span asp-validation-for="AnhDaiDienFile" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="DiaChi" class="control-label"></label>
+        <input asp-for="DiaChi" class="form-control" />
+        <span asp-validation-for="DiaChi" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="SoDienThoai" class="control-label"></label>
+        <input asp-for="SoDienThoai" class="form-control" />
+        <span asp-validation-for="SoDienThoai" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Email" class="control-label"></label>
+        <input asp-for="Email" class="form-control" />
+        <span asp-validation-for="Email" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Cccd" class="control-label"></label>
+        <input asp-for="Cccd" class="form-control" />
+        <span asp-validation-for="Cccd" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="MaChucVu" class="control-label"></label>
+        <select asp-for="MaChucVu" class="form-control" asp-items="ViewBag.ChucVuList">
+            <option value="">-- Chọn Chức Vụ --</option>
+        </select>
+        <span asp-validation-for="MaChucVu" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <input type="submit" value="Thêm Nhân Viên" class="btn btn-primary" />
+    </div>
+</form>

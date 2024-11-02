@@ -11,7 +11,7 @@ public partial class Taikhoan
 
     public string TrangThai { get; set; } = null!;
 
-    public string? MaNhanVien { get; set; }
+    public string? MaNhanVien { get; set; } = null!;
 
-    public virtual Nhanvien? MaNhanVienNavigation { get; set; }
+    public virtual Nhanvien? MaNhanVienNavigation { get; set; } = null!;
 }

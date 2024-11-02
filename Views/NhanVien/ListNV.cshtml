@@ -1,0 +1,37 @@
+﻿@model IEnumerable<HR_Management.Models.Nhanvien>
+
+<h2>Danh sách nhân viên</h2>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>Tên</th>
+            <th>Ngày sinh</th>
+            <th>Giới tính</th>
+            <th>Ảnh đại diện</th>
+            <th>Địa chỉ</th>
+            <th>Số điện thoại</th>
+            <th>Email</th>
+            <th>CCCD</th>
+            <th>Mã chức vụ</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var nhanVien in Model)
+        {
+            <tr>
+                <td>@nhanVien.MaNhanVien</td>
+                <td>@nhanVien.TenNhanVien</td>
+                <td>@nhanVien.NgaySinh</td>
+                <td>@nhanVien.GioiTinh</td>
+                <td>@nhanVien.AnhDaiDien</td>
+                <td>@nhanVien.DiaChi</td>
+                <td>@nhanVien.SoDienThoai</td>
+                <td>@nhanVien.Email</td>
+                <td>@nhanVien.Cccd</td>
+                <td>@nhanVien.MaChucVu</td>
+            </tr>
+        }
+    </tbody>
+</table>

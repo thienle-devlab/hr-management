@@ -1,9 +1,16 @@
-﻿using Microsoft.AspNetCore.Authentication.Negotiate;
+﻿using HR_Management.Models;
+using Microsoft.AspNetCore.Authentication.Negotiate;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+
+// Thêm dịch vụ DbContext vào DI container
+builder.Services.AddDbContext<HrmContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+
 //-
 builder.Services.AddControllers();
 

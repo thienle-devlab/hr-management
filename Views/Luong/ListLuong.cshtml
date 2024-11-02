@@ -1,0 +1,31 @@
+﻿@model IEnumerable<HR_Management.Models.Luong>
+
+@{
+    ViewData["Title"] = "Danh sách bảng lương";
+}
+
+<h2>Danh sách bảng lương</h2>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>MaLuong</th>
+            <th>MaNhanVien</th>
+            <th>LuongCoBan</th>
+            <th>NgayNhanLuong</th>
+            <th>TrangThai</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.MaLuong</td>
+                <td>@item.MaNhanVien</td>
+                <td>@item.LuongCoBan</td>
+                <td>@item.NgayNhanLuong.ToString("dd/MM/yyyy")</td>
+                <td>@item.TrangThai</td>
+            </tr>
+        }
+    </tbody>
+</table>

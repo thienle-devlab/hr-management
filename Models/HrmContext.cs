@@ -47,6 +47,8 @@ public partial class HrmContext : DbContext
 
     public virtual DbSet<Thuong> Thuongs { get; set; }
 
+    public DbSet<Hopdong> HopDongs { get; set; }
+
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
         => optionsBuilder.UseSqlServer("Data Source=DESKTOP-0SBNK63\\SQLEXPRESS01;Initial Catalog=HRM;Integrated Security=True;Connect Timeout=30;Encrypt=True;Trust Server Certificate=True;Application Intent=ReadWrite;Multi Subnet Failover=False");
@@ -62,7 +64,7 @@ public partial class HrmContext : DbContext
             entity.Property(e => e.MaBaoCao)
                 .HasMaxLength(10)
                 .IsUnicode(false);
-            entity.Property(e => e.DuLieuBaoCao).HasColumnType("text");
+            entity.Property(e => e.DuLieuBaoCao).HasColumnType("ntext");
             entity.Property(e => e.LoaiBaoCao).HasMaxLength(50);
             entity.Property(e => e.MaNhanVien)
                 .HasMaxLength(10)
@@ -129,7 +131,7 @@ public partial class HrmContext : DbContext
             entity.Property(e => e.MaCongViec)
                 .HasMaxLength(10)
                 .IsUnicode(false);
-            entity.Property(e => e.MoTaCongViec).HasColumnType("text");
+            entity.Property(e => e.MoTaCongViec).HasColumnType("ntext");
             entity.Property(e => e.TenCongViec).HasMaxLength(50);
         });
 
@@ -231,7 +233,7 @@ public partial class HrmContext : DbContext
             entity.Property(e => e.MaNghiPhep)
                 .HasMaxLength(10)
                 .IsUnicode(false);
-            entity.Property(e => e.LyDo).HasColumnType("text");
+            entity.Property(e => e.LyDo).HasColumnType("ntext");
             entity.Property(e => e.MaNhanVien)
                 .HasMaxLength(10)
                 .IsUnicode(false);
@@ -317,7 +319,7 @@ public partial class HrmContext : DbContext
             entity.Property(e => e.MaPhat)
                 .HasMaxLength(10)
                 .IsUnicode(false);
-            entity.Property(e => e.LyDoPhat).HasColumnType("text");
+            entity.Property(e => e.LyDoPhat).HasColumnType("ntext");
             entity.Property(e => e.MaLuong)
                 .HasMaxLength(10)
                 .IsUnicode(false);
@@ -384,7 +386,7 @@ public partial class HrmContext : DbContext
             entity.Property(e => e.MaThuong)
                 .HasMaxLength(10)
                 .IsUnicode(false);
-            entity.Property(e => e.LyDoThuong).HasColumnType("text");
+            entity.Property(e => e.LyDoThuong).HasColumnType("ntext");
             entity.Property(e => e.MaLuong)
                 .HasMaxLength(10)
                 .IsUnicode(false);
@@ -394,6 +396,46 @@ public partial class HrmContext : DbContext
                 .HasForeignKey(d => d.MaLuong)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_T_L");
+        });
+
+        modelBuilder.Entity<Hopdong>(entity =>
+        {
+            entity.HasKey(e => e.MaHopDong)
+                .HasName("PK_HOPDONG");
+
+            entity.ToTable("HOPDONG");
+
+            entity.Property(e => e.MaHopDong)
+                .HasMaxLength(10)
+                .IsUnicode(false);
+
+            entity.Property(e => e.MaNhanVien)
+                .HasMaxLength(10)
+                .IsUnicode(false);
+
+            entity.Property(e => e.NgayKy)
+                .HasColumnType("datetime");
+
+            entity.Property(e => e.NgayBatDau)
+                .HasColumnType("datetime");
+
+            entity.Property(e => e.NgayKetThuc)
+                .HasColumnType("datetime");
+
+            entity.Property(e => e.LoaiHopDong)
+                .HasMaxLength(50);
+
+            entity.Property(e => e.MucLuong)
+                .HasColumnType("int");
+
+            entity.Property(e => e.TrangThai)
+                .HasMaxLength(20);
+
+            entity.HasOne(d => d.MaNhanVienNavigation) // Quan hệ với bảng NHANVIEN
+                .WithMany(p => p.HopDongs) // Giả sử bạn đã thêm DbSet<HopDong> trong model NHANVIEN
+                .HasForeignKey(d => d.MaNhanVien)
+                .OnDelete(DeleteBehavior.ClientSetNull) // Chọn hành vi xóa
+                .HasConstraintName("FK_HD_NV");
         });
 
         OnModelCreatingPartial(modelBuilder);
