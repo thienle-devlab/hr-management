@@ -1,0 +1,25 @@
+﻿@model IEnumerable<HR_Management.Models.Phucap>
+
+@{
+    ViewData["Title"] = "Danh sách Phụ cấp";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Mã Phụ cấp</th>
+            <th>Tên Phụ cấp</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.MaPhuCap</td>
+                <td>@item.TenPhuCap</td>
+            </tr>
+        }
+    </tbody>
+</table>

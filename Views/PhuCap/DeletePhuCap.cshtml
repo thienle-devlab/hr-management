@@ -1,0 +1,41 @@
+﻿@model HR_Management.Models.Phucap
+
+@{
+    ViewData["Title"] = "Xóa Phụ cấp";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+<h3>Bạn có chắc chắn muốn xóa phụ cấp này không?</h3>
+<div>
+    <h4>PhuCap</h4>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.MaPhuCap)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.MaPhuCap)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.TenPhuCap)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.TenPhuCap)
+        </dd>
+    </dl>
+
+    <form asp-action="DeletePhuCap">
+        <input type="hidden" asp-for="MaPhuCap" />
+        <div class="form-group">
+            <input type="submit" value="Xóa" class="btn btn-danger" /> |
+            <a asp-action="ListPhuCap" class="btn btn-secondary">Hủy</a>
+        </div>
+    </form>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

@@ -1,0 +1,42 @@
+﻿@model HR_Management.Models.Luongphucap
+
+@{
+    ViewData["Title"] = "Xóa Lương Phụ Cấp";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<h4>Bạn có chắc chắn muốn xóa Lương Phụ Cấp này không?</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="DeleteLuongPC" method="post">
+            <input type="hidden" asp-for="MaLuongPhuCap" />
+
+            <div class="form-group">
+                <label>Mã Lương:</label>
+                <p>@Model.MaLuong</p>
+            </div>
+
+            <div class="form-group">
+                <label>Mã Phụ Cấp:</label>
+                <p>@Model.MaPhuCap</p>
+            </div>
+
+            <div class="form-group">
+                <label>Số Tiền Phụ Cấp:</label>
+                <p>@Model.SoTienPhuCap</p>
+            </div>
+
+            <div class="form-group">
+                <label>Ngày Áp Dụng:</label>
+                <p>@Model.NgayApDung.ToString("dd/MM/yyyy")</p>
+            </div>
+
+            <div class="form-group">
+                <input type="submit" value="Xóa" class="btn btn-danger" />
+                <a asp-action="ListLuongPC" class="btn btn-secondary">Hủy</a>
+            </div>
+        </form>
+    </div>
+</div>

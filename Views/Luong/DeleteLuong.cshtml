@@ -1,0 +1,54 @@
+﻿@model HR_Management.Models.Luong
+
+@{
+    ViewData["Title"] = "Xóa Lương";
+}
+
+<h1>Xóa Lương</h1>
+
+<h3>Bạn có chắc chắn muốn xóa thông tin lương này?</h3>
+<div>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.MaLuong)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.MaLuong)
+        </dd>
+
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.MaNhanVienNavigation.TenNhanVien)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.MaNhanVienNavigation.TenNhanVien)
+        </dd>
+
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.LuongCoBan)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.LuongCoBan)
+        </dd>
+
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.NgayNhanLuong)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.NgayNhanLuong)
+        </dd>
+
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.TrangThai)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.TrangThai)
+        </dd>
+    </dl>
+
+    <form asp-action="DeleteLuong">
+        <input type="hidden" asp-for="MaLuong" />
+        <input type="submit" value="Xóa" class="btn btn-danger" /> |
+        <a asp-action="ListLuong" class="btn btn-secondary">Quay lại danh sách</a>
+    </form>
+</div>

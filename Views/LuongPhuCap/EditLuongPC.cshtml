@@ -1,0 +1,60 @@
+﻿@model HR_Management.Models.Luongphucap
+
+@{
+    ViewData["Title"] = "Sửa Lương Phụ Cấp";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<h4>Lương Phụ Cấp</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="EditLuongPC" method="post">
+            <div class="form-group">
+                <label asp-for="MaLuongPhuCap" class="control-label"></label>
+                <input asp-for="MaLuongPhuCap" class="form-control" readonly />
+                <span asp-validation-for="MaLuongPhuCap" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="MaLuong" class="control-label">Mã lương</label>
+                <select asp-for="MaLuong" class="form-control" asp-items="@ViewBag.LuongList">
+                    <option value="">-- Chọn mã lương --</option>
+                </select>
+                <span asp-validation-for="MaLuong" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="MaPhuCap" class="control-label">Mã phụ cấp</label>
+                <select asp-for="MaPhuCap" class="form-control" asp-items="@ViewBag.PhuCapList">
+                    <option value="">-- Chọn phụ cấp --</option>
+                </select>
+                <span asp-validation-for="MaPhuCap" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="SoTienPhuCap" class="control-label"></label>
+                <input asp-for="SoTienPhuCap" class="form-control" />
+                <span asp-validation-for="SoTienPhuCap" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="NgayApDung" class="control-label"></label>
+                <input asp-for="NgayApDung" class="form-control" />
+                <span asp-validation-for="NgayApDung" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <input type="submit" value="Cập nhật" class="btn btn-primary" />
+                <a asp-action="ListLuongPC" class="btn btn-secondary">Hủy</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

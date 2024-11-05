@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace HR_Management.Models;
 
@@ -19,7 +20,7 @@ public partial class Luong
 
     public virtual ICollection<Luongphucap> Luongphucaps { get; set; } = new List<Luongphucap>();
 
-    public virtual Nhanvien MaNhanVienNavigation { get; set; } = null!;
+    public virtual Nhanvien MaNhanVienNavigation { get; set; }
 
     public virtual ICollection<Phat> Phats { get; set; } = new List<Phat>();
 

@@ -1,0 +1,51 @@
+﻿@model IEnumerable<HR_Management.Models.Luongphucap>
+
+@{
+    ViewData["Title"] = "Danh sách Lương Phụ Cấp";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.First().MaLuongPhuCap)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.First().MaLuong)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.First().MaPhuCap)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.First().SoTienPhuCap)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.First().NgayApDung)
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.MaLuongPhuCap)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.MaLuong)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.MaPhuCap)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.SoTienPhuCap)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.NgayApDung)
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
