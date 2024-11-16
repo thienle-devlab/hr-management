@@ -11,6 +11,14 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddDbContext<HrmContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
+// Thêm dịch vụ Session
+builder.Services.AddSession(options =>
+{
+    options.IdleTimeout = TimeSpan.FromMinutes(30); // Thời gian timeout của Session
+    options.Cookie.HttpOnly = true;
+    options.Cookie.IsEssential = true;
+});
+
 //-
 builder.Services.AddControllers();
 
@@ -33,6 +41,9 @@ if (!app.Environment.IsDevelopment())
     // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
+
+// Sử dụng Session
+app.UseSession();
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();

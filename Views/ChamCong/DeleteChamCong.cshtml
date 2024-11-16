@@ -1,0 +1,16 @@
+﻿@model HR_Management.Models.Chamcong
+
+@{
+    ViewData["Title"] = "Xóa Chấm Công";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+<p>Bạn có chắc chắn muốn xóa chấm công của nhân viên <strong>@Model.MaNhanVien</strong> vào ngày <strong>@Model.NgayChamCong.ToString("dd/MM/yyyy")</strong>?</p>
+
+<form method="post">
+    <div class="form-group">
+        <button type="submit" class="btn btn-danger">Xóa</button>
+        <a href="@Url.Action("ListChamCong", "ChamCong")" class="btn btn-secondary">Hủy</a>
+    </div>
+</form>

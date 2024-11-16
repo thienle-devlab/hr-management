@@ -1,0 +1,39 @@
+﻿@model HR_Management.Models.Congviec
+
+@{
+    ViewData["Title"] = "Xóa Công Việc";
+}
+
+<h2>Xóa Công Việc</h2>
+
+<h3>Bạn có chắc chắn muốn xóa công việc này không?</h3>
+<div>
+    <h4>Công Việc</h4>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.MaCongViec)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.MaCongViec)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.TenCongViec)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.TenCongViec)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.MoTaCongViec)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.MoTaCongViec)
+        </dd>
+    </dl>
+
+    <form asp-action="DeleteCV" method="post">
+        <input type="hidden" asp-for="MaCongViec" />
+        <input type="submit" value="Xóa" class="btn btn-danger" /> |
+        <a asp-action="ListCongViec" class="btn btn-secondary">Hủy</a>
+    </form>
+</div>

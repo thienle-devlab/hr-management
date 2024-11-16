@@ -1,0 +1,53 @@
+﻿@model HR_Management.Models.Chamcong
+
+@{
+    ViewData["Title"] = "Tạo Chấm Công";
+}
+
+<h1>Tạo Chấm Công</h1>
+
+<h4>Chấm Công</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="CreateChamCong">
+            <div class="form-group">
+                <label asp-for="MaChamCong" class="control-label"></label>
+                <input asp-for="MaChamCong" class="form-control" />
+                <span asp-validation-for="MaChamCong" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="MaNhanVien" class="control-label"></label>
+                <select asp-for="MaNhanVien" class="form-control" asp-items="ViewBag.NhanVienList"></select>
+                <span asp-validation-for="MaNhanVien" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="NgayChamCong" class="control-label"></label>
+                <input asp-for="NgayChamCong" class="form-control" />
+                <span asp-validation-for="NgayChamCong" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="CheckIn" class="control-label"></label>
+                <input asp-for="CheckIn" class="form-control" />
+                <span asp-validation-for="CheckIn" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="CheckOut" class="control-label"></label>
+                <input asp-for="CheckOut" class="form-control" />
+                <span asp-validation-for="CheckOut" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="TrangThai" class="control-label"></label>
+                <input asp-for="TrangThai" class="form-control" />
+                <span asp-validation-for="TrangThai" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="ListChamCong">Back to List</a>
+</div>

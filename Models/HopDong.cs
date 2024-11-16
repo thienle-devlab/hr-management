@@ -21,6 +21,6 @@ namespace HR_Management.Models
 
         public string TrangThai { get; set; } = null!;
 
-        public virtual Nhanvien MaNhanVienNavigation { get; set; } = null!;
+        public virtual Nhanvien? MaNhanVienNavigation { get; set; } = null!;
     }
 }

@@ -1,4 +1,5 @@
-﻿using HR_Management.Models;
+﻿using HR_Management.Class;
+using HR_Management.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -16,6 +17,7 @@ namespace HR_Management.Controllers
         }
 
         // Lấy danh sách Nhân viên
+        [CustomAuth(maChucVu: new string[] { "CV002" }, maPhongBan: new string[] { "PB002" })] // Phân quyền
         public async Task<IActionResult> ListNV()
         {
             var nv = await _context.Nhanviens.ToListAsync();
@@ -23,6 +25,7 @@ namespace HR_Management.Controllers
         }
 
         // Thêm nhân viên
+        [CustomAuth(maChucVu: new string[] { "CV001" }, maPhongBan: new string[] { "PB001" })]
         public async Task <IActionResult> CreateNV()
         {
             // Tạo danh sách chức vụ để hiển thị trong view

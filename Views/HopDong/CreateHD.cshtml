@@ -1,0 +1,72 @@
+﻿@model HR_Management.Models.Hopdong
+
+<h2>Create HopDong</h2>
+
+<form asp-action="CreateHD">
+    <div asp-validation-summary="All" class="text-danger"></div>
+
+    <!-- Trường MaHopDong -->
+    <div class="form-group">
+        <label asp-for="MaHopDong" class="control-label"></label>
+        <input asp-for="MaHopDong" class="form-control" />
+        <span asp-validation-for="MaHopDong" class="text-danger"></span>
+    </div>
+
+    <!-- Trường MaNhanVien (Danh sách nhân viên) -->
+    <div class="form-group">
+        <label asp-for="MaNhanVien" class="control-label"></label>
+        <select asp-for="MaNhanVien" class="form-control" asp-items="ViewBag.NhanVienList"></select>
+        <span asp-validation-for="MaNhanVien" class="text-danger"></span>
+    </div>
+
+    <!-- Trường LoaiHopDong -->
+    <div class="form-group">
+        <label asp-for="LoaiHopDong" class="control-label"></label>
+        <input asp-for="LoaiHopDong" class="form-control" />
+        <span asp-validation-for="LoaiHopDong" class="text-danger"></span>
+    </div>
+
+    <!-- Trường NgayKy -->
+    <div class="form-group">
+        <label asp-for="NgayKy" class="control-label"></label>
+        <input asp-for="NgayKy" class="form-control" type="date" />
+        <span asp-validation-for="NgayKy" class="text-danger"></span>
+    </div>
+
+    <!-- Trường NgayBatDau -->
+    <div class="form-group">
+        <label asp-for="NgayBatDau" class="control-label"></label>
+        <input asp-for="NgayBatDau" class="form-control" type="date" />
+        <span asp-validation-for="NgayBatDau" class="text-danger"></span>
+    </div>
+
+    <!-- Trường NgayKetThuc -->
+    <div class="form-group">
+        <label asp-for="NgayKetThuc" class="control-label"></label>
+        <input asp-for="NgayKetThuc" class="form-control" type="date" />
+        <span asp-validation-for="NgayKetThuc" class="text-danger"></span>
+    </div>
+
+    <!-- Trường MucLuong -->
+    <div class="form-group">
+        <label asp-for="MucLuong" class="control-label"></label>
+        <input asp-for="MucLuong" class="form-control" />
+        <span asp-validation-for="MucLuong" class="text-danger"></span>
+    </div>
+
+    <!-- Trường TrangThai -->
+    <div class="form-group">
+        <label asp-for="TrangThai" class="control-label"></label>
+        <input asp-for="TrangThai" class="form-control" />
+        <span asp-validation-for="TrangThai" class="text-danger"></span>
+    </div>
+
+    <!-- Nút Submit -->
+    <div class="form-group">
+        <input type="submit" value="Save" class="btn btn-primary" />
+    </div>
+</form>
+
+<div>
+    <a asp-action="ListHD">Back to List</a>
+</div>

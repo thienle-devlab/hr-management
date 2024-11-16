@@ -1,0 +1,62 @@
+﻿@model IEnumerable<HR_Management.Models.Chamcong>
+
+@{
+    ViewData["Title"] = "ListChamCong";
+}
+
+<h2>ListChamCong</h2>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.MaChamCong)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.MaNhanVien)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.NgayChamCong)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CheckIn)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CheckOut)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.TrangThai)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.MaChamCong)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.MaNhanVien)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.NgayChamCong)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.CheckIn)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.CheckOut)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.TrangThai)
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.MaChamCong">Edit</a> |
+                    <a asp-action="Delete" asp-route-id="@item.MaChamCong">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

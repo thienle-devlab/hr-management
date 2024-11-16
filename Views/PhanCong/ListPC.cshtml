@@ -1,0 +1,32 @@
+﻿@model IEnumerable<HR_Management.Models.Phancong>
+@{
+    ViewData["Title"] = "Danh sách phân công";
+}
+
+<h2>Danh sách phân công</h2>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Mã phân công</th>
+            <th>Mã nhân viên</th>
+            <th>Mã công việc</th>
+            <th>Ngày bắt đầu</th>
+            <th>Ngày kết thúc</th>
+            <th>Trạng thái</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var phanCong in Model)
+        {
+            <tr>
+                <td>@phanCong.MaPhanCong</td>
+                <td>@phanCong.MaNhanVien</td>
+                <td>@phanCong.MaCongViec</td>
+                <td>@phanCong.NgayBatDau.ToString("dd/MM/yyyy")</td>
+                <td>@phanCong.NgayKetThuc.ToString("dd/MM/yyyy")</td>
+                <td>@phanCong.TrangThai</td>
+            </tr>
+        }
+    </tbody>
+</table>

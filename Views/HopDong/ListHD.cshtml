@@ -1,0 +1,82 @@
+﻿@model IEnumerable<HR_Management.Models.Hopdong>
+
+@{
+    ViewData["Title"] = "List HopDong";
+}
+
+<h2>List HopDong</h2>
+
+<p>
+    <a asp-action="CreateHD" class="btn btn-primary">Create New</a>
+</p>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.MaHopDong)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.MaNhanVien)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.LoaiHopDong)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.NgayKy)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.NgayBatDau)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.NgayKetThuc)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.MucLuong)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.TrangThai)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.MaHopDong)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.MaNhanVien)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.LoaiHopDong)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.NgayKy)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.NgayBatDau)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.NgayKetThuc)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.MucLuong)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.TrangThai)
+                </td>
+                <td>
+                    <a asp-action="EditHD" asp-route-id="@item.MaHopDong" class="btn btn-warning">Edit</a> |
+                    <a asp-action="DeleteHD" asp-route-id="@item.MaHopDong" class="btn btn-danger">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<div>
+    <a asp-action="Index" class="btn btn-secondary">Back to Home</a>
+</div>

@@ -1,0 +1,72 @@
+﻿@model IEnumerable<HR_Management.Models.Baocao>
+
+@{
+    ViewData["Title"] = "BaoCao";
+}
+
+<h2>BaoCao</h2>
+
+<p>
+    <a asp-action="CreateBC">Create New</a>
+</p>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.MaBaoCao)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.MaNhanVien)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.TenBaoCao)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DuLieuBaoCao)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.NgayTaoBaoCao)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.LoaiBaoCao)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.TrangThaiBaoCao)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.MaBaoCao)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.MaNhanVien)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.TenBaoCao)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.DuLieuBaoCao)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.NgayTaoBaoCao)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.LoaiBaoCao)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.TrangThaiBaoCao)
+                </td>
+                <td>
+                    <a asp-action="EditBC" asp-route-id="@item.MaBaoCao">Edit</a> |
+                    <a asp-action="DeleteBC" asp-route-id="@item.MaBaoCao">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

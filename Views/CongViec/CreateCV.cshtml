@@ -1,0 +1,34 @@
+﻿@model HR_Management.Models.Congviec
+
+<h2>Tạo Công Việc Mới</h2>
+
+<form asp-action="CreateCV" method="post">
+    <div class="form-group">
+        <label asp-for="MaCongViec" class="control-label">Mã Công Việc</label>
+        <input asp-for="MaCongViec" class="form-control" />
+        <span asp-validation-for="MaCongViec" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="TenCongViec" class="control-label">Tên Công Việc</label>
+        <input asp-for="TenCongViec" class="form-control" />
+        <span asp-validation-for="TenCongViec" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="MoTaCongViec" class="control-label">Mô Tả Công Việc</label>
+        <textarea asp-for="MoTaCongViec" class="form-control"></textarea>
+        <span asp-validation-for="MoTaCongViec" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <input type="submit" value="Tạo" class="btn btn-primary" />
+    </div>
+</form>
+
+<div>
+    <a asp-action="ListCongViec">Trở về danh sách</a>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

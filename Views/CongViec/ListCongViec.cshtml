@@ -1,0 +1,27 @@
+﻿@model IEnumerable<HR_Management.Models.Congviec>
+
+@{
+    ViewData["Title"] = "Danh sách bảng công việc";
+}
+
+<h2>Danh sách bảng công việc</h2>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>MaCongViec</th>
+            <th>TenCongViec</th>
+            <th>MoTaCongViec</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.MaCongViec</td>
+                <td>@item.TenCongViec</td>
+                <td>@item.MoTaCongViec</td>
+            </tr>
+        }
+    </tbody>
+</table>

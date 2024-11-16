@@ -19,5 +19,5 @@ public partial class Baocao
 
     public string TrangThaiBaoCao { get; set; } = null!;
 
-    public virtual Nhanvien MaNhanVienNavigation { get; set; } = null!;
+    public virtual Nhanvien? MaNhanVienNavigation { get; set; } = null!;
 }

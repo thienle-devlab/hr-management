@@ -1,0 +1,46 @@
+﻿@model HR_Management.Models.Phancong
+
+<h2>Edit PhanCong</h2>
+
+<form asp-action="EditPC">
+    <input type="hidden" asp-for="MaPhanCong" />
+    <div asp-validation-summary="All" class="text-danger"></div>
+    <div class="form-group">
+        <label asp-for="MaNhanVien" class="control-label"></label>
+        <select asp-for="MaNhanVien" class="form-control" asp-items="ViewBag.NhanVienList"></select>
+        <span asp-validation-for="MaNhanVien" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="MaCongViec" class="control-label"></label>
+        <select asp-for="MaCongViec" class="form-control" asp-items="ViewBag.CongViecList"></select>
+        <span asp-validation-for="MaCongViec" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="NgayBatDau" class="control-label"></label>
+        <input asp-for="NgayBatDau" class="form-control" />
+        <span asp-validation-for="NgayBatDau" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="NgayKetThuc" class="control-label"></label>
+        <input asp-for="NgayKetThuc" class="form-control" />
+        <span asp-validation-for="NgayKetThuc" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="TrangThai" class="control-label"></label>
+        <input asp-for="TrangThai" class="form-control" />
+        <span asp-validation-for="TrangThai" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <input type="submit" value="Save" class="btn btn-primary" />
+    </div>
+</form>
+
+<div>
+    <a asp-action="ListPC">Back to List</a>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

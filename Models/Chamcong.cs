@@ -17,5 +17,5 @@ public partial class Chamcong
 
     public string TrangThai { get; set; } = null!;
 
-    public virtual Nhanvien MaNhanVienNavigation { get; set; } = null!;
+    public virtual Nhanvien? MaNhanVienNavigation { get; set; } = null!;
 }

@@ -1,0 +1,45 @@
+﻿@model HR_Management.Models.Chamcong
+
+@{
+    ViewData["Title"] = "Sửa Chấm Công";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+
+<form asp-action="EditChamCong" method="post">
+    <div class="form-group">
+        <label for="MaChamCong">Mã Chấm Công</label>
+        <input type="text" class="form-control" id="MaChamCong" name="MaChamCong" value="@Model.MaChamCong" readonly />
+    </div>
+
+    <div class="form-group">
+        <label for="MaNhanVien">Nhân Viên</label>
+        <select asp-for="MaNhanVien" class="form-control" asp-items="ViewBag.NhanVienList"></select>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="NgayChamCong" class="control-label"></label>
+        <input asp-for="NgayChamCong" class="form-control" />
+        <span asp-validation-for="NgayChamCong" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="CheckIn" class="control-label"></label>
+        <input asp-for="CheckIn" class="form-control" />
+        <span asp-validation-for="CheckIn" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="CheckOut" class="control-label"></label>
+        <input asp-for="CheckOut" class="form-control" />
+        <span asp-validation-for="CheckOut" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="TrangThai" class="control-label"></label>
+        <input asp-for="TrangThai" class="form-control" />
+        <span asp-validation-for="TrangThai" class="text-danger"></span>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Cập Nhật</button>
+    <a href="@Url.Action("ListChamCong", "ChamCong")" class="btn btn-secondary">Hủy</a>
+</form>

@@ -1,0 +1,22 @@
+﻿@model HR_Management.Models.Baocao
+
+@{
+    ViewData["Title"] = "Xóa Báo Cáo";
+}
+
+<h2>Are you sure you want to delete this report?</h2>
+
+<div>
+    <h3>@Model.TenBaoCao</h3>
+    <p><strong>MaBaoCao:</strong> @Model.MaBaoCao</p>
+    <p><strong>LoaiBaoCao:</strong> @Model.LoaiBaoCao</p>
+    <p><strong>TrangThaiBaoCao:</strong> @Model.TrangThaiBaoCao</p>
+    <p><strong>NgayTaoBaoCao:</strong> @Model.NgayTaoBaoCao.ToString("yyyy-MM-dd")</p>
+    <p><strong>DuLieuBaoCao:</strong> @Model.DuLieuBaoCao</p>
+</div>
+
+<form method="post" asp-action="DeleteBaoCao">
+    <input type="hidden" name="maBaoCao" value="@Model.MaBaoCao" />
+    <button type="submit" class="btn btn-danger">Delete</button>
+    <a href="@Url.Action("Index", "BaoCao")" class="btn btn-secondary">Cancel</a>
+</form>
