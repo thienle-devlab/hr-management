@@ -1,0 +1,27 @@
+﻿@model HR_Management.Models.Phongban
+
+@{
+    ViewData["Title"] = "Xóa Phòng Ban";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+<h3>Bạn có chắc chắn muốn xóa phòng ban này không?</h3>
+
+<div>
+    <h4>Phòng Ban</h4>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">Mã Phòng Ban</dt>
+        <dd class="col-sm-10">@Model.MaPhongBan</dd>
+
+        <dt class="col-sm-2">Tên Phòng Ban</dt>
+        <dd class="col-sm-10">@Model.TenPhongBan</dd>
+    </dl>
+
+    <form asp-action="DeletePhongBan" method="post">
+        <input type="hidden" name="MaPhongBan" value="@Model.MaPhongBan" />
+        <button type="submit" class="btn btn-danger">Xóa</button>
+        <a asp-action="ListPhongBan" class="btn btn-secondary">Hủy</a>
+    </form>
+</div>

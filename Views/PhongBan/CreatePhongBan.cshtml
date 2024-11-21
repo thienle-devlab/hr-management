@@ -1,0 +1,22 @@
+﻿@model HR_Management.Models.Phongban
+
+@{
+    ViewData["Title"] = "Thêm Phòng Ban";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+<form asp-action="CreatePhongBan" method="post">
+    <div class="form-group">
+        <label for="MaPhongBan">Mã Phòng Ban</label>
+        <input type="text" class="form-control" id="MaPhongBan" name="MaPhongBan" required />
+    </div>
+
+    <div class="form-group">
+        <label for="TenPhongBan">Tên Phòng Ban</label>
+        <input type="text" class="form-control" id="TenPhongBan" name="TenPhongBan" required />
+    </div>
+
+    <button type="submit" class="btn btn-primary">Lưu</button>
+    <a asp-action="ListPhongBan" class="btn btn-secondary">Hủy</a>
+</form>

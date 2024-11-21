@@ -1,0 +1,28 @@
+﻿@model HR_Management.Models.Khautruluong
+
+<h1>Thêm mới khấu trừ lương</h1>
+
+<form asp-action="CreateKhauTruLuong" method="post">
+    <div class="form-group">
+        <label for="MaKhauTruluong">Mã Khấu Trừ Lương</label>
+        <input asp-for="MaKhauTruLuong" class="form-control" />
+    </div>
+
+    <div class="form-group">
+        <label for="MaLuong">Mã lương</label>
+        <select asp-for="MaLuong" class="form-control" asp-items="ViewBag.LuongList"></select>
+    </div>
+    <div class="form-group">
+        <label for="MaKhauTru">Khấu trừ</label>
+        <select asp-for="MaKhauTru" class="form-control" asp-items="ViewBag.KhauTruList"></select>
+    </div>
+    <div class="form-group">
+        <label for="KhoanKhauTru">Số tiền</label>
+        <input type="number" asp-for="KhoanKhauTru" class="form-control" />
+    </div>
+    <div class="form-group">
+        <label for="NgayApDung">Ngày áp dụng</label>
+        <input type="date" asp-for="NgayApDung" class="form-control" />
+    </div>
+    <button type="submit" class="btn btn-primary">Lưu</button>
+</form>

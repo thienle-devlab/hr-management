@@ -1,0 +1,32 @@
+﻿@model IEnumerable<HR_Management.Models.Khautru>
+
+@{
+    ViewData["Title"] = "Danh sách Khấu trừ";
+}
+
+<h2>Danh sách Khấu trừ</h2>
+
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>Mã Khấu Trừ</th>
+            <th>Tên Khấu Trừ</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.MaKhauTru</td>
+                <td>@item.TenKhauTru</td>
+                <td>
+                    <a asp-action="EditKhauTru" asp-route-id="@item.MaKhauTru" class="btn btn-warning">Chỉnh sửa</a>
+                    <a asp-action="DeleteKhauTru" asp-route-id="@item.MaKhauTru" class="btn btn-danger">Xóa</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<a asp-action="CreateKhauTru" class="btn btn-primary">Thêm Khấu trừ</a>

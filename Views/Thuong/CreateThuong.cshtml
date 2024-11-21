@@ -1,0 +1,34 @@
+﻿@model HR_Management.Models.Thuong
+
+@{
+    ViewData["Title"] = "Thêm thưởng mới";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<form asp-action="CreateThuong" method="post">
+    <div class="form-group">
+        <label for="MaThuong">Mã Thưởng</label>
+        <input type="text" asp-for="MaThuong" class="form-control" />
+        <span asp-validation-for="MaThuong" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label for="MaLuong">Mã Lương</label>
+        <select asp-for="MaLuong" asp-items="ViewBag.LuongList" class="form-control"></select>
+    </div>
+    <div class="form-group">
+        <label for="NgayThuong">Ngày Thưởng</label>
+        <input asp-for="NgayThuong" class="form-control" type="date" />
+    </div>
+    <div class="form-group">
+        <label for="SoTienThuong">Số Tiền Thưởng</label>
+        <input asp-for="SoTienThuong" class="form-control" type="number" />
+    </div>
+    <div class="form-group">
+        <label for="LyDoThuong">Lý Do Thưởng</label>
+        <textarea asp-for="LyDoThuong" class="form-control"></textarea>
+    </div>
+    <button type="submit" class="btn btn-primary">Thêm</button>
+    <a asp-action="ListThuong" class="btn btn-secondary">Quay lại</a>
+</form>

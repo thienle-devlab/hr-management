@@ -1,0 +1,38 @@
+﻿@model IEnumerable<HR_Management.Models.Thuong>
+
+@{
+    ViewData["Title"] = "Danh sách thưởng";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<a asp-action="CreateThuong" class="btn btn-primary">Thêm thưởng mới</a>
+
+<table class="table table-bordered mt-3">
+    <thead>
+        <tr>
+            <th>Mã Thưởng</th>
+            <th>Mã Lương</th>
+            <th>Ngày Thưởng</th>
+            <th>Số Tiền Thưởng</th>
+            <th>Lý Do Thưởng</th>
+            <th>Hành Động</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.MaThuong</td>
+                <td>@item.MaLuong</td>
+                <td>@item.NgayThuong.ToString("dd/MM/yyyy")</td>
+                <td>@item.SoTienThuong.ToString("N0")</td>
+                <td>@item.LyDoThuong</td>
+                <td>
+                    <a asp-action="EditThuong" asp-route-maThuong="@item.MaThuong" class="btn btn-warning">Sửa</a>
+                    <a asp-action="DeleteThuong" asp-route-maThuong="@item.MaThuong" class="btn btn-danger">Xóa</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

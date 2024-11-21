@@ -1,0 +1,20 @@
+﻿@model HR_Management.Models.Khautru
+
+@{
+    ViewData["Title"] = "Thêm Khấu trừ";
+}
+
+<h2>Thêm Khấu trừ</h2>
+
+<form asp-action="CreateKhauTru" method="post">
+    <div class="form-group">
+        <label for="MaKhauTru">Mã Khấu Trừ</label>
+        <input asp-for="MaKhauTru" class="form-control" />
+    </div>
+    <div class="form-group">
+        <label for="TenKhauTru">Tên Khấu Trừ</label>
+        <input asp-for="TenKhauTru" class="form-control" />
+    </div>
+    <button type="submit" class="btn btn-primary">Lưu</button>
+    <a asp-action="ListKhauTru" class="btn btn-secondary">Hủy</a>
+</form>

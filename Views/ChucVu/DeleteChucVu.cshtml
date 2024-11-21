@@ -1,0 +1,30 @@
+﻿@model HR_Management.Models.Chucvu
+
+@{
+    ViewData["Title"] = "Xóa Chức Vụ";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+<h3>Bạn có chắc chắn muốn xóa chức vụ này không?</h3>
+
+<div>
+    <h4>Chức Vụ</h4>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">Mã Chức Vụ</dt>
+        <dd class="col-sm-10">@Model.MaChucVu</dd>
+
+        <dt class="col-sm-2">Tên Chức Vụ</dt>
+        <dd class="col-sm-10">@Model.TenChucVu</dd>
+
+        <dt class="col-sm-2">Phòng Ban</dt>
+        <dd class="col-sm-10">@Model.MaPhongBanNavigation?.TenPhongBan</dd>
+    </dl>
+
+    <form asp-action="DeleteChucVu" method="post">
+        <input type="hidden" name="MaChucVu" value="@Model.MaChucVu" />
+        <button type="submit" class="btn btn-danger">Xóa</button>
+        <a asp-action="ListChucVu" class="btn btn-secondary">Hủy</a>
+    </form>
+</div>

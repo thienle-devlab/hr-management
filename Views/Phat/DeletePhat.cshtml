@@ -1,0 +1,33 @@
+﻿@model HR_Management.Models.Phat
+
+@{
+    ViewData["Title"] = "Xóa Phạt";
+}
+
+<h2>Xóa Phạt</h2>
+
+<h4>Bạn có chắc chắn muốn xóa?</h4>
+<div>
+    <dl class="row">
+        <dt class="col-sm-2">Mã Phạt</dt>
+        <dd class="col-sm-10">@Model.MaPhat</dd>
+
+        <dt class="col-sm-2">Mã Lương</dt>
+        <dd class="col-sm-10">@Model.MaLuong</dd>
+
+        <dt class="col-sm-2">Ngày Phạt</dt>
+        <dd class="col-sm-10">@Model.NgayPhat.ToString("dd/MM/yyyy")</dd>
+
+        <dt class="col-sm-2">Số Tiền Phạt</dt>
+        <dd class="col-sm-10">@Model.SoTienPhat</dd>
+
+        <dt class="col-sm-2">Lý Do Phạt</dt>
+        <dd class="col-sm-10">@Model.LyDoPhat</dd>
+    </dl>
+
+    <form asp-action="DeletePhat" method="post">
+        <input type="hidden" asp-for="MaPhat" />
+        <button type="submit" class="btn btn-danger">Xóa</button>
+        <a asp-action="ListPhat" class="btn btn-secondary">Hủy</a>
+    </form>
+</div>

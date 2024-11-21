@@ -15,5 +15,5 @@ public partial class Thuong
 
     public string? LyDoThuong { get; set; }
 
-    public virtual Luong MaLuongNavigation { get; set; } = null!;
+    public virtual Luong? MaLuongNavigation { get; set; } = null!;
 }

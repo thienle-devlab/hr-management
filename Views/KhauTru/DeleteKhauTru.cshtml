@@ -1,0 +1,24 @@
+﻿@model HR_Management.Models.Khautru
+
+@{
+    ViewData["Title"] = "Xóa Khấu trừ";
+}
+
+<h2>Xóa Khấu trừ</h2>
+
+<h4>Bạn có chắc chắn muốn xóa Khấu trừ này không?</h4>
+<div>
+    <dl class="row">
+        <dt class="col-sm-2">Mã Khấu Trừ</dt>
+        <dd class="col-sm-10">@Model.MaKhauTru</dd>
+
+        <dt class="col-sm-2">Tên Khấu Trừ</dt>
+        <dd class="col-sm-10">@Model.TenKhauTru</dd>
+    </dl>
+
+    <form asp-action="DeleteKhauTru" method="post">
+        <input type="hidden" asp-for="MaKhauTru" />
+        <button type="submit" class="btn btn-danger">Xóa</button>
+        <a asp-action="ListKhauTru" class="btn btn-secondary">Hủy</a>
+    </form>
+</div>

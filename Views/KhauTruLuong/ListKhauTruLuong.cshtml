@@ -1,0 +1,33 @@
+﻿@model IEnumerable<HR_Management.Models.Khautruluong>
+
+<h1>Danh sách khấu trừ lương</h1>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Mã khấu trừ Lương</th>
+            <th>Mã lương</th>
+            <th>Mã khấu trừ</th>
+            <th>Số tiền</th>
+            <th>Ngày áp dụng</th>
+            <th>Hành động</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.MaKhauTruLuong</td>
+                <td>@item.MaLuong</td>
+                <td>@item.MaKhauTru</td>
+                <td>@item.KhoanKhauTru</td>
+                <td>@item.NgayApDung.ToString("dd/MM/yyyy")</td>
+                <td>
+                    <a href="@Url.Action("EditKhaoTruLuong", new { maKhauTruLuong = item.MaKhauTruLuong })">Sửa</a> |
+                    <a href="@Url.Action("DeleteKhaoTruLuong", new { maKhauTruLuong = item.MaKhauTruLuong })">Xóa</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+<a href="@Url.Action("CreateKhaoTruLuong")">Thêm mới khấu trừ lương</a>

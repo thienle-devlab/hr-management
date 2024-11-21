@@ -1,0 +1,36 @@
+﻿@model IEnumerable<HR_Management.Models.Chucvu>
+
+@{
+    ViewData["Title"] = "Danh sách Chức Vụ";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+<p>
+    <a asp-action="CreateChucVu">Thêm Chức Vụ</a>
+</p>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Mã Chức Vụ</th>
+            <th>Tên Chức Vụ</th>
+            <th>Mã Phòng Ban</th>
+            <th>Thao tác</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.MaChucVu</td>
+                <td>@item.TenChucVu</td>
+                <td>@item.MaPhongBan</td>
+                <td>
+                    <a asp-action="EditChucVu" asp-route-maChucVu="@item.MaChucVu">Sửa</a> |
+                    <a asp-action="DeleteChucVu" asp-route-maChucVu="@item.MaChucVu">Xóa</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

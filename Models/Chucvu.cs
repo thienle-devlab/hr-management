@@ -11,7 +11,7 @@ public partial class Chucvu
 
     public string MaPhongBan { get; set; } = null!;
 
-    public virtual Phongban MaPhongBanNavigation { get; set; } = null!;
+    public virtual Phongban? MaPhongBanNavigation { get; set; } = null!;
 
     public virtual ICollection<Nhanvien> Nhanviens { get; set; } = new List<Nhanvien>();
 }

@@ -1,0 +1,41 @@
+﻿@model HR_Management.Models.Phat
+
+@{
+    ViewData["Title"] = "Sửa Phạt";
+}
+
+<h2>Sửa Phạt</h2>
+
+<form asp-action="EditPhat" method="post">
+    <input type="hidden" asp-for="MaPhat" />
+
+    <div class="form-group">
+        <label for="MaLuong">Mã Lương</label>
+        <select asp-for="MaLuong" class="form-control" asp-items="ViewBag.LuongList">
+            <option value="">-- Chọn Mã Lương --</option>
+        </select>
+        <span asp-validation-for="MaLuong" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label for="NgayPhat">Ngày Phạt</label>
+        <input type="date" asp-for="NgayPhat" class="form-control" />
+        <span asp-validation-for="NgayPhat" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label for="SoTienPhat">Số Tiền Phạt</label>
+        <input type="number" asp-for="SoTienPhat" class="form-control" />
+        <span asp-validation-for="SoTienPhat" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label for="LyDoPhat">Lý Do Phạt</label>
+        <textarea asp-for="LyDoPhat" class="form-control"></textarea>
+        <span asp-validation-for="LyDoPhat" class="text-danger"></span>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Lưu Thay Đổi</button>
+    <a asp-action="ListPhat" class="btn btn-secondary">Hủy</a>
+</form>
+

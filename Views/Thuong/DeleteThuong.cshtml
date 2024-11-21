@@ -1,0 +1,38 @@
+﻿@model HR_Management.Models.Thuong
+
+@{
+    ViewData["Title"] = "Xóa thưởng";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<p>Bạn có chắc chắn muốn xóa thưởng sau đây không?</p>
+
+<table class="table table-bordered">
+    <tr>
+        <th>Mã Thưởng</th>
+        <td>@Model.MaThuong</td>
+    </tr>
+    <tr>
+        <th>Mã Lương</th>
+        <td>@Model.MaLuong</td>
+    </tr>
+    <tr>
+        <th>Ngày Thưởng</th>
+        <td>@Model.NgayThuong.ToString("dd/MM/yyyy")</td>
+    </tr>
+    <tr>
+        <th>Số Tiền Thưởng</th>
+        <td>@Model.SoTienThuong.ToString("N0")</td>
+    </tr>
+    <tr>
+        <th>Lý Do Thưởng</th>
+        <td>@Model.LyDoThuong</td>
+    </tr>
+</table>
+
+<form asp-action="DeleteThuong" method="post">
+    <input type="hidden" asp-for="MaThuong" />
+    <button type="submit" class="btn btn-danger">Xóa</button>
+    <a asp-action="ListThuong" class="btn btn-secondary">Quay lại</a>
+</form>

@@ -1,0 +1,38 @@
+﻿@model IEnumerable<HR_Management.Models.Phat>
+
+@{
+    ViewData["Title"] = "Danh sách Phạt";
+}
+
+<h2>Danh sách Phạt</h2>
+
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>Mã Phạt</th>
+            <th>Mã Lương</th>
+            <th>Ngày Phạt</th>
+            <th>Số Tiền Phạt</th>
+            <th>Lý Do Phạt</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.MaPhat</td>
+                <td>@item.MaLuong</td>
+                <td>@item.NgayPhat.ToString("dd/MM/yyyy")</td>
+                <td>@item.SoTienPhat</td>
+                <td>@item.LyDoPhat</td>
+                <td>
+                    <a asp-action="EditPhat" asp-route-id="@item.MaPhat" class="btn btn-warning">Chỉnh sửa</a>
+                    <a asp-action="DeletePhat" asp-route-id="@item.MaPhat" class="btn btn-danger">Xóa</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<a asp-action="CreatePhat" class="btn btn-primary">Thêm Phạt</a>

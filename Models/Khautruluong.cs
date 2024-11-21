@@ -15,7 +15,7 @@ public partial class Khautruluong
 
     public DateTime NgayApDung { get; set; }
 
-    public virtual Khautru MaKhauTruNavigation { get; set; } = null!;
+    public virtual Khautru? MaKhauTruNavigation { get; set; } = null!;
 
-    public virtual Luong MaLuongNavigation { get; set; } = null!;
+    public virtual Luong? MaLuongNavigation { get; set; } = null!;
 }
