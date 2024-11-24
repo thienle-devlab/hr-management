@@ -2,6 +2,14 @@
 
 <h2>Danh sách nhân viên</h2>
 
+@if (ViewBag.IsAdmin)
+{
+    <a asp-action="CreateNV" class="btn btn-primary">Thêm mới</a>
+}
+
+<!-- Nút Xuất Excel -->
+<a href="@Url.Action("ExportToExcel", "NhanVien")" class="btn btn-success">Xuất Excel</a>
+
 <table class="table">
     <thead>
         <tr>
@@ -15,6 +23,10 @@
             <th>Email</th>
             <th>CCCD</th>
             <th>Mã chức vụ</th>
+            @if (ViewBag.IsAdmin)
+            {
+                <th>Thao tác</th>
+            }
         </tr>
     </thead>
     <tbody>
@@ -31,6 +43,13 @@
                 <td>@nhanVien.Email</td>
                 <td>@nhanVien.Cccd</td>
                 <td>@nhanVien.MaChucVu</td>
+                @if (ViewBag.IsAdmin)
+                {
+                    <td>
+                        <a asp-action="EditNV" asp-route-id="@nhanVien.MaNhanVien">Sửa</a> |
+                        <a asp-action="DeleteNV" asp-route-id="@nhanVien.MaNhanVien">Xóa</a>
+                    </td>
+                }
             </tr>
         }
     </tbody>

@@ -38,7 +38,8 @@ namespace HR_Management.Controllers
                 return RedirectToAction("Index", "Home");
             }
 
-            ModelState.AddModelError("", "Tài khoản hoặc mật khẩu không đúng");
+            // Nếu đăng nhập sai, truyền thông báo lỗi vào ViewData
+            ViewData["ErrorMessage"] = "Tài khoản hoặc mật khẩu không đúng";
             return View();
         }
 

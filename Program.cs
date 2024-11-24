@@ -1,11 +1,23 @@
-﻿using HR_Management.Models;
+﻿using HR_Management.Class;
+using HR_Management.Models;
 using Microsoft.AspNetCore.Authentication.Negotiate;
 using Microsoft.EntityFrameworkCore;
+using OfficeOpenXml;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+
+// Cấu hình giấy phép EPPlus
+ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
+
+// Thêm dịch vụ CustomAuthorizationFilter
+//builder.Services.AddScoped<CustomAuthorizationFilter>();
+//builder.Services.AddScoped<CustomAuthorizationFilterFactory>();
+
+
+
 
 // Thêm dịch vụ DbContext vào DI container
 builder.Services.AddDbContext<HrmContext>(options =>
@@ -20,7 +32,7 @@ builder.Services.AddSession(options =>
 });
 
 //-
-builder.Services.AddControllers();
+//builder.Services.AddControllers();
 
 builder.Services.AddAuthentication(NegotiateDefaults.AuthenticationScheme)
    .AddNegotiate();
@@ -45,6 +57,8 @@ if (!app.Environment.IsDevelopment())
 // Sử dụng Session
 app.UseSession();
 
+
+
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 
@@ -57,6 +71,6 @@ app.MapControllerRoute(
     pattern: "{controller=Home}/{action=Index}/{id?}");
 
 //--
-app.MapControllers(); 
+//app.MapControllers(); 
 
 app.Run();
