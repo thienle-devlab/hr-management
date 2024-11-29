@@ -1,33 +1,49 @@
 ﻿@model IEnumerable<HR_Management.Models.Nghiphep>
 
 @{
+    Layout = "_Layout";
     ViewData["Title"] = "Danh Sách Nghỉ Phép";
 }
 
-<h1>Danh Sách Nghỉ Phép</h1>
+<div class="container mt-4">
+    <h2 class="mb-4">@ViewData["Title"]</h2>
 
-<table class="table">
-    <thead>
-        <tr>
-            <th>Mã Nghỉ Phép</th>
-            <th>Mã Nhân Viên</th>
-            <th>Ngày Bắt Đầu</th>
-            <th>Ngày Kết Thúc</th>
-            <th>Lý Do</th>
-            <th>Trạng Thái</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model)
-        {
-            <tr>
-                <td>@item.MaNghiPhep</td>
-                <td>@item.MaNhanVien</td>
-                <td>@item.NgayBatDau.ToString("dd/MM/yyyy")</td>
-                <td>@item.NgayKetThuc.ToString("dd/MM/yyyy")</td>
-                <td>@item.LyDo</td>
-                <td>@item.TrangThai</td>
-            </tr>
-        }
-    </tbody>
-</table>
+    <p>
+        <a asp-action="CreateNghiPhep" class="btn btn-primary mb-3">Tạo Mới Nghỉ Phép</a>
+    </p>
+
+    <div class="table-responsive">
+        <table class="table table-striped table-bordered">
+            <thead class="thead-light">
+                <tr>
+                    <th scope="col">Mã Nghỉ Phép</th>
+                    <th scope="col">Mã Nhân Viên</th>
+                    <th scope="col">Ngày Bắt Đầu</th>
+                    <th scope="col">Ngày Kết Thúc</th>
+                    <th scope="col">Lý Do</th>
+                    <th scope="col">Trạng Thái</th>
+                    <th scope="col">Hành Động</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>@Html.DisplayFor(modelItem => item.MaNghiPhep)</td>
+                        <td>@Html.DisplayFor(modelItem => item.MaNhanVien)</td>
+                        <td>@item.NgayBatDau.ToString("dd/MM/yyyy")</td>
+                        <td>@item.NgayKetThuc.ToString("dd/MM/yyyy")</td>
+                        <td>@Html.DisplayFor(modelItem => item.LyDo)</td>
+                        <td>@Html.DisplayFor(modelItem => item.TrangThai)</td>
+                        <td>
+                            <div class="btn-group" role="group">
+                                <a href="@Url.Action("EditNghiPhep", new { maNghiPhep = item.MaNghiPhep })" class="btn btn-warning btn-sm">Sửa</a>
+                                <a href="@Url.Action("DeleteNghiPhep", new { maNghiPhep = item.MaNghiPhep })" class="btn btn-danger btn-sm">Xóa</a>
+                            </div>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

@@ -1,17 +1,38 @@
 ﻿@model HR_Management.Models.Khautru
 
 @{
-    ViewData["Title"] = "Chỉnh sửa Khấu trừ";
+    ViewData["Title"] = "Sửa Khấu Trừ";
 }
 
-<h2>Chỉnh sửa Khấu trừ</h2>
+<div class="container mt-4">
+    <h2>@ViewData["Title"]</h2>
 
-<form asp-action="EditKhauTru" method="post">
-    <input type="hidden" asp-for="MaKhauTru" />
-    <div class="form-group">
-        <label for="TenKhauTru">Tên Khấu Trừ</label>
-        <input asp-for="TenKhauTru" class="form-control" />
-    </div>
-    <button type="submit" class="btn btn-primary">Cập nhật</button>
-    <a asp-action="ListKhauTru" class="btn btn-secondary">Hủy</a>
-</form>
+    <form asp-action="EditKhauTru">
+        <div class="card">
+            <div class="card-header bg-warning text-white">
+                <h4 class="card-title">Chỉnh sửa thông tin khấu trừ</h4>
+            </div>
+            <div class="card-body">
+
+                <!-- Mã Khấu Trừ -->
+                <div class="form-group">
+                    <label asp-for="MaKhauTru" class="control-label">Mã Khấu Trừ</label>
+                    <input asp-for="MaKhauTru" class="form-control" readonly />
+                    <span asp-validation-for="MaKhauTru" class="text-danger"></span>
+                </div>
+
+                <!-- Tên Khấu Trừ -->
+                <div class="form-group">
+                    <label for="TenKhauTru">Tên Khấu Trừ</label>
+                    <input asp-for="TenKhauTru" class="form-control" />
+                    <span asp-validation-for="TenKhauTru" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="card-footer text-center">
+                <button type="submit" class="btn btn-success btn-lg">Lưu Thay Đổi</button>
+                <a href="@Url.Action("ListKhauTru", "KhauTru")" class="btn btn-secondary btn-lg">Hủy</a>
+            </div>
+        </div>
+    </form>
+</div>

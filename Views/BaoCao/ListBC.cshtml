@@ -2,72 +2,50 @@
 
 @{
     Layout = "_Layout";
-    ViewData["Title"] = "BaoCao";
+    ViewData["Title"] = "Danh Sách Báo Cáo";
 }
 
-<h2>BaoCao</h2>
+<div class="container mt-4">
+    <h2 class="mb-4">@ViewData["Title"]</h2>
 
-<p>
-    <a asp-action="CreateBC">Create New</a>
-</p>
+    <p>
+        <a asp-action="CreateBaoCao" class="btn btn-primary mb-3">Tạo Mới Báo Cáo</a>
+    </p>
 
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.MaBaoCao)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.MaNhanVien)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.TenBaoCao)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.DuLieuBaoCao)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.NgayTaoBaoCao)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.LoaiBaoCao)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.TrangThaiBaoCao)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model)
-        {
-            <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.MaBaoCao)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.MaNhanVien)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.TenBaoCao)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.DuLieuBaoCao)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.NgayTaoBaoCao)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.LoaiBaoCao)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.TrangThaiBaoCao)
-                </td>
-                <td>
-                    <a asp-action="EditBC" asp-route-id="@item.MaBaoCao">Edit</a> |
-                    <a asp-action="DeleteBC" asp-route-id="@item.MaBaoCao">Delete</a>
-                </td>
-            </tr>
-        }
-    </tbody>
-</table>
+    <div class="table-responsive">
+        <table class="table table-striped table-bordered">
+            <thead class="thead-light">
+                <tr>
+                    <th scope="col">Mã Báo Cáo</th>
+                    <th scope="col">Mã Nhân Viên</th>
+                    <th scope="col">Tên Báo Cáo</th>
+                    <th scope="col">Dữ Liệu Báo Cáo</th>
+                    <th scope="col">Ngày Báo Cáo</th>
+                    <th scope="col">Loại Báo Cáo</th>
+                    <th scope="col">Trạng Thái</th>
+                    <th scope="col">Hành Động</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>@Html.DisplayFor(modelItem => item.MaBaoCao)</td>
+                        <td>@Html.DisplayFor(modelItem => item.MaNhanVien)</td>
+                        <td>@Html.DisplayFor(modelItem => item.TenBaoCao)</td>
+                        <td>@Html.DisplayFor(modelItem => item.DuLieuBaoCao)</td>
+                        <td>@Html.DisplayFor(modelItem => item.NgayTaoBaoCao)</td>
+                        <td>@Html.DisplayFor(modelItem => item.LoaiBaoCao)</td>
+                        <td>@Html.DisplayFor(modelItem => item.TrangThaiBaoCao)</td>
+                        <td>
+                            <div class="btn-group" role="group">
+                                <a href="@Url.Action("EditBaoCao", new { maBaoCao = item.MaBaoCao })" class="btn btn-warning btn-sm">Sửa</a>
+                                <a href="@Url.Action("DeleteBaoCao", new { maBaoCao = item.MaBaoCao })" class="btn btn-danger btn-sm">Xóa</a>
+                            </div>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

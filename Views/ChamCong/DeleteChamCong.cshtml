@@ -4,13 +4,26 @@
     ViewData["Title"] = "Xóa Chấm Công";
 }
 
-<h2>@ViewData["Title"]</h2>
-
-<p>Bạn có chắc chắn muốn xóa chấm công của nhân viên <strong>@Model.MaNhanVien</strong> vào ngày <strong>@Model.NgayChamCong.ToString("dd/MM/yyyy")</strong>?</p>
-
-<form method="post">
-    <div class="form-group">
-        <button type="submit" class="btn btn-danger">Xóa</button>
-        <a href="@Url.Action("ListChamCong", "ChamCong")" class="btn btn-secondary">Hủy</a>
+<div class="container mt-4">
+    <h2 class="text-danger">Bạn có chắc chắn muốn xóa chấm công này không?</h2>
+    <div class="card">
+        <div class="card-header bg-danger text-white">
+            <h4 class="card-title">Xóa Chấm Công</h4>
+        </div>
+        <div class="card-body">
+            <h5 class="card-title">Chấm Công của nhân viên: @Model.MaNhanVien</h5>
+            <p><strong>Mã Chấm Công:</strong> @Model.MaChamCong</p>
+            <p><strong>Ngày Chấm Công:</strong> @Model.NgayChamCong.ToString("yyyy-MM-dd")</p>
+            <p><strong>Giờ Vào:</strong> @Model.CheckIn</p>
+            <p><strong>Giờ Ra:</strong> @Model.CheckOut</p>
+            <p><strong>Trạng Thái:</strong> @Model.TrangThai</p>
+        </div>
+        <div class="card-footer text-center">
+            <form method="post" asp-action="DeleteChamCong">
+                <input type="hidden" name="maChamCong" value="@Model.MaChamCong" />
+                <button type="submit" class="btn btn-danger btn-lg mr-3">Xóa</button>
+                <a href="@Url.Action("ListChamCong", "ChamCong")" class="btn btn-secondary btn-lg">Hủy</a>
+            </form>
+        </div>
     </div>
-</form>
+</div>

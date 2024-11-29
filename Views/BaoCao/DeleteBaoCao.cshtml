@@ -4,19 +4,26 @@
     ViewData["Title"] = "Xóa Báo Cáo";
 }
 
-<h2>Are you sure you want to delete this report?</h2>
-
-<div>
-    <h3>@Model.TenBaoCao</h3>
-    <p><strong>MaBaoCao:</strong> @Model.MaBaoCao</p>
-    <p><strong>LoaiBaoCao:</strong> @Model.LoaiBaoCao</p>
-    <p><strong>TrangThaiBaoCao:</strong> @Model.TrangThaiBaoCao</p>
-    <p><strong>NgayTaoBaoCao:</strong> @Model.NgayTaoBaoCao.ToString("yyyy-MM-dd")</p>
-    <p><strong>DuLieuBaoCao:</strong> @Model.DuLieuBaoCao</p>
+<div class="container mt-4">
+    <h2 class="text-danger">Bạn có chắc chắn muốn xóa báo cáo này không?</h2>
+    <div class="card">
+        <div class="card-header bg-danger text-white">
+            <h4 class="card-title">Xóa báo cáo</h4>
+        </div>
+        <div class="card-body">
+            <h5 class="card-title">@Model.TenBaoCao</h5>
+            <p><strong>Ma Báo Cáo:</strong> @Model.MaBaoCao</p>
+            <p><strong>Loại Báo Cáo:</strong> @Model.LoaiBaoCao</p>
+            <p><strong>Trạng Thái Báo Cáo:</strong> @Model.TrangThaiBaoCao</p>
+            <p><strong>Ngày Tạo Báo Cáo:</strong> @Model.NgayTaoBaoCao.ToString("yyyy-MM-dd")</p>
+            <p><strong>Dữ Liệu Báo Cáo:</strong> @Model.DuLieuBaoCao</p>
+        </div>
+        <div class="card-footer text-center">
+            <form method="post" asp-action="DeleteBaoCao">
+                <input type="hidden" name="maBaoCao" value="@Model.MaBaoCao" />
+                <button type="submit" class="btn btn-danger btn-lg mr-3">Delete</button>
+                <a href="@Url.Action("ListBC", "BaoCao")" class="btn btn-secondary btn-lg">Cancel</a>
+            </form>
+        </div>
+    </div>
 </div>
-
-<form method="post" asp-action="DeleteBaoCao">
-    <input type="hidden" name="maBaoCao" value="@Model.MaBaoCao" />
-    <button type="submit" class="btn btn-danger">Delete</button>
-    <a href="@Url.Action("Index", "BaoCao")" class="btn btn-secondary">Cancel</a>
-</form>

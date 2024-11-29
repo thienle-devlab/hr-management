@@ -1,46 +1,68 @@
 ﻿@model HR_Management.Models.Phancong
 
-<h2>Create PhanCong</h2>
+@{
+    ViewData["Title"] = "Tạo Phân Công";
+}
 
-<form asp-action="CreatePC">
-    <div asp-validation-summary="All" class="text-danger"></div>
-    <div class="form-group">
-        <label asp-for="MaPhanCong" class="control-label"></label>
-        <input asp-for="MaPhanCong" class="form-control" />
-        <span asp-validation-for="MaPhanCong" class="text-danger"></span>
-    </div>
-    <div class="form-group">
-        <label asp-for="MaNhanVien" class="control-label"></label>
-        <select asp-for="MaNhanVien" class="form-control" asp-items="ViewBag.NhanVienList"></select>
-        <span asp-validation-for="MaNhanVien" class="text-danger"></span>
-    </div>
-    <div class="form-group">
-        <label asp-for="MaCongViec" class="control-label"></label>
-        <select asp-for="MaCongViec" class="form-control" asp-items="ViewBag.CongViecList"></select>
-        <span asp-validation-for="MaCongViec" class="text-danger"></span>
-    </div>
-    <div class="form-group">
-        <label asp-for="NgayBatDau" class="control-label"></label>
-        <input asp-for="NgayBatDau" class="form-control" />
-        <span asp-validation-for="NgayBatDau" class="text-danger"></span>
-    </div>
-    <div class="form-group">
-        <label asp-for="NgayKetThuc" class="control-label"></label>
-        <input asp-for="NgayKetThuc" class="form-control" />
-        <span asp-validation-for="NgayKetThuc" class="text-danger"></span>
-    </div>
-    <div class="form-group">
-        <label asp-for="TrangThai" class="control-label"></label>
-        <input asp-for="TrangThai" class="form-control" />
-        <span asp-validation-for="TrangThai" class="text-danger"></span>
-    </div>
-    <div class="form-group">
-        <input type="submit" value="Create" class="btn btn-primary" />
-    </div>
-</form>
+<div class="container mt-4">
+    <h2>@ViewData["Title"]</h2>
 
-<div>
-    <a asp-action="ListPC">Danh sách phân công</a>
+    <form asp-action="CreatePC">
+        <div class="card">
+            <div class="card-header bg-primary text-white">
+                <h4 class="card-title">Thêm Phân Công Mới</h4>
+            </div>
+            <div class="card-body">
+
+                <!-- Mã Phân Công -->
+                <div class="form-group">
+                    <label asp-for="MaPhanCong" class="control-label">Mã Phân Công</label>
+                    <input asp-for="MaPhanCong" class="form-control" />
+                    <span asp-validation-for="MaPhanCong" class="text-danger"></span>
+                </div>
+
+                <!-- Nhân viên -->
+                <div class="form-group">
+                    <label for="MaNhanVien">Nhân viên</label>
+                    <select asp-for="MaNhanVien" class="form-control" asp-items="ViewBag.NhanVienList"></select>
+                    <span asp-validation-for="MaNhanVien" class="text-danger"></span>
+                </div>
+
+                <!-- Công việc -->
+                <div class="form-group">
+                    <label for="MaCongViec">Công việc</label>
+                    <select asp-for="MaCongViec" class="form-control" asp-items="ViewBag.CongViecList"></select>
+                    <span asp-validation-for="MaCongViec" class="text-danger"></span>
+                </div>
+
+                <!-- Ngày Bắt Đầu -->
+                <div class="form-group">
+                    <label asp-for="NgayBatDau" class="control-label">Ngày Bắt Đầu</label>
+                    <input asp-for="NgayBatDau" class="form-control" />
+                    <span asp-validation-for="NgayBatDau" class="text-danger"></span>
+                </div>
+
+                <!-- Ngày Kết Thúc -->
+                <div class="form-group">
+                    <label asp-for="NgayKetThuc" class="control-label">Ngày Kết Thúc</label>
+                    <input asp-for="NgayKetThuc" class="form-control" />
+                    <span asp-validation-for="NgayKetThuc" class="text-danger"></span>
+                </div>
+
+                <!-- Trạng Thái -->
+                <div class="form-group">
+                    <label asp-for="TrangThai" class="control-label">Trạng Thái</label>
+                    <input asp-for="TrangThai" class="form-control" />
+                    <span asp-validation-for="TrangThai" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="card-footer text-center">
+                <button type="submit" class="btn btn-primary btn-lg">Tạo Phân Công</button>
+                <a href="@Url.Action("ListPC", "PhanCong")" class="btn btn-secondary btn-lg">Hủy</a>
+            </div>
+        </div>
+    </form>
 </div>
 
 @section Scripts {

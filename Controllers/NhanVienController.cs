@@ -24,7 +24,7 @@ namespace HR_Management.Controllers
             var maNhanVien = HttpContext.Session.GetString("MaNhanVien");
             if (string.IsNullOrEmpty(maNhanVien))
             {
-                return RedirectToAction("Login", "Account");
+                return RedirectToAction("Login", "Auth");
             }
 
             // Lấy thông tin nhân viên từ DB để kiểm tra quyền

@@ -1,62 +1,49 @@
 ﻿@model IEnumerable<HR_Management.Models.Chamcong>
 
 @{
-    ViewData["Title"] = "ListChamCong";
+    Layout = "_Layout";
+    ViewData["Title"] = "Danh Sách Chấm Công";
 }
 
-<h2>ListChamCong</h2>
+<div class="container mt-4">
+    <h2 class="mb-4">@ViewData["Title"]</h2>
 
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.MaChamCong)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.MaNhanVien)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.NgayChamCong)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.CheckIn)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.CheckOut)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.TrangThai)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model)
-        {
-            <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.MaChamCong)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.MaNhanVien)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.NgayChamCong)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.CheckIn)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.CheckOut)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.TrangThai)
-                </td>
-                <td>
-                    <a asp-action="Edit" asp-route-id="@item.MaChamCong">Edit</a> |
-                    <a asp-action="Delete" asp-route-id="@item.MaChamCong">Delete</a>
-                </td>
-            </tr>
-        }
-    </tbody>
-</table>
+    <p>
+        <a asp-action="CreateChamCong" class="btn btn-primary mb-3">Tạo Mới Chấm Công</a>
+    </p>
+
+    <div class="table-responsive">
+        <table class="table table-striped table-bordered">
+            <thead class="thead-light">
+                <tr>
+                    <th scope="col">Mã Chấm Công</th>
+                    <th scope="col">Mã Nhân Viên</th>
+                    <th scope="col">Ngày Chấm Công</th>
+                    <th scope="col">Giờ Vào</th>
+                    <th scope="col">Giờ Ra</th>
+                    <th scope="col">Trạng Thái</th>
+                    <th scope="col">Hành Động</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>@Html.DisplayFor(modelItem => item.MaChamCong)</td>
+                        <td>@Html.DisplayFor(modelItem => item.MaNhanVien)</td>
+                        <td>@Html.DisplayFor(modelItem => item.NgayChamCong)</td>
+                        <td>@Html.DisplayFor(modelItem => item.CheckIn)</td>
+                        <td>@Html.DisplayFor(modelItem => item.CheckOut)</td>
+                        <td>@Html.DisplayFor(modelItem => item.TrangThai)</td>
+                        <td>
+                            <div class="btn-group" role="group">
+                                <a href="@Url.Action("EditChamCong", new { maChamCong = item.MaChamCong })" class="btn btn-warning btn-sm">Sửa</a>
+                                <a href="@Url.Action("DeleteChamCong", new { maChamCong = item.MaChamCong })" class="btn btn-danger btn-sm">Xóa</a>
+                            </div>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

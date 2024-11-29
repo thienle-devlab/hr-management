@@ -1,25 +1,45 @@
 ﻿@model IEnumerable<HR_Management.Models.Phucap>
 
 @{
-    ViewData["Title"] = "Danh sách Phụ cấp";
+    Layout = "_Layout";
+    ViewData["Title"] = "Danh Sách Phụ Cấp";
 }
 
-<h2>@ViewData["Title"]</h2>
+<div class="container mt-4">
+    <h2 class="mb-4">@ViewData["Title"]</h2>
 
-<table class="table">
-    <thead>
-        <tr>
-            <th>Mã Phụ cấp</th>
-            <th>Tên Phụ cấp</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model)
-        {
-            <tr>
-                <td>@item.MaPhuCap</td>
-                <td>@item.TenPhuCap</td>
-            </tr>
-        }
-    </tbody>
-</table>
+    <!-- Nút Tạo Mới Phụ Cấp -->
+    <p>
+        <a asp-action="CreatePhuCap" class="btn btn-primary mb-3">Tạo Mới Phụ Cấp</a>
+    </p>
+
+    <!-- Bảng danh sách phụ cấp -->
+    <div class="table-responsive">
+        <table class="table table-striped table-bordered">
+            <thead class="thead-light">
+                <tr>
+                    <th scope="col">Mã Phụ Cấp</th>
+                    <th scope="col">Tên Phụ Cấp</th>
+                    <th scope="col">Hành Động</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>@Html.DisplayFor(modelItem => item.MaPhuCap)</td>
+                        <td>@Html.DisplayFor(modelItem => item.TenPhuCap)</td>
+                        <td>
+                            <div class="btn-group" role="group">
+                                <!-- Nút sửa phụ cấp -->
+                                <a href="@Url.Action("EditPhuCap", new { maPhuCap = item.MaPhuCap })" class="btn btn-warning btn-sm">Sửa</a>
+                                <!-- Nút xóa phụ cấp -->
+                                <a href="@Url.Action("DeletePhuCap", new { maPhuCap = item.MaPhuCap })" class="btn btn-danger btn-sm">Xóa</a>
+                            </div>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

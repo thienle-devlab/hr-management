@@ -1,32 +1,49 @@
 ﻿@model IEnumerable<HR_Management.Models.Phancong>
+
 @{
-    ViewData["Title"] = "Danh sách phân công";
+    Layout = "_Layout";
+    ViewData["Title"] = "Danh Sách Phân Công";
 }
 
-<h2>Danh sách phân công</h2>
+<div class="container mt-4">
+    <h2 class="mb-4">@ViewData["Title"]</h2>
 
-<table class="table">
-    <thead>
-        <tr>
-            <th>Mã phân công</th>
-            <th>Mã nhân viên</th>
-            <th>Mã công việc</th>
-            <th>Ngày bắt đầu</th>
-            <th>Ngày kết thúc</th>
-            <th>Trạng thái</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var phanCong in Model)
-        {
-            <tr>
-                <td>@phanCong.MaPhanCong</td>
-                <td>@phanCong.MaNhanVien</td>
-                <td>@phanCong.MaCongViec</td>
-                <td>@phanCong.NgayBatDau.ToString("dd/MM/yyyy")</td>
-                <td>@phanCong.NgayKetThuc.ToString("dd/MM/yyyy")</td>
-                <td>@phanCong.TrangThai</td>
-            </tr>
-        }
-    </tbody>
-</table>
+    <p>
+        <a asp-action="CreatePC" class="btn btn-primary mb-3">Tạo Mới Phân Công</a>
+    </p>
+
+    <div class="table-responsive">
+        <table class="table table-striped table-bordered">
+            <thead class="thead-light">
+                <tr>
+                    <th scope="col">Mã Phân Công</th>
+                    <th scope="col">Mã Nhân Viên</th>
+                    <th scope="col">Mã Công Việc</th>
+                    <th scope="col">Ngày Bắt Đầu</th>
+                    <th scope="col">Ngày Kết Thúc</th>
+                    <th scope="col">Trạng Thái</th>
+                    <th scope="col">Hành Động</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var phanCong in Model)
+                {
+                    <tr>
+                        <td>@Html.DisplayFor(modelItem => phanCong.MaPhanCong)</td>
+                        <td>@Html.DisplayFor(modelItem => phanCong.MaNhanVien)</td>
+                        <td>@Html.DisplayFor(modelItem => phanCong.MaCongViec)</td>
+                        <td>@phanCong.NgayBatDau.ToString("dd/MM/yyyy")</td>
+                        <td>@phanCong.NgayKetThuc.ToString("dd/MM/yyyy")</td>
+                        <td>@Html.DisplayFor(modelItem => phanCong.TrangThai)</td>
+                        <td>
+                            <div class="btn-group" role="group">
+                                <a href="@Url.Action("EditPC", new { maPhanCong = phanCong.MaPhanCong })" class="btn btn-warning btn-sm">Sửa</a>
+                                <a href="@Url.Action("DeletePC", new { maPhanCong = phanCong.MaPhanCong })" class="btn btn-danger btn-sm">Xóa</a>
+                            </div>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

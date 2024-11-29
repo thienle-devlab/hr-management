@@ -33,7 +33,7 @@ namespace HR_Management.Class
 
             if(string.IsNullOrEmpty(maNhanVien))
             {
-                context.Result = new RedirectToActionResult("Login", "Account", null);
+                context.Result = new RedirectToActionResult("Login", "Auth", null);
             }
 
             // Kiểm tra quyền truy cập

@@ -4,53 +4,63 @@
     ViewData["Title"] = "Tạo Báo Cáo";
 }
 
-<h2>@ViewData["Title"]</h2>
+<div class="container mt-4">
+    <h2>@ViewData["Title"]</h2>
 
-<form asp-action="CreateBaoCao">
-    <div class="form-group">
-        <label asp-for="MaBaoCao" class="control-label"></label>
-        <input asp-for="MaBaoCao" class="form-control" />
-        <span asp-validation-for="MaBaoCao" class="text-danger"></span>
-    </div>
+    <form asp-action="CreateBaoCao">
+        <div class="card">
+            <div class="card-header bg-primary text-white">
+                <h4 class="card-title">Thêm Báo Cáo Mới</h4>
+            </div>
+            <div class="card-body">
 
-    <div class="form-group">
-        <label for="MaNhanVien">Nhân viên</label>
-        <select asp-for="MaNhanVien" class="form-control" asp-items="ViewBag.NhanVienList"></select>
-        <span asp-validation-for="MaNhanVien" class="text-danger"></span>
-    </div>
+                <!-- Mã Báo Cáo -->
+                <div class="form-group">
+                    <label asp-for="MaBaoCao" class="control-label">Mã Báo Cáo</label>
+                    <input asp-for="MaBaoCao" class="form-control" />
+                    <span asp-validation-for="MaBaoCao" class="text-danger"></span>
+                </div>
 
-    <div class="form-group">
-        <label for="TenBaoCao">Tên báo cáo</label>
-        <input asp-for="TenBaoCao" class="form-control" />
-        <span asp-validation-for="TenBaoCao" class="text-danger"></span>
-    </div>
+                <!-- Nhân viên -->
+                <div class="form-group">
+                    <label for="MaNhanVien">Nhân viên</label>
+                    <select asp-for="MaNhanVien" class="form-control" asp-items="ViewBag.NhanVienList"></select>
+                    <span asp-validation-for="MaNhanVien" class="text-danger"></span>
+                </div>
 
-    <div class="form-group">
-        <label for="DuLieuBaoCao">Dữ liệu báo cáo</label>
-        <textarea asp-for="DuLieuBaoCao" class="form-control"></textarea>
-        <span asp-validation-for="DuLieuBaoCao" class="text-danger"></span>
-    </div>
+                <!-- Tên Báo Cáo -->
+                <div class="form-group">
+                    <label for="TenBaoCao">Tên Báo Cáo</label>
+                    <input asp-for="TenBaoCao" class="form-control" />
+                    <span asp-validation-for="TenBaoCao" class="text-danger"></span>
+                </div>
 
-    <div class="form-group">
-        <label for="LoaiBaoCao">Loại báo cáo</label>
-        <input asp-for="LoaiBaoCao" class="form-control" />
-        <span asp-validation-for="LoaiBaoCao" class="text-danger"></span>
-    </div>
+                <!-- Dữ liệu Báo Cáo -->
+                <div class="form-group">
+                    <label for="DuLieuBaoCao">Dữ Liệu Báo Cáo</label>
+                    <textarea asp-for="DuLieuBaoCao" class="form-control" rows="4"></textarea>
+                    <span asp-validation-for="DuLieuBaoCao" class="text-danger"></span>
+                </div>
 
-    <div class="form-group">
-        <label for="TrangThaiBaoCao">Trạng thái báo cáo</label>
-        <input asp-for="TrangThaiBaoCao" class="form-control" />
-        <span asp-validation-for="TrangThaiBaoCao" class="text-danger"></span>
-    </div>
+                <!-- Loại Báo Cáo -->
+                <div class="form-group">
+                    <label for="LoaiBaoCao">Loại Báo Cáo</label>
+                    <input asp-for="LoaiBaoCao" class="form-control" />
+                    <span asp-validation-for="LoaiBaoCao" class="text-danger"></span>
+                </div>
 
-    <div class="form-group">
-        <button type="submit" class="btn btn-primary">Tạo Báo Cáo</button>
-        <a href="@Url.Action("ListBaoCao", "BaoCao")" class="btn btn-secondary">Hủy</a>
-    </div>
-</form>
+                <!-- Trạng Thái Báo Cáo -->
+                <div class="form-group">
+                    <label for="TrangThaiBaoCao">Trạng Thái Báo Cáo</label>
+                    <input asp-for="TrangThaiBaoCao" class="form-control" />
+                    <span asp-validation-for="TrangThaiBaoCao" class="text-danger"></span>
+                </div>
+            </div>
 
-@section Scripts {
-    @{
-        await Html.RenderPartialAsync("_ValidationScriptsPartial");
-    }
-}
+            <div class="card-footer text-center">
+                <button type="submit" class="btn btn-primary btn-lg">Tạo Báo Cáo</button>
+                <a href="@Url.Action("ListBC", "BaoCao")" class="btn btn-secondary btn-lg">Hủy</a>
+            </div>
+        </div>
+    </form>
+</div>

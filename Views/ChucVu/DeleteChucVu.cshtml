@@ -4,27 +4,24 @@
     ViewData["Title"] = "Xóa Chức Vụ";
 }
 
-<h2>@ViewData["Title"]</h2>
-
-<h3>Bạn có chắc chắn muốn xóa chức vụ này không?</h3>
-
-<div>
-    <h4>Chức Vụ</h4>
-    <hr />
-    <dl class="row">
-        <dt class="col-sm-2">Mã Chức Vụ</dt>
-        <dd class="col-sm-10">@Model.MaChucVu</dd>
-
-        <dt class="col-sm-2">Tên Chức Vụ</dt>
-        <dd class="col-sm-10">@Model.TenChucVu</dd>
-
-        <dt class="col-sm-2">Phòng Ban</dt>
-        <dd class="col-sm-10">@Model.MaPhongBanNavigation?.TenPhongBan</dd>
-    </dl>
-
-    <form asp-action="DeleteChucVu" method="post">
-        <input type="hidden" name="MaChucVu" value="@Model.MaChucVu" />
-        <button type="submit" class="btn btn-danger">Xóa</button>
-        <a asp-action="ListChucVu" class="btn btn-secondary">Hủy</a>
-    </form>
+<div class="container mt-4">
+    <h2 class="text-danger">Bạn có chắc chắn muốn xóa chức vụ này không?</h2>
+    <div class="card">
+        <div class="card-header bg-danger text-white">
+            <h4 class="card-title">Xóa Chức Vụ</h4>
+        </div>
+        <div class="card-body">
+            <h5 class="card-title">@Model.TenChucVu</h5>
+            <p><strong>Mã Chức Vụ:</strong> @Model.MaChucVu</p>
+            <p><strong>Tên Chức Vụ:</strong> @Model.TenChucVu</p>
+            <p><strong>Phòng Ban:</strong> @Model.MaPhongBanNavigation?.TenPhongBan</p>
+        </div>
+        <div class="card-footer text-center">
+            <form method="post" asp-action="DeleteChucVu">
+                <input type="hidden" name="MaChucVu" value="@Model.MaChucVu" />
+                <button type="submit" class="btn btn-danger btn-lg mr-3">Xóa</button>
+                <a href="@Url.Action("ListChucVu", "Chucvu")" class="btn btn-secondary btn-lg">Hủy</a>
+            </form>
+        </div>
+    </div>
 </div>

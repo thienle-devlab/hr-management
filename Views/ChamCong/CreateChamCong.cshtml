@@ -4,50 +4,64 @@
     ViewData["Title"] = "Tạo Chấm Công";
 }
 
-<h1>Tạo Chấm Công</h1>
+<div class="container mt-4">
+    <h2>@ViewData["Title"]</h2>
 
-<h4>Chấm Công</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="CreateChamCong">
-            <div class="form-group">
-                <label asp-for="MaChamCong" class="control-label"></label>
-                <input asp-for="MaChamCong" class="form-control" />
-                <span asp-validation-for="MaChamCong" class="text-danger"></span>
+    <form asp-action="CreateChamCong">
+        <div class="card">
+            <div class="card-header bg-primary text-white">
+                <h4 class="card-title">Thêm Chấm Công Mới</h4>
             </div>
-            <div class="form-group">
-                <label asp-for="MaNhanVien" class="control-label"></label>
-                <select asp-for="MaNhanVien" class="form-control" asp-items="ViewBag.NhanVienList"></select>
-                <span asp-validation-for="MaNhanVien" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="NgayChamCong" class="control-label"></label>
-                <input asp-for="NgayChamCong" class="form-control" />
-                <span asp-validation-for="NgayChamCong" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="CheckIn" class="control-label"></label>
-                <input asp-for="CheckIn" class="form-control" />
-                <span asp-validation-for="CheckIn" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="CheckOut" class="control-label"></label>
-                <input asp-for="CheckOut" class="form-control" />
-                <span asp-validation-for="CheckOut" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="TrangThai" class="control-label"></label>
-                <input asp-for="TrangThai" class="form-control" />
-                <span asp-validation-for="TrangThai" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
-            </div>
-        </form>
-    </div>
-</div>
+            <div class="card-body">
 
-<div>
-    <a asp-action="ListChamCong">Back to List</a>
+                <!-- Mã Chấm Công -->
+                <div class="form-group">
+                    <label asp-for="MaChamCong" class="control-label">Mã Chấm Công</label>
+                    <input asp-for="MaChamCong" class="form-control" />
+                    <span asp-validation-for="MaChamCong" class="text-danger"></span>
+                </div>
+
+                <!-- Nhân viên -->
+                <div class="form-group">
+                    <label for="MaNhanVien">Nhân viên</label>
+                    <select asp-for="MaNhanVien" class="form-control" asp-items="ViewBag.NhanVienList"></select>
+                    <span asp-validation-for="MaNhanVien" class="text-danger"></span>
+                </div>
+
+                <!-- Ngày Chấm Công -->
+                <div class="form-group">
+                    <label asp-for="NgayChamCong" class="control-label">Ngày Chấm Công</label>
+                    <input asp-for="NgayChamCong" class="form-control" />
+                    <span asp-validation-for="NgayChamCong" class="text-danger"></span>
+                </div>
+
+                <!-- Giờ Vào -->
+                <div class="form-group">
+                    <label asp-for="CheckIn" class="control-label">Giờ Vào</label>
+                    <input asp-for="CheckIn" class="form-control" />
+                    <span asp-validation-for="CheckIn" class="text-danger"></span>
+                </div>
+
+                <!-- Giờ Ra -->
+                <div class="form-group">
+                    <label asp-for="CheckOut" class="control-label">Giờ Ra</label>
+                    <input asp-for="CheckOut" class="form-control" />
+                    <span asp-validation-for="CheckOut" class="text-danger"></span>
+                </div>
+
+                <!-- Trạng Thái -->
+                <div class="form-group">
+                    <label asp-for="TrangThai" class="control-label">Trạng Thái</label>
+                    <input asp-for="TrangThai" class="form-control" />
+                    <span asp-validation-for="TrangThai" class="text-danger"></span>
+                </div>
+
+            </div>
+
+            <div class="card-footer text-center">
+                <button type="submit" class="btn btn-primary btn-lg">Tạo Chấm Công</button>
+                <a href="@Url.Action("ListChamCong", "ChamCong")" class="btn btn-secondary btn-lg">Hủy</a>
+            </div>
+        </div>
+    </form>
 </div>

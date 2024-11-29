@@ -1,33 +1,47 @@
 ﻿@model IEnumerable<HR_Management.Models.Khautruluong>
 
-<h1>Danh sách khấu trừ lương</h1>
+@{
+    Layout = "_Layout";
+    ViewData["Title"] = "Danh Sách Khấu Trừ Lương";
+}
 
-<table class="table">
-    <thead>
-        <tr>
-            <th>Mã khấu trừ Lương</th>
-            <th>Mã lương</th>
-            <th>Mã khấu trừ</th>
-            <th>Số tiền</th>
-            <th>Ngày áp dụng</th>
-            <th>Hành động</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model)
-        {
-            <tr>
-                <td>@item.MaKhauTruLuong</td>
-                <td>@item.MaLuong</td>
-                <td>@item.MaKhauTru</td>
-                <td>@item.KhoanKhauTru</td>
-                <td>@item.NgayApDung.ToString("dd/MM/yyyy")</td>
-                <td>
-                    <a href="@Url.Action("EditKhaoTruLuong", new { maKhauTruLuong = item.MaKhauTruLuong })">Sửa</a> |
-                    <a href="@Url.Action("DeleteKhaoTruLuong", new { maKhauTruLuong = item.MaKhauTruLuong })">Xóa</a>
-                </td>
-            </tr>
-        }
-    </tbody>
-</table>
-<a href="@Url.Action("CreateKhaoTruLuong")">Thêm mới khấu trừ lương</a>
+<div class="container mt-4">
+    <h2 class="mb-4">@ViewData["Title"]</h2>
+
+    <p>
+        <a asp-action="CreateKhauTruLuong" class="btn btn-primary mb-3">Tạo Mới Khấu Trừ Lương</a>
+    </p>
+
+    <div class="table-responsive">
+        <table class="table table-striped table-bordered">
+            <thead class="thead-light">
+                <tr>
+                    <th scope="col">Mã Khấu Trừ Lương</th>
+                    <th scope="col">Mã Lương</th>
+                    <th scope="col">Mã Khấu Trừ</th>
+                    <th scope="col">Số Tiền</th>
+                    <th scope="col">Ngày Áp Dụng</th>
+                    <th scope="col">Hành Động</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>@Html.DisplayFor(modelItem => item.MaKhauTruLuong)</td>
+                        <td>@Html.DisplayFor(modelItem => item.MaLuong)</td>
+                        <td>@Html.DisplayFor(modelItem => item.MaKhauTru)</td>
+                        <td>@Html.DisplayFor(modelItem => item.KhoanKhauTru)</td>
+                        <td>@Html.DisplayFor(modelItem => item.NgayApDung)</td>
+                        <td>
+                            <div class="btn-group" role="group">
+                                <a href="@Url.Action("EditKhauTruLuong", new { maKhauTruLuong = item.MaKhauTruLuong })" class="btn btn-warning btn-sm">Sửa</a>
+                                <a href="@Url.Action("DeleteKhauTruLuong", new { maKhauTruLuong = item.MaKhauTruLuong })" class="btn btn-danger btn-sm">Xóa</a>
+                            </div>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

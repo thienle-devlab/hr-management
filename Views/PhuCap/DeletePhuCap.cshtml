@@ -1,37 +1,28 @@
 ﻿@model HR_Management.Models.Phucap
 
 @{
-    ViewData["Title"] = "Xóa Phụ cấp";
+    ViewData["Title"] = "Xóa Phụ Cấp";
 }
 
-<h2>@ViewData["Title"]</h2>
+<div class="container mt-4">
+    <h2 class="text-danger">Bạn có chắc chắn muốn xóa phụ cấp này không?</h2>
 
-<h3>Bạn có chắc chắn muốn xóa phụ cấp này không?</h3>
-<div>
-    <h4>PhuCap</h4>
-    <hr />
-    <dl class="row">
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.MaPhuCap)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.MaPhuCap)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.TenPhuCap)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.TenPhuCap)
-        </dd>
-    </dl>
-
-    <form asp-action="DeletePhuCap">
-        <input type="hidden" asp-for="MaPhuCap" />
-        <div class="form-group">
-            <input type="submit" value="Xóa" class="btn btn-danger" /> |
-            <a asp-action="ListPhuCap" class="btn btn-secondary">Hủy</a>
+    <div class="card">
+        <div class="card-header bg-danger text-white">
+            <h4 class="card-title">Xóa Phụ Cấp</h4>
         </div>
-    </form>
+        <div class="card-body">
+            <h5 class="card-title">@Model.TenPhuCap</h5>
+            <p><strong>Mã Phụ Cấp:</strong> @Model.MaPhuCap</p>
+        </div>
+        <div class="card-footer text-center">
+            <form method="post" asp-action="DeletePhuCap">
+                <input type="hidden" name="MaPhuCap" value="@Model.MaPhuCap" />
+                <button type="submit" class="btn btn-danger btn-lg mr-3">Xóa</button>
+                <a href="@Url.Action("ListPhuCap", "Phucap")" class="btn btn-secondary btn-lg">Hủy</a>
+            </form>
+        </div>
+    </div>
 </div>
 
 @section Scripts {

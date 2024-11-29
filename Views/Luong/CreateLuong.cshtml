@@ -4,44 +4,63 @@
     ViewData["Title"] = "Thêm mới Lương";
 }
 
-<h2>Thêm mới Lương</h2>
+<div class="container mt-4">
+    <h2>@ViewData["Title"]</h2>
 
-<h4>Nhập thông tin lương</h4>
-<hr />
-<div class="row">
-    <div class="col-md-12">
-        <form asp-action="CreateLuong">
-            <div class="form-group">
-                <label asp-for="MaLuong" class="control-label"></label>
-                <input asp-for="MaLuong" class="form-control" />
-                <span asp-validation-for="MaLuong" class="text-danger"></span>
+    <form asp-action="CreateLuong">
+        <div class="card">
+            <div class="card-header bg-primary text-white">
+                <h4 class="card-title">Thêm Lương Mới</h4>
             </div>
-            <div class="form-group">
-                <label asp-for="MaNhanVien" class="control-label">Mã nhân viên</label>
-                <select asp-for="MaNhanVien" class="form-control" asp-items="@ViewBag.NhanVienList">
-                    <option value="">-- Chọn Nhân Viên --</option>
-                </select>
-                <span asp-validation-for="MaNhanVien" class="text-danger"></span>
+            <div class="card-body">
+                <!-- Mã Lương -->
+                <div class="form-group">
+                    <label asp-for="MaLuong" class="control-label">Mã Lương</label>
+                    <input asp-for="MaLuong" class="form-control" />
+                    <span asp-validation-for="MaLuong" class="text-danger"></span>
+                </div>
+
+                <!-- Nhân viên -->
+                <div class="form-group">
+                    <label asp-for="MaNhanVien" class="control-label">Nhân viên</label>
+                    <select asp-for="MaNhanVien" class="form-control" asp-items="ViewBag.NhanVienList" required>
+                        <option value="">-- Chọn Nhân Viên --</option>
+                    </select>
+                    <span asp-validation-for="MaNhanVien" class="text-danger"></span>
+                </div>
+
+                <!-- Lương Cơ Bản -->
+                <div class="form-group">
+                    <label asp-for="LuongCoBan" class="control-label">Lương Cơ Bản</label>
+                    <input asp-for="LuongCoBan" class="form-control" type="number" min="0" required />
+                    <span asp-validation-for="LuongCoBan" class="text-danger"></span>
+                </div>
+
+                <!-- Ngày Nhận Lương -->
+                <div class="form-group">
+                    <label asp-for="NgayNhanLuong" class="control-label">Ngày Nhận Lương</label>
+                    <input asp-for="NgayNhanLuong" class="form-control" type="date" required />
+                    <span asp-validation-for="NgayNhanLuong" class="text-danger"></span>
+                </div>
+
+                <!-- Trạng Thái -->
+                <div class="form-group">
+                    <label asp-for="TrangThai" class="control-label">Trạng Thái</label>
+                    <input asp-for="TrangThai" class="form-control" required />
+                    <span asp-validation-for="TrangThai" class="text-danger"></span>
+                </div>
             </div>
-            <div class="form-group">
-                <label asp-for="LuongCoBan" class="control-label"></label>
-                <input asp-for="LuongCoBan" class="form-control" />
-                <span asp-validation-for="LuongCoBan" class="text-danger"></span>
+
+            <div class="card-footer text-center">
+                <button type="submit" class="btn btn-primary btn-lg">Tạo Lương</button>
+                <a asp-action="ListLuong" class="btn btn-secondary btn-lg">Hủy</a>
             </div>
-            <div class="form-group">
-                <label asp-for="NgayNhanLuong" class="control-label"></label>
-                <input asp-for="NgayNhanLuong" class="form-control" type="date" />
-                <span asp-validation-for="NgayNhanLuong" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="TrangThai" class="control-label"></label>
-                <input asp-for="TrangThai" class="form-control" />
-                <span asp-validation-for="TrangThai" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
-            </div>
-        </form>
-    </div>
+        </div>
+    </form>
 </div>
 
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

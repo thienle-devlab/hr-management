@@ -4,27 +4,45 @@
     ViewData["Title"] = "Sửa Chức Vụ";
 }
 
-<h2>Sửa Chức Vụ</h2>
+<div class="container mt-4">
+    <h2>@ViewData["Title"]</h2>
 
-<form asp-action="EditChucVu" method="post">
-    <input type="hidden" asp-for="MaChucVu" />
+    <form asp-action="EditChucVu">
+        <div class="card">
+            <div class="card-header bg-warning text-white">
+                <h4 class="card-title">Chỉnh sửa thông tin chức vụ</h4>
+            </div>
+            <div class="card-body">
 
-    <div class="form-group">
-        <label for="TenChucVu">Tên Chức Vụ</label>
-        <input type="text" asp-for="TenChucVu" class="form-control" />
-        <span asp-validation-for="TenChucVu" class="text-danger"></span>
-    </div>
+                <!-- Mã Chức Vụ -->
+                <div class="form-group">
+                    <label asp-for="MaChucVu" class="control-label">Mã Chức Vụ</label>
+                    <input asp-for="MaChucVu" class="form-control" readonly />
+                    <span asp-validation-for="MaChucVu" class="text-danger"></span>
+                </div>
 
-    <div class="form-group">
-        <label for="MaPhongBan">Phòng Ban</label>
-        <select asp-for="MaPhongBan" class="form-control" asp-items="ViewBag.PhongBanList">
-            <option value="">-- Chọn Phòng Ban --</option>
-        </select>
-        <span asp-validation-for="MaPhongBan" class="text-danger"></span>
-    </div>
+                <!-- Tên Chức Vụ -->
+                <div class="form-group">
+                    <label for="TenChucVu">Tên Chức Vụ</label>
+                    <input asp-for="TenChucVu" class="form-control" />
+                    <span asp-validation-for="TenChucVu" class="text-danger"></span>
+                </div>
 
-    <button type="submit" class="btn btn-primary">Lưu</button>
-    <a asp-action="ListChucVu" class="btn btn-secondary">Hủy</a>
-</form>
+                <!-- Phòng Ban -->
+                <div class="form-group">
+                    <label for="MaPhongBan">Phòng Ban</label>
+                    <select asp-for="MaPhongBan" class="form-control" asp-items="ViewBag.PhongBanList">
+                        <option value="">-- Chọn Phòng Ban --</option>
+                    </select>
+                    <span asp-validation-for="MaPhongBan" class="text-danger"></span>
+                </div>
 
+            </div>
 
+            <div class="card-footer text-center">
+                <button type="submit" class="btn btn-success btn-lg">Lưu Thay Đổi</button>
+                <a href="@Url.Action("ListChucVu", "Chucvu")" class="btn btn-secondary btn-lg">Hủy</a>
+            </div>
+        </div>
+    </form>
+</div>

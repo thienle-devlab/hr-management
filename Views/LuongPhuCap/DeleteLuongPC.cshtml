@@ -4,39 +4,31 @@
     ViewData["Title"] = "Xóa Lương Phụ Cấp";
 }
 
-<h1>@ViewData["Title"]</h1>
+<div class="container mt-4">
+    <h2 class="text-danger">Bạn có chắc chắn muốn xóa lương phụ cấp này không?</h2>
+    <div class="card">
+        <div class="card-header bg-danger text-white">
+            <h4 class="card-title">Xóa Lương Phụ Cấp</h4>
+        </div>
+        <div class="card-body">
+            <!-- Mã Lương -->
+            <p><strong>Mã Lương:</strong> @Model.MaLuong</p>
 
-<h4>Bạn có chắc chắn muốn xóa Lương Phụ Cấp này không?</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="DeleteLuongPC" method="post">
-            <input type="hidden" asp-for="MaLuongPhuCap" />
+            <!-- Mã Phụ Cấp -->
+            <p><strong>Mã Phụ Cấp:</strong> @Model.MaPhuCap</p>
 
-            <div class="form-group">
-                <label>Mã Lương:</label>
-                <p>@Model.MaLuong</p>
-            </div>
+            <!-- Số Tiền Phụ Cấp -->
+            <p><strong>Số Tiền Phụ Cấp:</strong> @Model.SoTienPhuCap</p>
 
-            <div class="form-group">
-                <label>Mã Phụ Cấp:</label>
-                <p>@Model.MaPhuCap</p>
-            </div>
-
-            <div class="form-group">
-                <label>Số Tiền Phụ Cấp:</label>
-                <p>@Model.SoTienPhuCap</p>
-            </div>
-
-            <div class="form-group">
-                <label>Ngày Áp Dụng:</label>
-                <p>@Model.NgayApDung.ToString("dd/MM/yyyy")</p>
-            </div>
-
-            <div class="form-group">
-                <input type="submit" value="Xóa" class="btn btn-danger" />
-                <a asp-action="ListLuongPC" class="btn btn-secondary">Hủy</a>
-            </div>
-        </form>
+            <!-- Ngày Áp Dụng -->
+            <p><strong>Ngày Áp Dụng:</strong> @Model.NgayApDung.ToString("dd/MM/yyyy")</p>
+        </div>
+        <div class="card-footer text-center">
+            <form method="post" asp-action="DeleteLuongPC">
+                <input type="hidden" name="MaLuongPhuCap" value="@Model.MaLuongPhuCap" />
+                <button type="submit" class="btn btn-danger btn-lg mr-3">Xóa</button>
+                <a href="@Url.Action("ListLuongPC", "Luongphucap")" class="btn btn-secondary btn-lg">Hủy</a>
+            </form>
+        </div>
     </div>
 </div>

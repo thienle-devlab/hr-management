@@ -4,19 +4,36 @@
     ViewData["Title"] = "Sửa Phòng Ban";
 }
 
-<h2>@ViewData["Title"]</h2>
+<div class="container mt-4">
+    <h2>@ViewData["Title"]</h2>
 
-<form asp-action="EditPhongBan" method="post">
-    <div class="form-group">
-        <label for="MaPhongBan">Mã Phòng Ban</label>
-        <input type="text" class="form-control" id="MaPhongBan" name="MaPhongBan" value="@Model.MaPhongBan" readonly />
-    </div>
+    <form asp-action="EditPhongBan">
+        <div class="card">
+            <div class="card-header bg-warning text-white">
+                <h4 class="card-title">Chỉnh sửa thông tin phòng ban</h4>
+            </div>
+            <div class="card-body">
 
-    <div class="form-group">
-        <label for="TenPhongBan">Tên Phòng Ban</label>
-        <input type="text" class="form-control" id="TenPhongBan" name="TenPhongBan" value="@Model.TenPhongBan" required />
-    </div>
+                <!-- Mã Phòng Ban -->
+                <div class="form-group">
+                    <label asp-for="MaPhongBan" class="control-label">Mã Phòng Ban</label>
+                    <input asp-for="MaPhongBan" class="form-control" readonly />
+                    <span asp-validation-for="MaPhongBan" class="text-danger"></span>
+                </div>
 
-    <button type="submit" class="btn btn-primary">Lưu</button>
-    <a asp-action="ListPhongBan" class="btn btn-secondary">Hủy</a>
-</form>
+                <!-- Tên Phòng Ban -->
+                <div class="form-group">
+                    <label for="TenPhongBan" class="control-label">Tên Phòng Ban</label>
+                    <input asp-for="TenPhongBan" class="form-control" />
+                    <span asp-validation-for="TenPhongBan" class="text-danger"></span>
+                </div>
+
+            </div>
+
+            <div class="card-footer text-center">
+                <button type="submit" class="btn btn-success btn-lg">Lưu Thay Đổi</button>
+                <a href="@Url.Action("ListPhongBan", "Phongban")" class="btn btn-secondary btn-lg">Hủy</a>
+            </div>
+        </div>
+    </form>
+</div>

@@ -1,34 +1,26 @@
 ﻿@model HR_Management.Models.Taikhoan
 
 @{
-    ViewBag.Title = "Xóa Tài Khoản";
+    ViewData["Title"] = "Xóa Tài Khoản";
 }
 
-<h2>Xóa Tài Khoản</h2>
+<div class="container mt-4">
+    <h2 class="text-danger">Bạn có chắc chắn muốn xóa tài khoản này không?</h2>
 
-<h3>Bạn có chắc chắn muốn xóa tài khoản này?</h3>
-
-<div>
-    <h4>Tài Khoản</h4>
-    <hr />
-    <dl class="dl-horizontal">
-        <dt>
-            @Html.DisplayNameFor(model => model.Username)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Username)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.MaNhanVien)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.MaNhanVien)
-        </dd>
-    </dl>
-
-    <form asp-action="DeleteTaiKhoan" method="post">
-        <input type="hidden" asp-for="Username" />
-        <button type="submit" class="btn btn-danger">Xóa</button>
-        @Html.ActionLink("Quay lại", "ListTaiKhoan", null, new { @class = "btn btn-secondary" })
-    </form>
+    <div class="card">
+        <div class="card-header bg-danger text-white">
+            <h4 class="card-title">Xóa Tài Khoản</h4>
+        </div>
+        <div class="card-body">
+            <h5 class="card-title">@Model.Username</h5>
+            <p><strong>Mã Nhân Viên:</strong> @Model.MaNhanVien</p>
+        </div>
+        <div class="card-footer text-center">
+            <form method="post" asp-action="DeleteTaiKhoan">
+                <input type="hidden" asp-for="Username" />
+                <button type="submit" class="btn btn-danger btn-lg mr-3">Xóa</button>
+                <a href="@Url.Action("ListTaiKhoan", "TaiKhoan")" class="btn btn-secondary btn-lg">Hủy</a>
+            </form>
+        </div>
+    </div>
 </div>

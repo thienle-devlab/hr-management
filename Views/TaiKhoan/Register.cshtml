@@ -1,36 +1,55 @@
 ﻿@model HR_Management.Models.Taikhoan
+
 @{
-    ViewBag.Title = "Đăng Ký Tài Khoản";
+    ViewData["Title"] = "Đăng Ký Tài Khoản";
 }
 
-<h2>Đăng Ký Tài Khoản</h2>
+<div class="container mt-4">
+    <h2>@ViewData["Title"]</h2>
 
-<form asp-action="Register" method="post">
-    <div class="form-group">
-        <label>Tên Tài Khoản</label>
-        <input asp-for="Username" class="form-control" />
-        <span asp-validation-for="Username" class="text-danger"></span>
-    </div>
+    <form asp-action="Register" method="post">
+        <div class="card">
+            <div class="card-header bg-primary text-white">
+                <h4 class="card-title">Thêm Tài Khoản Mới</h4>
+            </div>
+            <div class="card-body">
 
-    <div class="form-group">
-        <label>Mật Khẩu</label>
-        <input asp-for="Password" type="password" class="form-control" />
-        <span asp-validation-for="Password" class="text-danger"></span>
-    </div>
+                <!-- Tên Tài Khoản -->
+                <div class="form-group">
+                    <label asp-for="Username" class="control-label">Tên Tài Khoản</label>
+                    <input asp-for="Username" class="form-control" />
+                    <span asp-validation-for="Username" class="text-danger"></span>
+                </div>
 
-    <div class="form-group">
-        <label asp-for="TrangThai" class="control-label">Trạng Thái</label>
-        <input asp-for="TrangThai" class="form-control" />
-        <span asp-validation-for="TrangThai" class="text-danger"></span>
-    </div>
+                <!-- Mật Khẩu -->
+                <div class="form-group">
+                    <label asp-for="Password" class="control-label">Mật Khẩu</label>
+                    <input asp-for="Password" type="password" class="form-control" />
+                    <span asp-validation-for="Password" class="text-danger"></span>
+                </div>
 
-    <div class="form-group">
-        <label asp-for="MaNhanVien" class="control-label">Mã nhân viên</label>
-        <select asp-for="MaNhanVien" class="form-control" asp-items="ViewBag.NhanVienList">
-            <option value="">-- Chọn Nhân Viên --</option>
-        </select>
-        <span asp-validation-for="MaNhanVien" class="text-danger"></span>
-    </div>
+                <!-- Trạng Thái -->
+                <div class="form-group">
+                    <label asp-for="TrangThai" class="control-label">Trạng Thái</label>
+                    <input asp-for="TrangThai" class="form-control" />
+                    <span asp-validation-for="TrangThai" class="text-danger"></span>
+                </div>
 
-    <button type="submit" class="btn btn-primary">Đăng Ký</button>
-</form>
+                <!-- Mã Nhân Viên -->
+                <div class="form-group">
+                    <label asp-for="MaNhanVien" class="control-label">Mã Nhân Viên</label>
+                    <select asp-for="MaNhanVien" class="form-control" asp-items="ViewBag.NhanVienList">
+                        <option value="">-- Chọn Nhân Viên --</option>
+                    </select>
+                    <span asp-validation-for="MaNhanVien" class="text-danger"></span>
+                </div>
+
+            </div>
+
+            <div class="card-footer text-center">
+                <button type="submit" class="btn btn-primary btn-lg">Đăng Ký</button>
+                <a href="@Url.Action("ListTaiKhoan", "TaiKhoan")" class="btn btn-secondary btn-lg">Hủy</a>
+            </div>
+        </div>
+    </form>
+</div>
