@@ -159,7 +159,7 @@ public partial class HrmContext : DbContext
             entity.Property(e => e.MaKhauTru)
                 .HasMaxLength(10)
                 .IsUnicode(false);
-            entity.Property(e => e.MaLuong)
+            entity.Property(e => e.MaNhanVien)
                 .HasMaxLength(10)
                 .IsUnicode(false);
             entity.Property(e => e.NgayApDung).HasColumnType("datetime");
@@ -169,10 +169,10 @@ public partial class HrmContext : DbContext
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_KTL_KT");
 
-            entity.HasOne(d => d.MaLuongNavigation).WithMany(p => p.Khautruluongs)
-                .HasForeignKey(d => d.MaLuong)
+            entity.HasOne(d => d.MaNhanVienNavigation).WithMany(p => p.Khautruluongs)
+                .HasForeignKey(d => d.MaNhanVien)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_KTL_L");
+                .HasConstraintName("FK_KTL_NV");
         });
 
         modelBuilder.Entity<Luong>(entity =>
@@ -205,7 +205,7 @@ public partial class HrmContext : DbContext
             entity.Property(e => e.MaLuongPhuCap)
                 .HasMaxLength(10)
                 .IsUnicode(false);
-            entity.Property(e => e.MaLuong)
+            entity.Property(e => e.MaNhanVien)
                 .HasMaxLength(10)
                 .IsUnicode(false);
             entity.Property(e => e.MaPhuCap)
@@ -213,10 +213,10 @@ public partial class HrmContext : DbContext
                 .IsUnicode(false);
             entity.Property(e => e.NgayApDung).HasColumnType("datetime");
 
-            entity.HasOne(d => d.MaLuongNavigation).WithMany(p => p.Luongphucaps)
-                .HasForeignKey(d => d.MaLuong)
+            entity.HasOne(d => d.MaNhanVienNavigation).WithMany(p => p.Luongphucaps)
+                .HasForeignKey(d => d.MaNhanVien)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_LPC_L");
+                .HasConstraintName("FK_LPC_NV");
 
             entity.HasOne(d => d.MaPhuCapNavigation).WithMany(p => p.Luongphucaps)
                 .HasForeignKey(d => d.MaPhuCap)
@@ -320,15 +320,15 @@ public partial class HrmContext : DbContext
                 .HasMaxLength(10)
                 .IsUnicode(false);
             entity.Property(e => e.LyDoPhat).HasColumnType("ntext");
-            entity.Property(e => e.MaLuong)
+            entity.Property(e => e.MaNhanVien)
                 .HasMaxLength(10)
                 .IsUnicode(false);
             entity.Property(e => e.NgayPhat).HasColumnType("datetime");
 
-            entity.HasOne(d => d.MaLuongNavigation).WithMany(p => p.Phats)
-                .HasForeignKey(d => d.MaLuong)
+            entity.HasOne(d => d.MaNhanVienNavigation).WithMany(p => p.Phats)
+                .HasForeignKey(d => d.MaNhanVien)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_P_L");
+                .HasConstraintName("FK_P_NV");
         });
 
         modelBuilder.Entity<Phongban>(entity =>
@@ -387,15 +387,15 @@ public partial class HrmContext : DbContext
                 .HasMaxLength(10)
                 .IsUnicode(false);
             entity.Property(e => e.LyDoThuong).HasColumnType("ntext");
-            entity.Property(e => e.MaLuong)
+            entity.Property(e => e.MaNhanVien)
                 .HasMaxLength(10)
                 .IsUnicode(false);
             entity.Property(e => e.NgayThuong).HasColumnType("datetime");
 
-            entity.HasOne(d => d.MaLuongNavigation).WithMany(p => p.Thuongs)
-                .HasForeignKey(d => d.MaLuong)
+            entity.HasOne(d => d.MaNhanVienNavigation).WithMany(p => p.Thuongs)
+                .HasForeignKey(d => d.MaNhanVien)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_T_L");
+                .HasConstraintName("FK_T_NV");
         });
 
         modelBuilder.Entity<Hopdong>(entity =>

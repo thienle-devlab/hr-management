@@ -4,31 +4,59 @@
     ViewData["Title"] = "Thêm thưởng mới";
 }
 
-<h1>@ViewData["Title"]</h1>
+<div class="container mt-4">
+    <h2>@ViewData["Title"]</h2>
 
-<form asp-action="CreateThuong" method="post">
-    <div class="form-group">
-        <label for="MaThuong">Mã Thưởng</label>
-        <input type="text" asp-for="MaThuong" class="form-control" />
-        <span asp-validation-for="MaThuong" class="text-danger"></span>
-    </div>
+    <form asp-action="CreateThuong" method="post">
+        <div class="card">
+            <div class="card-header bg-primary text-white">
+                <h4 class="card-title">Thêm Thưởng Mới</h4>
+            </div>
+            <div class="card-body">
 
-    <div class="form-group">
-        <label for="MaLuong">Mã Lương</label>
-        <select asp-for="MaLuong" asp-items="ViewBag.LuongList" class="form-control"></select>
-    </div>
-    <div class="form-group">
-        <label for="NgayThuong">Ngày Thưởng</label>
-        <input asp-for="NgayThuong" class="form-control" type="date" />
-    </div>
-    <div class="form-group">
-        <label for="SoTienThuong">Số Tiền Thưởng</label>
-        <input asp-for="SoTienThuong" class="form-control" type="number" />
-    </div>
-    <div class="form-group">
-        <label for="LyDoThuong">Lý Do Thưởng</label>
-        <textarea asp-for="LyDoThuong" class="form-control"></textarea>
-    </div>
-    <button type="submit" class="btn btn-primary">Thêm</button>
-    <a asp-action="ListThuong" class="btn btn-secondary">Quay lại</a>
-</form>
+                <!-- Mã Thưởng -->
+                <div class="form-group">
+                    <label asp-for="MaThuong" class="control-label">Mã Thưởng</label>
+                    <input asp-for="MaThuong" class="form-control" />
+                    <span asp-validation-for="MaThuong" class="text-danger"></span>
+                </div>
+
+                <!-- Mã Nhân Viên -->
+                <div class="form-group">
+                    <label for="MaNhanVien">Nhân Viên</label>
+                    <select asp-for="MaNhanVien" asp-items="ViewBag.NhanVienList" class="form-control">
+                        <option value="">-- Chọn Nhân Viên --</option>
+                    </select>
+                    <span asp-validation-for="MaNhanVien" class="text-danger"></span>
+                </div>
+
+                <!-- Ngày Thưởng -->
+                <div class="form-group">
+                    <label for="NgayThuong">Ngày Thưởng</label>
+                    <input asp-for="NgayThuong" class="form-control" type="date" />
+                    <span asp-validation-for="NgayThuong" class="text-danger"></span>
+                </div>
+
+                <!-- Số Tiền Thưởng -->
+                <div class="form-group">
+                    <label for="SoTienThuong">Số Tiền Thưởng</label>
+                    <input asp-for="SoTienThuong" class="form-control" type="number" />
+                    <span asp-validation-for="SoTienThuong" class="text-danger"></span>
+                </div>
+
+                <!-- Lý Do Thưởng -->
+                <div class="form-group">
+                    <label for="LyDoThuong">Lý Do Thưởng</label>
+                    <textarea asp-for="LyDoThuong" class="form-control" rows="4"></textarea>
+                    <span asp-validation-for="LyDoThuong" class="text-danger"></span>
+                </div>
+
+            </div>
+
+            <div class="card-footer text-center">
+                <button type="submit" class="btn btn-primary btn-lg">Thêm Thưởng</button>
+                <a href="@Url.Action("ListThuong", "Thuong")" class="btn btn-secondary btn-lg">Hủy</a>
+            </div>
+        </div>
+    </form>
+</div>

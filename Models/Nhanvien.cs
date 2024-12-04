@@ -55,6 +55,10 @@ namespace HR_Management.Models
         public virtual ICollection<Chamcong> Chamcongs { get; set; } = new List<Chamcong>();
         public virtual ICollection<Luong> Luongs { get; set; } = new List<Luong>();
         public virtual ICollection<Hopdong> HopDongs { get; set; } = new List<Hopdong>();
+        public virtual ICollection<Luongphucap> Luongphucaps { get; set; } = new List<Luongphucap>();
+        public virtual ICollection<Khautruluong> Khautruluongs { get; set; } = new List<Khautruluong>();
+        public virtual ICollection<Phat> Phats { get; set; } = new List<Phat>();
+        public virtual ICollection<Thuong> Thuongs { get; set; } = new List<Thuong>();
 
         [ForeignKey("MaChucVu")]
         public virtual Chucvu? MaChucVuNavigation { get; set; } = null!;

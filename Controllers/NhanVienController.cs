@@ -41,7 +41,7 @@ namespace HR_Management.Controllers
 
             if (nhanVien == null)
             {
-                return RedirectToAction("AccessDenied", "Account");
+                return RedirectToAction("Auth", "Login");
             }
 
             bool isAdmin = nhanVien.MaChucVu == "CV001" && nhanVien.MaPhongBan == "PB001";
@@ -64,10 +64,71 @@ namespace HR_Management.Controllers
             return View(nvInSamePhongBan);
         }
 
+        // Chi tiết nhân viên
+        public async Task<IActionResult> GetEmployeeDetails(string maNhanVien)
+        {
+            // Kiểm tra xem mã nhân viên có hợp lệ không
+            if (string.IsNullOrEmpty(maNhanVien))
+            {
+                return BadRequest("Mã nhân viên không hợp lệ.");
+            }
+
+            // Lấy thông tin nhân viên từ DB
+            var nhanVien = await _context.Nhanviens
+                .Include(nv => nv.MaChucVuNavigation)
+                .ThenInclude(cv => cv.MaPhongBanNavigation)
+                .FirstOrDefaultAsync(nv => nv.MaNhanVien == maNhanVien);
+
+            // Kiểm tra xem nhân viên có tồn tại không
+            if (nhanVien == null)
+            {
+                return NotFound("Không tìm thấy nhân viên.");
+            }
+
+            // Lấy mã nhân viên từ session để kiểm tra quyền
+            var maNhanVienSession = HttpContext.Session.GetString("MaNhanVien");
+            if (string.IsNullOrEmpty(maNhanVienSession))
+            {
+                return RedirectToAction("Login", "Auth");
+            }
+
+            // Lấy thông tin nhân viên để kiểm tra quyền (Admin hoặc nhân viên cùng phòng ban)
+            var nhanVienSession = await _context.Nhanviens
+                .Include(nv => nv.MaChucVuNavigation)
+                .ThenInclude(cv => cv.MaPhongBanNavigation)
+                .Where(nv => nv.MaNhanVien == maNhanVienSession)
+                .Select(nv => new
+                {
+                    nv.MaChucVu,
+                    nv.MaChucVuNavigation.MaPhongBan
+                })
+                .FirstOrDefaultAsync();
+
+            if (nhanVienSession == null)
+            {
+                return RedirectToAction("Login", "Auth");
+            }
+
+            // Kiểm tra quyền của người dùng
+            bool isAdmin = nhanVienSession.MaChucVu == "CV001" && nhanVienSession.MaPhongBan == "PB001";
+            string userPhongBan = nhanVienSession.MaPhongBan;
+
+            // Nếu là admin hoặc nhân viên cùng phòng ban, hiển thị chi tiết và nút sửa/xóa
+            ViewBag.IsAdmin = isAdmin;
+            ViewBag.UserPhongBan = userPhongBan;
+
+            return PartialView("EmployeeDetails", nhanVien);
+        }
+
         // Thêm nhân viên
         [CustomAuth(maChucVu: new string[] { "CV001" }, maPhongBan: new string[] { "PB001" })]
         public async Task <IActionResult> CreateNV()
         {
+            var maNhanVien = HttpContext.Session.GetString("MaNhanVien");
+            if (string.IsNullOrEmpty(maNhanVien))
+            {
+                return RedirectToAction("Login", "Auth");
+            }
             // Tạo danh sách chức vụ để hiển thị trong view
             ViewBag.ChucVuList = new SelectList(await _context.Chucvus.ToListAsync(), "MaChucVu", "TenChucVu");
             return View(new Nhanvien());
@@ -252,7 +313,7 @@ namespace HR_Management.Controllers
             {
                 return NotFound();
             }
-            return View("DeleteConfirm", nhanVien); // Trả về view xác nhận xóa
+            return View(nhanVien); // Trả về view xác nhận xóa
         }
 
         [HttpPost, ActionName("DeleteNV")]
@@ -267,6 +328,11 @@ namespace HR_Management.Controllers
 
             try
             {
+                // Xóa tất cả tài khoản liên quan đến nhân viên trước
+                var taiKhoans = _context.Taikhoans.Where(tk => tk.MaNhanVien == maNhanVien);
+                _context.Taikhoans.RemoveRange(taiKhoans);
+
+
                 // Xóa file ảnh đại diện nếu có
                 if (!string.IsNullOrEmpty(nhanVien.AnhDaiDien))
                 {
@@ -299,7 +365,7 @@ namespace HR_Management.Controllers
             var maNhanVien = HttpContext.Session.GetString("MaNhanVien");
             if (string.IsNullOrEmpty(maNhanVien))
             {
-                return RedirectToAction("Login", "Account");
+                return RedirectToAction("Login", "Auth");
             }
 
             // Lấy thông tin nhân viên từ DB để kiểm tra quyền
@@ -316,7 +382,7 @@ namespace HR_Management.Controllers
 
             if (nhanVien == null)
             {
-                return RedirectToAction("AccessDenied", "Account");
+                return RedirectToAction("Login", "Auth");
             }
 
             bool isAdmin = nhanVien.MaChucVu == "CV001" && nhanVien.MaPhongBan == "PB001";

@@ -7,7 +7,9 @@ public partial class Khautruluong
 {
     public string MaKhauTruLuong { get; set; } = null!;
 
-    public string MaLuong { get; set; } = null!;
+    //public string MaLuong { get; set; } = null!;
+
+    public string MaNhanVien { get; set; } = null!;
 
     public string MaKhauTru { get; set; } = null!;
 
@@ -17,5 +19,7 @@ public partial class Khautruluong
 
     public virtual Khautru? MaKhauTruNavigation { get; set; } = null!;
 
-    public virtual Luong? MaLuongNavigation { get; set; } = null!;
+    public virtual Nhanvien? MaNhanVienNavigation { get; set; } = null!;
+
+    //public virtual Luong? MaLuongNavigation { get; set; } = null!;
 }

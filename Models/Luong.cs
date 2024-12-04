@@ -16,13 +16,13 @@ public partial class Luong
 
     public string TrangThai { get; set; } = null!;
 
-    public virtual ICollection<Khautruluong> Khautruluongs { get; set; } = new List<Khautruluong>();
+    //public virtual ICollection<Khautruluong> Khautruluongs { get; set; } = new List<Khautruluong>();
 
-    public virtual ICollection<Luongphucap> Luongphucaps { get; set; } = new List<Luongphucap>();
+    //public virtual ICollection<Luongphucap> Luongphucaps { get; set; } = new List<Luongphucap>();
 
     public virtual Nhanvien MaNhanVienNavigation { get; set; }
 
-    public virtual ICollection<Phat> Phats { get; set; } = new List<Phat>();
+    //public virtual ICollection<Phat> Phats { get; set; } = new List<Phat>();
 
-    public virtual ICollection<Thuong> Thuongs { get; set; } = new List<Thuong>();
+    //public virtual ICollection<Thuong> Thuongs { get; set; } = new List<Thuong>();
 }

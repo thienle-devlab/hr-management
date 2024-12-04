@@ -21,6 +21,8 @@ namespace HR_Management.Controllers
         [HttpGet]
         public IActionResult Login()
         {
+            ViewBag.Avatar = HttpContext.Session.GetString("Avatar");
+            ViewBag.Username = HttpContext.Session.GetString("Username");
             return View();
         }
 
@@ -33,9 +35,14 @@ namespace HR_Management.Controllers
 
             if (taiKhoan != null)
             {
+                // Lấy thông tin nhân viên từ bảng Nhanvien dựa trên MaNhanVien
+                var nhanVien = await _context.Nhanviens.FirstOrDefaultAsync(nv => nv.MaNhanVien == taiKhoan.MaNhanVien);
+
                 // Lưu MaNhanVien vào Session
                 HttpContext.Session.SetString("MaNhanVien", taiKhoan.MaNhanVien);
-                return RedirectToAction("Index", "Home");
+                HttpContext.Session.SetString("Username", taiKhoan.Username);
+                HttpContext.Session.SetString("Avatar", nhanVien.AnhDaiDien);
+                return RedirectToAction("ListNV", "NhanVien");
             }
 
             // Nếu đăng nhập sai, truyền thông báo lỗi vào ViewData

@@ -1,4 +1,5 @@
-﻿using HR_Management.Models;
+﻿using HR_Management.Class;
+using HR_Management.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -18,37 +19,87 @@ namespace HR_Management.Controllers
         // Danh sách lương phụ cấp
         public async Task<IActionResult> ListLuongPC()
         {
-            var luongPC = await _context.Luongphucaps.ToListAsync();
-            return View(luongPC);
+            var maNhanVien = HttpContext.Session.GetString("MaNhanVien");
+            if (string.IsNullOrEmpty(maNhanVien))
+            {
+                return RedirectToAction("Login", "Auth");
+            }
+
+            // Lấy thông tin nhân viên từ DB để kiểm tra quyền
+            var nhanVien = await _context.Nhanviens
+                .Include(nv => nv.MaChucVuNavigation)
+                .ThenInclude(cv => cv.MaPhongBanNavigation)
+                .Where(nv => nv.MaNhanVien == maNhanVien)
+                .Select(nv => new
+                {
+                    nv.MaChucVu,
+                    nv.MaChucVuNavigation.MaPhongBan
+                })
+                .FirstOrDefaultAsync();
+
+            if (nhanVien == null)
+            {
+                return RedirectToAction("Auth", "Login");
+            }
+
+            bool isAdmin = nhanVien.MaChucVu == "CV001" && nhanVien.MaPhongBan == "PB001";
+            string userPhongBan = nhanVien.MaPhongBan;
+
+            // Kiểm tra quyền admin: Nếu là admin (CV001, PB001) thì cho phép xem tất cả tài khoản
+            if (isAdmin)
+            {
+                var allLPC = await _context.Luongphucaps.ToListAsync();
+                ViewBag.IsAdmin = true;
+                return View(allLPC);
+            }
+
+            // Nếu không phải admin, chỉ cho phép xem tài khoản thuộc cùng phòng ban
+            var lpcInSamePhongBan = await _context.Luongphucaps
+                .Include(ktl => ktl.MaNhanVienNavigation)
+                .Where(ktl => ktl.MaNhanVienNavigation.MaChucVuNavigation.MaPhongBan == userPhongBan)
+                .ToListAsync();
+
+            ViewBag.IsAdmin = false;
+            return View(lpcInSamePhongBan);
+
+            //var luongPC = await _context.Luongphucaps.ToListAsync();
+            //return View(luongPC);
         }
 
         // Thêm lương phụ cấp
+        [CustomAuth(maChucVu: new string[] { "CV001" }, maPhongBan: new string[] { "PB001" })]
         public IActionResult CreateLuongPC()
         {
-            ViewBag.LuongList = new SelectList(_context.Luongs, "MaLuong", "MaLuong");
+            var maNhanVien = HttpContext.Session.GetString("MaNhanVien");
+            if (string.IsNullOrEmpty(maNhanVien))
+            {
+                return RedirectToAction("Login", "Auth");
+            }
+
+            ViewBag.NhanVienList = new SelectList(_context.Nhanviens, "MaNhanVien", "TenNhanVien");
             ViewBag.PhuCapList = new SelectList(_context.Phucaps, "MaPhuCap", "TenPhuCap");
             return View();
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> CreateLuongPC([Bind("MaLuongPhuCap,MaLuong,MaPhuCap,SoTienPhuCap,NgayApDung")] Luongphucap luongPhuCap)
+        public async Task<IActionResult> CreateLuongPC([Bind("MaLuongPhuCap,MaNhanVien,MaPhuCap,SoTienPhuCap,NgayApDung")] Luongphucap luongPhuCap)
         {
             try
             {
                 // Tắt validation cho MaLuongNavigation và MaPhuCapNavigation
-                ModelState.Remove("MaLuongNavigation");
+                ModelState.Remove("MaNhanVienNavigation");
                 ModelState.Remove("MaPhuCapNavigation");
 
                 if (ModelState.IsValid)
                 {
                     // Kiểm tra tồn tại của mã lương và mã phụ cấp
-                    var maLuong = await _context.Luongs.FindAsync(luongPhuCap.MaLuong);
+                    var maNhanVien = await _context.Nhanviens.FindAsync(luongPhuCap.MaNhanVien);
                     var maPhuCap = await _context.Phucaps.FindAsync(luongPhuCap.MaPhuCap);
 
-                    if (maLuong == null)
+                    if (maNhanVien == null)
                     {
-                        ModelState.AddModelError("MaLuong", "Mã lương không tồn tại");
+                        ModelState.AddModelError("MaNhanVien", "Mã nhân viên không tồn tại");
                     }
 
                     if (maPhuCap == null)
@@ -81,16 +132,23 @@ namespace HR_Management.Controllers
             }
 
             // Nếu có lỗi, truyền lại danh sách cho View
-            ViewBag.LuongList = new SelectList(_context.Luongs, "MaLuong", "TenLuong");
+            ViewBag.NhanVienList = new SelectList(_context.Nhanviens, "MaNhanVien", "TenNhanVien");
             ViewBag.PhuCapList = new SelectList(_context.Phucaps, "MaPhuCap", "TenPhuCap");
             return View(luongPhuCap);
         }
 
         // Sửa lương phụ cấp
+        [CustomAuth(maChucVu: new string[] { "CV001" }, maPhongBan: new string[] { "PB001" })]
         [HttpGet]
         public async Task<IActionResult> EditLuongPC(string maLuongPhuCap)
         {
             Console.WriteLine("Starting EditLuongPC method...");
+
+            var maNhanVien = HttpContext.Session.GetString("MaNhanVien");
+            if (string.IsNullOrEmpty(maNhanVien))
+            {
+                return RedirectToAction("Login", "Auth");
+            }
 
             if (string.IsNullOrEmpty(maLuongPhuCap))
             {
@@ -106,14 +164,14 @@ namespace HR_Management.Controllers
                 return NotFound();
             }
 
-            ViewBag.LuongList = new SelectList(_context.Luongs, "MaLuong", "MaLuong", luongPhuCap.MaLuong);
+            ViewBag.NhanVienList = new SelectList(_context.Nhanviens, "MaNhanVien", "TenNhanVien", luongPhuCap.MaNhanVien);
             ViewBag.PhuCapList = new SelectList(_context.Phucaps, "MaPhuCap", "TenPhuCap", luongPhuCap.MaPhuCap);
             return View(luongPhuCap);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> EditLuongPC(string maLuongPhuCap, [Bind("MaLuongPhuCap,MaLuong,MaPhuCap,SoTienPhuCap,NgayApDung")] Luongphucap luongPhuCap)
+        public async Task<IActionResult> EditLuongPC(string maLuongPhuCap, [Bind("MaLuongPhuCap,MaNhanVien,MaPhuCap,SoTienPhuCap,NgayApDung")] Luongphucap luongPhuCap)
         {
             Console.WriteLine("Starting EditLuongPC method...");
 
@@ -125,8 +183,8 @@ namespace HR_Management.Controllers
 
             try
             {
-                // Tắt validation cho MaLuongNavigation và MaPhuCapNavigation nếu không cần thiết
-                ModelState.Remove("MaLuongNavigation");
+                // Tắt validation cho MaNhanVienNavigation và MaPhuCapNavigation nếu không cần thiết
+                ModelState.Remove("MaNhanVienNavigation");
                 ModelState.Remove("MaPhuCapNavigation");
 
                 if (ModelState.IsValid)
@@ -142,7 +200,7 @@ namespace HR_Management.Controllers
                     }
 
                     // Cập nhật các trường của existingLuongPhuCap từ luongPhuCap
-                    existingLuongPhuCap.MaLuong = luongPhuCap.MaLuong;
+                    existingLuongPhuCap.MaNhanVien = luongPhuCap.MaNhanVien;
                     existingLuongPhuCap.MaPhuCap = luongPhuCap.MaPhuCap;
                     existingLuongPhuCap.SoTienPhuCap = luongPhuCap.SoTienPhuCap;
                     existingLuongPhuCap.NgayApDung = luongPhuCap.NgayApDung;
@@ -191,7 +249,7 @@ namespace HR_Management.Controllers
                 Console.WriteLine($"Stack Trace: {ex.StackTrace}");
             }
 
-            ViewBag.LuongList = new SelectList(_context.Luongs, "MaLuong", "MaLuong", luongPhuCap.MaLuong);
+            ViewBag.NhanVienList = new SelectList(_context.Nhanviens, "MaNhanVien", "TenNhanVien", luongPhuCap.MaNhanVien);
             ViewBag.PhuCapList = new SelectList(_context.Phucaps, "MaPhuCap", "TenPhuCap", luongPhuCap.MaPhuCap);
             return View(luongPhuCap);
         }
@@ -202,10 +260,17 @@ namespace HR_Management.Controllers
         }
 
         // Xoá lương phụ cấp
+        [CustomAuth(maChucVu: new string[] { "CV001" }, maPhongBan: new string[] { "PB001" })]
         [HttpGet]
         public async Task<IActionResult> DeleteLuongPC(string maLuongPhuCap)
         {
             Console.WriteLine("Starting DeleteLuongPC method...");
+
+            var maNhanVien = HttpContext.Session.GetString("MaNhanVien");
+            if (string.IsNullOrEmpty(maNhanVien))
+            {
+                return RedirectToAction("Login", "Auth");
+            }
 
             if (string.IsNullOrEmpty(maLuongPhuCap))
             {

@@ -7,7 +7,9 @@ public partial class Luongphucap
 {
     public string MaLuongPhuCap { get; set; } = null!;
 
-    public string MaLuong { get; set; } = null!;
+    //public string MaLuong { get; set; } = null!;
+
+    public string MaNhanVien { get; set; } = null!;
 
     public string MaPhuCap { get; set; } = null!;
 
@@ -15,7 +17,9 @@ public partial class Luongphucap
 
     public DateTime NgayApDung { get; set; }
 
-    public virtual Luong MaLuongNavigation { get; set; } = null!;
+    //public virtual Luong MaLuongNavigation { get; set; } = null!;
+
+    public virtual Nhanvien MaNhanVienNavigation { get; set; } = null!;
 
     public virtual Phucap MaPhuCapNavigation { get; set; } = null!;
 }

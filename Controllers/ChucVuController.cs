@@ -1,4 +1,5 @@
-﻿using HR_Management.Models;
+﻿using HR_Management.Class;
+using HR_Management.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -17,13 +18,51 @@ namespace HR_Management.Controllers
         // Danh sách chức vụ
         public async Task<IActionResult> ListChucVu()
         {
-            var chucVu = await _context.Chucvus.ToListAsync();
-            return View(chucVu);
+            var maNhanVien = HttpContext.Session.GetString("MaNhanVien");
+            if (string.IsNullOrEmpty(maNhanVien))
+            {
+                return RedirectToAction("Login", "Auth");
+            }
+
+            // Lấy thông tin nhân viên từ DB để kiểm tra quyền
+            var nhanVien = await _context.Nhanviens
+                .Include(nv => nv.MaChucVuNavigation)
+                .ThenInclude(cv => cv.MaPhongBanNavigation)
+                .Where(nv => nv.MaNhanVien == maNhanVien)
+                .Select(nv => new
+                {
+                    nv.MaChucVu,
+                    nv.MaChucVuNavigation.MaPhongBan
+                })
+                .FirstOrDefaultAsync();
+
+            if (nhanVien == null)
+            {
+                return RedirectToAction("Auth", "Login");
+            }
+
+            bool isAdmin = nhanVien.MaChucVu == "CV001" && nhanVien.MaPhongBan == "PB001";
+            string userPhongBan = nhanVien.MaPhongBan;
+
+            ViewBag.IsAdmin = isAdmin;
+
+            var chucVus = await _context.Chucvus.ToListAsync();
+            return View(chucVus);
+
+            //var chucVu = await _context.Chucvus.ToListAsync();
+            //return View(chucVu);
         }
 
         // Tạo chức vụ mới (GET)
+        [CustomAuth(maChucVu: new string[] { "CV001" }, maPhongBan: new string[] { "PB001" })]
         public IActionResult CreateChucVu()
         {
+            var maNhanVien = HttpContext.Session.GetString("MaNhanVien");
+            if (string.IsNullOrEmpty(maNhanVien))
+            {
+                return RedirectToAction("Login", "Auth");
+            }
+
             // Truyền danh sách phòng ban vào ViewBag
             ViewBag.PhongBanList = new SelectList(_context.Phongbans, "MaPhongBan", "TenPhongBan");
 
@@ -84,10 +123,17 @@ namespace HR_Management.Controllers
         }
 
         // Hiển thị form sửa chức vụ
+        [CustomAuth(maChucVu: new string[] { "CV001" }, maPhongBan: new string[] { "PB001" })]
         [HttpGet]
         public async Task<IActionResult> EditChucVu(string maChucVu)
         {
             Console.WriteLine("Starting EditChucVu method...");
+
+            var maNhanVien = HttpContext.Session.GetString("MaNhanVien");
+            if (string.IsNullOrEmpty(maNhanVien))
+            {
+                return RedirectToAction("Login", "Auth");
+            }
 
             if (string.IsNullOrEmpty(maChucVu))
             {
@@ -212,8 +258,15 @@ namespace HR_Management.Controllers
         }
 
         // Xóa chức vụ (GET)
+        [CustomAuth(maChucVu: new string[] { "CV001" }, maPhongBan: new string[] { "PB001" })]
         public async Task<IActionResult> DeleteChucVu(string MaChucVu)
         {
+            var maNhanVien = HttpContext.Session.GetString("MaNhanVien");
+            if (string.IsNullOrEmpty(maNhanVien))
+            {
+                return RedirectToAction("Login", "Auth");
+            }
+
             if (string.IsNullOrEmpty(MaChucVu))
             {
                 return NotFound();

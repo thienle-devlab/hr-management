@@ -8,9 +8,12 @@
 <div class="container mt-4">
     <h2 class="mb-4">@ViewData["Title"]</h2>
 
-    <p>
-        <a asp-action="CreateChucVu" class="btn btn-primary mb-3">Tạo Mới Chức Vụ</a>
-    </p>
+    @if (ViewBag.IsAdmin)
+    {
+        <p>
+            <a asp-action="CreateChucVu" class="btn btn-primary mb-3">Tạo Mới Chức Vụ</a>
+        </p>
+    }
 
     <div class="table-responsive">
         <table class="table table-striped table-bordered">
@@ -19,7 +22,10 @@
                     <th scope="col">Mã Chức Vụ</th>
                     <th scope="col">Tên Chức Vụ</th>
                     <th scope="col">Mã Phòng Ban</th>
-                    <th scope="col">Hành Động</th>
+                    @if (ViewBag.IsAdmin)
+                    {
+                        <th scope="col">Hành Động</th>
+                    }
                 </tr>
             </thead>
             <tbody>
@@ -29,12 +35,15 @@
                         <td>@Html.DisplayFor(modelItem => item.MaChucVu)</td>
                         <td>@Html.DisplayFor(modelItem => item.TenChucVu)</td>
                         <td>@Html.DisplayFor(modelItem => item.MaPhongBan)</td>
-                        <td>
-                            <div class="btn-group" role="group">
-                                <a href="@Url.Action("EditChucVu", new { maChucVu = item.MaChucVu })" class="btn btn-warning btn-sm">Sửa</a>
-                                <a href="@Url.Action("DeleteChucVu", new { maChucVu = item.MaChucVu })" class="btn btn-danger btn-sm">Xóa</a>
-                            </div>
-                        </td>
+                        @if (ViewBag.IsAdmin)
+                        {
+                            <td>
+                                <div class="btn-group" role="group">
+                                    <a href="@Url.Action("EditChucVu", new { maChucVu = item.MaChucVu })" class="btn btn-warning btn-sm">Sửa</a>
+                                    <a href="@Url.Action("DeleteChucVu", new { maChucVu = item.MaChucVu })" class="btn btn-danger btn-sm">Xóa</a>
+                                </div>
+                            </td>
+                        }                       
                     </tr>
                 }
             </tbody>

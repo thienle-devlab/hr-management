@@ -1,4 +1,5 @@
-﻿using HR_Management.Models;
+﻿using HR_Management.Class;
+using HR_Management.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -17,14 +18,64 @@ namespace HR_Management.Controllers
         // Danh sách khấu trừ lương
         public async Task<IActionResult> ListKhauTruLuong()
         {
-            var khauTruLuong = await _context.Khautruluongs.ToListAsync();
-            return View(khauTruLuong);
+            var maNhanVien = HttpContext.Session.GetString("MaNhanVien");
+            if (string.IsNullOrEmpty(maNhanVien))
+            {
+                return RedirectToAction("Login", "Auth");
+            }
+
+            // Lấy thông tin nhân viên từ DB để kiểm tra quyền
+            var nhanVien = await _context.Nhanviens
+                .Include(nv => nv.MaChucVuNavigation)
+                .ThenInclude(cv => cv.MaPhongBanNavigation)
+                .Where(nv => nv.MaNhanVien == maNhanVien)
+                .Select(nv => new
+                {
+                    nv.MaChucVu,
+                    nv.MaChucVuNavigation.MaPhongBan
+                })
+                .FirstOrDefaultAsync();
+
+            if (nhanVien == null)
+            {
+                return RedirectToAction("Auth", "Login");
+            }
+
+            bool isAdmin = nhanVien.MaChucVu == "CV001" && nhanVien.MaPhongBan == "PB001";
+            string userPhongBan = nhanVien.MaPhongBan;
+
+            // Kiểm tra quyền admin: Nếu là admin (CV001, PB001) thì cho phép xem tất cả tài khoản
+            if (isAdmin)
+            {
+                var allKTL = await _context.Khautruluongs.ToListAsync();
+                ViewBag.IsAdmin = true;
+                return View(allKTL);
+            }
+
+            // Nếu không phải admin, chỉ cho phép xem tài khoản thuộc cùng phòng ban
+            var ktlInSamePhongBan = await _context.Khautruluongs
+                .Include(ktl => ktl.MaNhanVienNavigation)
+                .Where(ktl => ktl.MaNhanVienNavigation.MaChucVuNavigation.MaPhongBan == userPhongBan)
+                .ToListAsync();
+
+            ViewBag.IsAdmin = false;
+            return View(ktlInSamePhongBan);
+
+            //var khauTruLuong = await _context.Khautruluongs.ToListAsync();
+            //return View(khauTruLuong);
         }
 
         // Tạo khấu trừ lương mới (GET)
+        [CustomAuth(maChucVu: new string[] { "CV001" }, maPhongBan: new string[] { "PB001" })]
         public IActionResult CreateKhauTruLuong()
         {
-            ViewBag.LuongList = new SelectList(_context.Luongs, "MaLuong", "MaLuong");
+            var maNhanVien = HttpContext.Session.GetString("MaNhanVien");
+            if (string.IsNullOrEmpty(maNhanVien))
+            {
+                return RedirectToAction("Login", "Auth");
+            }
+
+            ViewBag.NhanVienList = new SelectList(_context.Nhanviens, "MaNhanVien", "TenNhanVien");
             ViewBag.KhauTruList = new SelectList(_context.Khautrus, "MaKhauTru", "TenKhauTru");
             return View();
         }
@@ -32,7 +83,7 @@ namespace HR_Management.Controllers
         // Tạo khấu trừ lương mới (POST)
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> CreateKhauTruLuong([Bind("MaKhauTruLuong,MaLuong,MaKhauTru,KhoanKhauTru,NgayApDung")] Khautruluong khautruluong)
+        public async Task<IActionResult> CreateKhauTruLuong([Bind("MaKhauTruLuong,MaNhanVien,MaKhauTru,KhoanKhauTru,NgayApDung")] Khautruluong khautruluong)
         {
             if (ModelState.IsValid)
             {
@@ -53,14 +104,21 @@ namespace HR_Management.Controllers
                 }
             }
 
-            ViewBag.LuongList = new SelectList(_context.Luongs, "MaLuong", "MaLuong", khautruluong.MaLuong);
+            ViewBag.NhanVienList = new SelectList(_context.Nhanviens, "MaNhanVien", "TenNhanVien", khautruluong.MaNhanVien);
             ViewBag.KhauTruList = new SelectList(_context.Khautrus, "MaKhauTru", "TenKhauTru", khautruluong.MaKhauTru);
             return View(khautruluong);
         }
 
         // Sửa khấu trừ lương (GET)
+        [CustomAuth(maChucVu: new string[] { "CV001" }, maPhongBan: new string[] { "PB001" })]
         public async Task<IActionResult> EditKhauTruLuong(string maKhauTruLuong)
         {
+            var maNhanVien = HttpContext.Session.GetString("MaNhanVien");
+            if (string.IsNullOrEmpty(maNhanVien))
+            {
+                return RedirectToAction("Login", "Auth");
+            }
+
             if (string.IsNullOrEmpty(maKhauTruLuong))
             {
                 return NotFound();
@@ -72,7 +130,7 @@ namespace HR_Management.Controllers
                 return NotFound();
             }
 
-            ViewBag.LuongList = new SelectList(_context.Luongs, "MaLuong", "MaLuong", khautruluong.MaLuong);
+            ViewBag.NhanVienList = new SelectList(_context.Nhanviens, "MaNhanVien", "TenNhanVien", khautruluong.MaNhanVien);
             ViewBag.KhauTruList = new SelectList(_context.Khautrus, "MaKhauTru", "TenKhauTru", khautruluong.MaKhauTru);
             return View(khautruluong);
         }
@@ -80,7 +138,7 @@ namespace HR_Management.Controllers
         // Sửa khấu trừ lương (POST)
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> EditKhauTruLuong(string maKhauTruLuong, [Bind("MaKhauTruLuong,MaLuong,MaKhauTru,KhoanKhauTru,NgayApDung")] Khautruluong khautruluong)
+        public async Task<IActionResult> EditKhauTruLuong(string maKhauTruLuong, [Bind("MaKhauTruLuong,MaNhanVien,MaKhauTru,KhoanKhauTru,NgayApDung")] Khautruluong khautruluong)
         {
             Console.WriteLine("Starting EditKhauTruLuong method...");
 
@@ -93,7 +151,7 @@ namespace HR_Management.Controllers
             try
             {
                 // Tắt validation cho các navigation properties nếu có
-                ModelState.Remove("MaLuongNavigation");
+                ModelState.Remove("MaNhanVienNavigation");
                 ModelState.Remove("MaKhauTruNavigation");
 
                 if (ModelState.IsValid)
@@ -109,7 +167,7 @@ namespace HR_Management.Controllers
                     }
 
                     // Cập nhật các trường của existingKhauTruLuong từ khautruluong
-                    existingKhauTruLuong.MaLuong = khautruluong.MaLuong;
+                    existingKhauTruLuong.MaNhanVien = khautruluong.MaNhanVien;
                     existingKhauTruLuong.MaKhauTru = khautruluong.MaKhauTru;
                     existingKhauTruLuong.KhoanKhauTru = khautruluong.KhoanKhauTru;
                     existingKhauTruLuong.NgayApDung = khautruluong.NgayApDung;
@@ -173,7 +231,7 @@ namespace HR_Management.Controllers
             }
 
             // Truyền danh sách lương và khấu trừ vào ViewBag
-            ViewBag.LuongList = new SelectList(_context.Luongs, "MaLuong", "MaLuong", khautruluong.MaLuong);
+            ViewBag.NhanVienList = new SelectList(_context.Nhanviens, "MaNhanVien", "TenNhanVien", khautruluong.MaNhanVien);
             ViewBag.KhauTruList = new SelectList(_context.Khautrus, "MaKhauTru", "TenKhauTru", khautruluong.MaKhauTru);
 
             return View(khautruluong);
@@ -187,15 +245,22 @@ namespace HR_Management.Controllers
 
 
         // Xóa khấu trừ lương (GET)
+        [CustomAuth(maChucVu: new string[] { "CV001" }, maPhongBan: new string[] { "PB001" })]
         public async Task<IActionResult> DeleteKhauTruLuong(string maKhauTruLuong)
         {
+            var maNhanVien = HttpContext.Session.GetString("MaNhanVien");
+            if (string.IsNullOrEmpty(maNhanVien))
+            {
+                return RedirectToAction("Login", "Auth");
+            }
+
             if (string.IsNullOrEmpty(maKhauTruLuong))
             {
                 return NotFound();
             }
 
             var khautruluong = await _context.Khautruluongs
-                .Include(k => k.MaLuongNavigation)
+                .Include(k => k.MaNhanVienNavigation)
                 .Include(k => k.MaKhauTruNavigation)
                 .FirstOrDefaultAsync(m => m.MaKhauTruLuong == maKhauTruLuong);
 

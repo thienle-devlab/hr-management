@@ -8,9 +8,12 @@
 <div class="container mt-4">
     <h2 class="mb-4">@ViewData["Title"]</h2>
 
-    <p>
-        <a asp-action="Register" class="btn btn-primary mb-3">Đăng Ký Tài Khoản Mới</a>
-    </p>
+    @if (ViewBag.IsAdmin)
+    {
+        <p>
+            <a asp-action="Register" class="btn btn-primary mb-3">Đăng Ký Tài Khoản Mới</a>
+        </p>
+    }
 
     <div class="table-responsive">
         <table class="table table-striped table-bordered">
@@ -19,7 +22,10 @@
                     <th scope="col">Tên Tài Khoản</th>
                     <th scope="col">Mã Nhân Viên</th>
                     <th scope="col">Trạng Thái</th>
-                    <th scope="col">Thao Tác</th>
+                    @if (ViewBag.IsAdmin)
+                    {
+                        <th scope="col">Thao Tác</th>
+                    }                
                 </tr>
             </thead>
             <tbody>
@@ -29,12 +35,15 @@
                         <td>@Html.DisplayFor(modelItem => account.Username)</td>
                         <td>@Html.DisplayFor(modelItem => account.MaNhanVien)</td>
                         <td>@Html.DisplayFor(modelItem => account.TrangThai)</td>
-                        <td>
-                            <div class="btn-group" role="group">
-                                <a href="@Url.Action("EditTaiKhoan", "TaiKhoan", new { Username = account.Username})" class="btn btn-warning btn-sm">Sửa</a>
-                                <a href="@Url.Action("DeleteTaiKhoan", "TaiKhoan", new { Username = account.Username})" class="btn btn-danger btn-sm">Xóa</a>
-                            </div>
-                        </td>
+                        @if (ViewBag.IsAdmin)
+                        {
+                            <td>
+                                <div class="btn-group" role="group">
+                                    <a href="@Url.Action("EditTaiKhoan", "TaiKhoan", new { Username = account.Username})" class="btn btn-warning btn-sm">Sửa</a>
+                                    <a href="@Url.Action("DeleteTaiKhoan", "TaiKhoan", new { Username = account.Username})" class="btn btn-danger btn-sm">Xóa</a>
+                                </div>
+                            </td>
+                        }                        
                     </tr>
                 }
             </tbody>

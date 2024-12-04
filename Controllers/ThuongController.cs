@@ -1,4 +1,5 @@
-﻿using HR_Management.Models;
+﻿using HR_Management.Class;
+using HR_Management.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -17,32 +18,82 @@ namespace HR_Management.Controllers
         // Hiển thị danh sách thưởng
         public async Task<IActionResult> ListThuong()
         {
-            var thuong = await _context.Thuongs.ToListAsync();
-            return View(thuong);
+            var maNhanVien = HttpContext.Session.GetString("MaNhanVien");
+            if (string.IsNullOrEmpty(maNhanVien))
+            {
+                return RedirectToAction("Login", "Auth");
+            }
+
+            // Lấy thông tin nhân viên từ DB để kiểm tra quyền
+            var nhanVien = await _context.Nhanviens
+                .Include(nv => nv.MaChucVuNavigation)
+                .ThenInclude(cv => cv.MaPhongBanNavigation)
+                .Where(nv => nv.MaNhanVien == maNhanVien)
+                .Select(nv => new
+                {
+                    nv.MaChucVu,
+                    nv.MaChucVuNavigation.MaPhongBan
+                })
+                .FirstOrDefaultAsync();
+
+            if (nhanVien == null)
+            {
+                return RedirectToAction("Auth", "Login");
+            }
+
+            bool isAdmin = nhanVien.MaChucVu == "CV001" && nhanVien.MaPhongBan == "PB001";
+            string userPhongBan = nhanVien.MaPhongBan;
+
+            // Kiểm tra quyền admin: Nếu là admin (CV001, PB001) thì cho phép xem tất cả tài khoản
+            if (isAdmin)
+            {
+                var allThuong = await _context.Thuongs.ToListAsync();
+                ViewBag.IsAdmin = true;
+                return View(allThuong);
+            }
+
+            // Nếu không phải admin, chỉ cho phép xem tài khoản thuộc cùng phòng ban
+            var thuongInSamePhongBan = await _context.Thuongs
+                .Include(thuong => thuong.MaNhanVienNavigation)
+                .Where(thuong => thuong.MaNhanVienNavigation.MaChucVuNavigation.MaPhongBan == userPhongBan)
+                .ToListAsync();
+
+            ViewBag.IsAdmin = false;
+            return View(thuongInSamePhongBan);
+
+            //var thuong = await _context.Thuongs.ToListAsync();
+            //return View(thuong);
         }
 
         // Hiển thị form thêm thưởng
+        [CustomAuth(maChucVu: new string[] { "CV001" }, maPhongBan: new string[] { "PB001" })]
         [HttpGet]
         public IActionResult CreateThuong()
         {
-            ViewBag.LuongList = new SelectList(_context.Luongs, "MaLuong", "MaLuong");
+            var maNhanVien = HttpContext.Session.GetString("MaNhanVien");
+            if (string.IsNullOrEmpty(maNhanVien))
+            {
+                return RedirectToAction("Login", "Auth");
+            }
+
+            ViewBag.NhanVienList = new SelectList(_context.Nhanviens, "MaNhanVien", "TenNhanVien");
             return View();
         }
 
         // Xử lý form thêm thưởng
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> CreateThuong([Bind("MaThuong,MaLuong,NgayThuong,SoTienThuong,LyDoThuong")] Thuong thuong)
+        public async Task<IActionResult> CreateThuong([Bind("MaThuong,MaNhanVien,NgayThuong,SoTienThuong,LyDoThuong")] Thuong thuong)
         {
             if (ModelState.IsValid)
             {
                 try
                 {
-                    var luong = await _context.Luongs.FindAsync(thuong.MaLuong);
-                    if (luong == null)
+                    var nhanVien = await _context.Nhanviens.FindAsync(thuong.MaNhanVien);
+                    if (nhanVien == null)
                     {
-                        ModelState.AddModelError("MaLuong", "Mã lương không tồn tại.");
-                        ViewBag.LuongList = new SelectList(_context.Luongs, "MaLuong", "MaLuong", thuong.MaLuong);
+                        ModelState.AddModelError("MaNhanVien", "Mã nhân viên không tồn tại.");
+                        ViewBag.NhanVienList = new SelectList(_context.Nhanviens, "MaNhanVien", "TenNhanVien", thuong.MaNhanVien);
                         return View(thuong);
                     }
 
@@ -58,14 +109,21 @@ namespace HR_Management.Controllers
                 }
             }
 
-            ViewBag.LuongList = new SelectList(_context.Luongs, "MaLuong", "MaLuong", thuong.MaLuong);
+            ViewBag.NhanVienList = new SelectList(_context.Nhanviens, "MaNhanVien", "TenNhanVien", thuong.MaNhanVien);
             return View(thuong);
         }
 
         // Hiển thị form sửa thưởng
+        [CustomAuth(maChucVu: new string[] { "CV001" }, maPhongBan: new string[] { "PB001" })]
         [HttpGet]
         public async Task<IActionResult> EditThuong(string maThuong)
         {
+            var maNhanVien = HttpContext.Session.GetString("MaNhanVien");
+            if (string.IsNullOrEmpty(maNhanVien))
+            {
+                return RedirectToAction("Login", "Auth");
+            }
+
             if (string.IsNullOrEmpty(maThuong))
                 return NotFound();
 
@@ -73,14 +131,14 @@ namespace HR_Management.Controllers
             if (thuong == null)
                 return NotFound();
 
-            ViewBag.LuongList = new SelectList(_context.Luongs, "MaLuong", "MaLuong", thuong.MaLuong);
+            ViewBag.NhanVienList = new SelectList(_context.Nhanviens, "MaNhanVien", "TenNhanVien", thuong.MaNhanVien);
             return View(thuong);
         }
 
         // Xử lý form sửa thưởng
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> EditThuong(string maThuong, [Bind("MaThuong,MaLuong,NgayThuong,SoTienThuong,LyDoThuong")] Thuong thuong)
+        public async Task<IActionResult> EditThuong(string maThuong, [Bind("MaThuong,MaNhanVien,NgayThuong,SoTienThuong,LyDoThuong")] Thuong thuong)
         {
             if (maThuong != thuong.MaThuong)
                 return NotFound();
@@ -93,15 +151,15 @@ namespace HR_Management.Controllers
                     if (existingThuong == null)
                         return NotFound();
 
-                    var luong = await _context.Luongs.FindAsync(thuong.MaLuong);
-                    if (luong == null)
+                    var nhanVien = await _context.Nhanviens.FindAsync(thuong.MaNhanVien);
+                    if (nhanVien == null)
                     {
-                        ModelState.AddModelError("MaLuong", "Mã lương không tồn tại.");
-                        ViewBag.LuongList = new SelectList(_context.Luongs, "MaLuong", "MaLuong", thuong.MaLuong);
+                        ModelState.AddModelError("MaNhanVien", "Mã nhân viên không tồn tại.");
+                        ViewBag.NhanVienList = new SelectList(_context.Nhanviens, "MaNhanVien", "TenNhanVien", thuong.MaNhanVien);
                         return View(thuong);
                     }
 
-                    existingThuong.MaLuong = thuong.MaLuong;
+                    existingThuong.MaNhanVien = thuong.MaNhanVien;
                     existingThuong.NgayThuong = thuong.NgayThuong;
                     existingThuong.SoTienThuong = thuong.SoTienThuong;
                     existingThuong.LyDoThuong = thuong.LyDoThuong;
@@ -117,19 +175,26 @@ namespace HR_Management.Controllers
                 }
             }
 
-            ViewBag.LuongList = new SelectList(_context.Luongs, "MaLuong", "MaLuong", thuong.MaLuong);
+            ViewBag.NhanVienList = new SelectList(_context.Nhanviens, "MaNhanVien", "TenNhanVien", thuong.MaNhanVien);
             return View(thuong);
         }
 
         // Xóa thưởng (GET)
+        [CustomAuth(maChucVu: new string[] { "CV001" }, maPhongBan: new string[] { "PB001" })]
         [HttpGet]
         public async Task<IActionResult> DeleteThuong(string maThuong)
         {
+            var maNhanVien = HttpContext.Session.GetString("MaNhanVien");
+            if (string.IsNullOrEmpty(maNhanVien))
+            {
+                return RedirectToAction("Login", "Auth");
+            }
+
             if (string.IsNullOrEmpty(maThuong))
                 return NotFound();
 
             var thuong = await _context.Thuongs
-                .Include(t => t.MaLuongNavigation)
+                .Include(t => t.MaNhanVienNavigation)
                 .FirstOrDefaultAsync(t => t.MaThuong == maThuong);
 
             if (thuong == null)

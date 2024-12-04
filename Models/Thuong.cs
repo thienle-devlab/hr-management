@@ -7,7 +7,7 @@ public partial class Thuong
 {
     public string MaThuong { get; set; } = null!;
 
-    public string MaLuong { get; set; } = null!;
+    public string MaNhanVien { get; set; } = null!;
 
     public DateTime NgayThuong { get; set; }
 
@@ -15,5 +15,5 @@ public partial class Thuong
 
     public string? LyDoThuong { get; set; }
 
-    public virtual Luong? MaLuongNavigation { get; set; } = null!;
+    public virtual Nhanvien? MaNhanVienNavigation { get; set; } = null!;
 }

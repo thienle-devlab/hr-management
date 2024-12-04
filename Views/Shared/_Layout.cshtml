@@ -5,11 +5,29 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard Layout</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="~/css/style.css">
+    <link rel="stylesheet" href="~/css/style2.css">
     <link href="~/font/css/all.min.css" rel="stylesheet" />
+    @RenderSection("Styles", required: false)
+
+    <style>
+        /* Thêm CSS để tạo thanh cuộn cho sidebar */
+        #sidebar {
+            height: 100vh;
+            overflow-y: auto;
+        }
+
+        /* CSS cho mũi tên */
+        .nav-link .arrow {
+            transition: transform 0.3s;
+            margin: 10px;
+        }
+
+        .nav-link.collapsed .arrow {
+            transform: rotate(180deg);
+        }
+    </style>
 </head>
 <body>
-
     <div class="d-flex" id="wrapper">
         <!-- Sidebar -->
         <div class="sidebar bg-light p-3" id="sidebar">
@@ -20,91 +38,127 @@
                 </button>
             </div>
             <ul class="nav flex-column">
-                <!-- Nhân viên -->
                 <li class="nav-item">
-                    <a class="nav-link" href="nhan-vien.html">
-                        <i class="fas fa-user"></i>
+                    <a class="nav-link collapsed" href="#nhanVienSubmenu" data-bs-toggle="collapse" aria-expanded="false">
+                        <i class="fas fa-users"></i>
                         <span class="menu-text">Nhân viên</span>
+                        <i class="fa-solid fa-chevron-up arrow"></i>
+                    </a>
+                    <ul class="collapse list-unstyled" id="nhanVienSubmenu">
+                        <!-- Nhân viên -->
+                        <li class="nav-item">
+                            <a class="nav-link" asp-controller="NhanVien" asp-action="ListNV">
+                                <span class="menu-text">Danh sách Nhân viên</span>
+                            </a>
+                        </li>
+
+                        <!-- Tài khoản -->
+                        <li class="nav-item">
+                            <a class="nav-link" asp-controller="TaiKhoan" asp-action="ListTaiKhoan">
+                                <span class="menu-text">Tài Khoản</span>
+                            </a>
+                        </li>
+
+                        <!-- Chấm công -->
+                        <li class="nav-item">
+                            <a class="nav-link" asp-controller="ChamCong" asp-action="ListChamCong">
+                                <span class="menu-text">Chấm công</span>
+                            </a>
+                        </li>
+
+                        <!-- Nghỉ phép -->
+                        <li class="nav-item">
+                            <a class="nav-link" asp-controller="NghiPhep" asp-action="ListNghiPhep">
+                                <span class="menu-text">Nghỉ phép</span>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+
+
+                <!-- Phòng ban -->
+                <li class="nav-item">
+                    <a class="nav-link" asp-controller="PhongBan" asp-action="ListPhongBan">
+                        <i class="fa-regular fa-building"></i>
+                        <span class="menu-text">Phòng Ban</span>
                     </a>
                 </li>
 
                 <!-- Chức vụ -->
                 <li class="nav-item">
-                    <a class="nav-link dropdown-toggle" href="#" id="chucVuDropdown" data-bs-toggle="collapse" data-bs-target="#chucVuSubmenu" aria-expanded="false" aria-controls="chucVuSubmenu">
-                        <i class="fas fa-cogs"></i>
+                    <a class="nav-link" asp-controller="ChucVu" asp-action="ListChucVu">
+                        <i class="fa-solid fa-arrow-up-right-dots"></i>
                         <span class="menu-text">Chức vụ</span>
                     </a>
-                    <ul class="nav flex-column ms-3 collapse" id="chucVuSubmenu">
-                        <li><a class="nav-link" href="phong-ban.html">Phòng ban</a></li>
-                    </ul>
                 </li>
 
-                <!-- Chấm công -->
+                <!-- Phân Công -->
                 <li class="nav-item">
-                    <a class="nav-link" href="cham-cong.html">
-                        <i class="fas fa-clock"></i>
-                        <span class="menu-text">Chấm công</span>
+                    <a class="nav-link" asp-controller="PhanCong" asp-action="ListPC">
+                        <i class="fa-solid fa-table"></i>
+                        <span class="menu-text">Phân Công</span>
                     </a>
                 </li>
 
-                <!-- Nghỉ phép -->
+                <!-- Công việc -->
                 <li class="nav-item">
-                    <a class="nav-link" href="nghi-phep.html">
-                        <i class="fas fa-calendar-times"></i>
-                        <span class="menu-text">Nghỉ phép</span>
+                    <a class="nav-link" asp-controller="CongViec" asp-action="ListCongViec">
+                        <i class="fa-solid fa-rectangle-list"></i>
+                        <span class="menu-text">Công Việc</span>
                     </a>
                 </li>
 
-                <!-- Phân công -->
+                <!-- Lương (Expandable) -->
                 <li class="nav-item">
-                    <a class="nav-link dropdown-toggle" href="#" id="phanCongDropdown" data-bs-toggle="collapse" data-bs-target="#phanCongSubmenu" aria-expanded="false" aria-controls="phanCongSubmenu">
-                        <i class="fas fa-tasks"></i>
-                        <span class="menu-text">Phân công</span>
-                    </a>
-                    <ul class="nav flex-column ms-3 collapse" id="phanCongSubmenu">
-                        <li><a class="nav-link" href="cong-viec.html">Công việc</a></li>
-                    </ul>
-                </li>
-
-                <!-- Lương -->
-                <li class="nav-item">
-                    <a class="nav-link dropdown-toggle" href="#" id="luongDropdown" data-bs-toggle="collapse" data-bs-target="#luongSubmenu" aria-expanded="false" aria-controls="luongSubmenu">
+                    <a class="nav-link collapsed" href="#luongSubmenu" data-bs-toggle="collapse" aria-expanded="false">
                         <i class="fas fa-money-bill-alt"></i>
                         <span class="menu-text">Lương</span>
+                        <i class="fa-solid fa-chevron-up arrow"></i>
                     </a>
-                    <ul class="nav flex-column ms-3 collapse" id="luongSubmenu">
-                        <li><a class="nav-link" href="thuong.html">Thưởng</a></li>
-                        <li><a class="nav-link" href="phat.html">Phạt</a></li>
-                        <li><a class="nav-link" href="luong-phu-cap.html">Lương phụ cấp</a></li>
-                        <li><a class="nav-link" href="khau-tru-luong.html">Khấu trừ lương</a></li>
-
-                        <!-- Lương phụ cấp -->
+                    <ul class="collapse list-unstyled" id="luongSubmenu">
                         <li class="nav-item">
-                            <a class="nav-link dropdown-toggle" href="#" id="luongPhuCapDropdown" data-bs-toggle="collapse" data-bs-target="#luongPhuCapSubmenu" aria-expanded="false" aria-controls="luongPhuCapSubmenu">
-                                <span class="menu-text">Lương phụ cấp</span>
+                            <a class="nav-link" asp-controller="Luong" asp-action="ListLuong">
+                                <span class="menu-text">Bảng Lương</span>
                             </a>
-                            <ul class="nav flex-column ms-3 collapse" id="luongPhuCapSubmenu">
-                                <li><a class="nav-link" href="phu-cap.html">Phụ cấp</a></li>
-                            </ul>
                         </li>
-
-                        <!-- Khấu trừ lương -->
                         <li class="nav-item">
-                            <a class="nav-link dropdown-toggle" href="#" id="khauTruLuongDropdown" data-bs-toggle="collapse" data-bs-target="#khauTruLuongSubmenu" aria-expanded="false" aria-controls="khauTruLuongSubmenu">
-                                <span class="menu-text">Khấu trừ lương</span>
+                            <a class="nav-link" asp-controller="KhauTru" asp-action="ListKhauTru">
+                                <span class="menu-text">Khấu Trừ</span>
                             </a>
-                            <ul class="nav flex-column ms-3 collapse" id="khauTruLuongSubmenu">
-                                <li><a class="nav-link" href="khau-tru.html">Khấu trừ</a></li>
-                            </ul>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" asp-controller="KhauTruLuong" asp-action="ListKhauTruLuong">
+                                <span class="menu-text">Khấu Trừ Lương</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" asp-controller="PhuCap" asp-action="ListPhuCap">
+                                <span class="menu-text">Phụ Cấp</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" asp-controller="LuongPhuCap" asp-action="ListLuongPC">
+                                <span class="menu-text">Phụ Cấp Lương</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" asp-controller="Thuong" asp-action="ListThuong">
+                                <span class="menu-text">Lương Thưởng</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" asp-controller="Phat" asp-action="ListPhat">
+                                <span class="menu-text">Phạt</span>
+                            </a>
                         </li>
                     </ul>
                 </li>
 
                 <!-- Báo cáo -->
                 <li class="nav-item">
-                    <a class="nav-link" href="bao-cao.html">
+                    <a class="nav-link" asp-controller="BaoCao" asp-action="ListBC">
                         <i class="fas fa-chart-line"></i>
-                        <span class="menu-text">Báo cáo</span>
+                        <span class="menu-text">Báo Cáo</span>
                     </a>
                 </li>
             </ul>
@@ -128,23 +182,24 @@
                                 </form>
                             </li>
                             <li class="nav-item separator"></li> <!-- Line phân cách -->
+                            @{
+                                var username = Context.Items["Username"] as string;
+                                var avatar = Context.Items["Avatar"] as string;
+                            }
                             <!-- Avatar Dropdown -->
                             <li class="nav-item dropdown">
                                 <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                    <img src="path_to_avatar.jpg" alt="User Avatar" class="avatar">
+                                    <img src="@avatar" alt="User Avatar" class="avatar"> @username
                                 </a>
                                 <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
                                     <li><a class="dropdown-item" href="#">Quản lý tài khoản</a></li>
-                                    <li><a class="dropdown-item" href="#">Đăng xuất</a></li>
+                                    <li><a class="dropdown-item" href="@Url.Action("Logout", "Auth")">Đăng xuất</a></li>
                                 </ul>
                             </li>
                         </ul>
                     </div>
                 </div>
             </nav>
-
-
-
 
             <!-- Content will be inserted here -->
             <div id="content">
@@ -153,9 +208,16 @@
             </div>
         </div>
     </div>
+
     @RenderSection("Scripts", required: false)
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="~/js/script.js"></script>
+    <script src="~/js/script2.js"></script>
     <script src="~/font/js/all.min.js"></script>
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha384-vtXRMe3mGCbOeY7l30aIg8H9p3GdeSe4IFlP6G8JMa7o7lXvnz3GFKzPxzJdPfGK" crossorigin="anonymous"></script>
+
+    <!-- Bootstrap JavaScript -->
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
+
 </body>
 </html>

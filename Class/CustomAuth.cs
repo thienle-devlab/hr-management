@@ -41,7 +41,7 @@ namespace HR_Management.Class
 
             if(!hasPermission)
             {
-                context.Result = new RedirectToActionResult("AccessDenied", "Account", null);
+                context.Result = new RedirectToActionResult("Login", "Auth", null);
             }
         }
 

@@ -1,4 +1,5 @@
-﻿using HR_Management.Models;
+﻿using HR_Management.Class;
+using HR_Management.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -15,10 +16,53 @@ namespace HR_Management.Controllers
         }
 
         // GET: BaoCao
-        public IActionResult ListBC()
+        public async Task<IActionResult> ListBC()
         {
-            var baocaos = _context.Baocaos.ToList();
-            return View(baocaos);
+            var maNhanVien = HttpContext.Session.GetString("MaNhanVien");
+            if (string.IsNullOrEmpty(maNhanVien))
+            {
+                return RedirectToAction("Login", "Auth");
+            }
+
+            // Lấy thông tin nhân viên từ DB để kiểm tra quyền
+            var nhanVien = await _context.Nhanviens
+                .Include(nv => nv.MaChucVuNavigation)
+                .ThenInclude(cv => cv.MaPhongBanNavigation)
+                .Where(nv => nv.MaNhanVien == maNhanVien)
+                .Select(nv => new
+                {
+                    nv.MaChucVu,
+                    nv.MaChucVuNavigation.MaPhongBan
+                })
+                .FirstOrDefaultAsync();
+
+            if (nhanVien == null)
+            {
+                return RedirectToAction("Auth", "Login");
+            }
+
+            bool isAdmin = nhanVien.MaChucVu == "CV001" && nhanVien.MaPhongBan == "PB001";
+            string userPhongBan = nhanVien.MaPhongBan;
+
+            // Kiểm tra quyền admin: Nếu là admin (CV001, PB001) thì cho phép xem tất cả tài khoản
+            if (isAdmin)
+            {
+                var allBC = await _context.Baocaos.ToListAsync();
+                ViewBag.IsAdmin = true;
+                return View(allBC);
+            }
+
+            // Nếu không phải admin, chỉ cho phép xem tài khoản thuộc cùng phòng ban
+            var bcInSamePhongBan = await _context.Baocaos
+                .Include(bc => bc.MaNhanVienNavigation)
+                .Where(bc => bc.MaNhanVienNavigation.MaChucVuNavigation.MaPhongBan == userPhongBan)
+                .ToListAsync();
+
+            ViewBag.IsAdmin = false;
+            return View(bcInSamePhongBan);
+
+            //var baocaos = _context.Baocaos.ToList();
+            //return View(baocaos);
         }
 
         // Controller Tạo Báo Cáo
@@ -92,10 +136,18 @@ namespace HR_Management.Controllers
         // Controller Sửa Báo Cáo
 
         // Hiển thị form sửa báo cáo
+        [CustomAuth(maChucVu: new string[] { "CV001" }, maPhongBan: new string[] { "PB001" })]
         [HttpGet]
         public async Task<IActionResult> EditBaoCao(string maBaoCao)
         {
             Console.WriteLine("Starting EditBaoCao method...");
+
+            var maNhanVien = HttpContext.Session.GetString("MaNhanVien");
+            if (string.IsNullOrEmpty(maNhanVien))
+            {
+                return RedirectToAction("Login", "Auth");
+
+            }
 
             if (string.IsNullOrEmpty(maBaoCao))
             {
@@ -223,8 +275,15 @@ namespace HR_Management.Controllers
         }
 
         // Delete BC
+        [CustomAuth(maChucVu: new string[] { "CV001" }, maPhongBan: new string[] { "PB001" })]
         public async Task<IActionResult> DeleteBaoCao(string maBaoCao)
         {
+            var maNhanVien = HttpContext.Session.GetString("MaNhanVien");
+            if (string.IsNullOrEmpty(maNhanVien))
+            {
+                return RedirectToAction("Login", "Auth");
+            }
+
             if (maBaoCao == null)
             {
                 return NotFound();

@@ -1,28 +1,88 @@
 ﻿@{
+    Layout = null; // Không sử dụng layout chung
     ViewData["Title"] = "Đăng nhập";
 }
 
-<h2>Đăng nhập</h2>
+@* <!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"]</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" />
+    <link href="~/css/style_login.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <h2>Đăng nhập</h2>
 
-<form method="post" asp-action="Login">
-    <div class="form-group">
-        <label for="username">Tài khoản</label>
-        <input type="text" class="form-control" id="username" name="username" placeholder="Nhập tài khoản" required />
+        <form method="post" asp-action="Login">
+            <div class="form-group">
+                <label for="username">Tài khoản</label>
+                <input type="text" class="form-control" id="username" name="username" placeholder="Nhập tài khoản" required />
+            </div>
+
+            <div class="form-group">
+                <label for="password">Mật khẩu</label>
+                <input type="password" class="form-control" id="password" name="password" placeholder="Nhập mật khẩu" required />
+            </div>
+
+            <div class="form-group">
+                <button type="submit" class="btn btn-primary">Đăng nhập</button>
+            </div>
+
+            @if (ViewData["ErrorMessage"] != null)
+            {
+                <div class="alert alert-danger">
+                    @ViewData["ErrorMessage"]
+                </div>
+            }
+        </form>
     </div>
 
-    <div class="form-group">
-        <label for="password">Mật khẩu</label>
-        <input type="password" class="form-control" id="password" name="password" placeholder="Nhập mật khẩu" required />
-    </div>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="~/js/script_login.js"></script>
+</body>
+</html> *@
 
-    <div class="form-group">
-        <button type="submit" class="btn btn-primary">Đăng nhập</button>
-    </div>
 
-    @if (ViewData["ErrorMessage"] != null)
-    {
-        <div class="alert alert-danger">
-            @ViewData["ErrorMessage"]
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Page with Loading Effect</title>
+    <link rel="stylesheet" href="~/css/style_login.css">
+</head>
+<body>
+    <div class="login-container">
+        <div class="login-box">
+            <h2>LOGIN</h2>
+            <form method="post" asp-action="Login">
+                <div class="input-group">
+                    <input type="text" name="username" placeholder="Tài khoản" required>
+                </div>
+              
+                <div class="input-group">
+                    <input type="password" name="password" placeholder="Mật khẩu" required>
+                </div>
+
+                @if (ViewData["ErrorMessage"] != null)
+                {
+                    <div class="alert alert-danger">
+                        @ViewData["ErrorMessage"]
+                    </div>
+                }
+
+                <button class="mt-4" type="submit">Đăng nhập</button>
+            </form>
         </div>
-    }
-</form>
+    </div>
+
+    <script src="~/js/script_login.js"></script>
+</body>
+</html>

@@ -1,38 +1,56 @@
 ﻿@model IEnumerable<HR_Management.Models.Thuong>
 
 @{
+    Layout = "_Layout";
     ViewData["Title"] = "Danh sách thưởng";
 }
 
-<h1>@ViewData["Title"]</h1>
+<div class="container mt-4">
+    <h2 class="mb-4">@ViewData["Title"]</h2>
 
-<a asp-action="CreateThuong" class="btn btn-primary">Thêm thưởng mới</a>
+    @if (ViewBag.IsAdmin)
+    {
+        <p>
+            <a asp-action="CreateThuong" class="btn btn-primary mb-3">Thêm Thưởng</a>
+        </p>
+    }
 
-<table class="table table-bordered mt-3">
-    <thead>
-        <tr>
-            <th>Mã Thưởng</th>
-            <th>Mã Lương</th>
-            <th>Ngày Thưởng</th>
-            <th>Số Tiền Thưởng</th>
-            <th>Lý Do Thưởng</th>
-            <th>Hành Động</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model)
-        {
-            <tr>
-                <td>@item.MaThuong</td>
-                <td>@item.MaLuong</td>
-                <td>@item.NgayThuong.ToString("dd/MM/yyyy")</td>
-                <td>@item.SoTienThuong.ToString("N0")</td>
-                <td>@item.LyDoThuong</td>
-                <td>
-                    <a asp-action="EditThuong" asp-route-maThuong="@item.MaThuong" class="btn btn-warning">Sửa</a>
-                    <a asp-action="DeleteThuong" asp-route-maThuong="@item.MaThuong" class="btn btn-danger">Xóa</a>
-                </td>
-            </tr>
-        }
-    </tbody>
-</table>
+    <div class="table-responsive">
+        <table class="table table-striped table-bordered">
+            <thead class="thead-light">
+                <tr>
+                    <th scope="col">Mã Thưởng</th>
+                    <th scope="col">Mã Nhân Viên</th>
+                    <th scope="col">Ngày Thưởng</th>
+                    <th scope="col">Số Tiền Thưởng</th>
+                    <th scope="col">Lý Do Thưởng</th>
+                    @if (ViewBag.IsAdmin)
+                    {
+                        <th scope="col">Hành Động</th>
+                    }
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>@Html.DisplayFor(modelItem => item.MaThuong)</td>
+                        <td>@Html.DisplayFor(modelItem => item.MaNhanVien)</td>
+                        <td>@item.NgayThuong.ToString("dd/MM/yyyy")</td>
+                        <td>@item.SoTienThuong.ToString("N0")</td>
+                        <td>@Html.DisplayFor(modelItem => item.LyDoThuong)</td>
+                        @if (ViewBag.IsAdmin)
+                        {
+                            <td>
+                                <div class="btn-group" role="group">
+                                    <a href="@Url.Action("EditThuong", new { maThuong = item.MaThuong })" class="btn btn-warning btn-sm">Sửa</a>
+                                    <a href="@Url.Action("DeleteThuong", new { maThuong = item.MaThuong })" class="btn btn-danger btn-sm">Xóa</a>
+                                </div>
+                            </td>
+                        }                       
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

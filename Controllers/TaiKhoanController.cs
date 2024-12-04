@@ -1,4 +1,5 @@
-﻿using HR_Management.Models;
+﻿using HR_Management.Class;
+using HR_Management.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -18,15 +19,64 @@ namespace HR_Management.Controllers
         }
 
         // Lấy danh sách Tài khoản
+        // Lấy danh sách Tài khoản
         public async Task<IActionResult> ListTaiKhoan()
         {
-            var tk = await _context.Taikhoans.ToListAsync();
-            return View(tk);
+            var maNhanVien = HttpContext.Session.GetString("MaNhanVien");
+            if (string.IsNullOrEmpty(maNhanVien))
+            {
+                return RedirectToAction("Login", "Auth");
+            }
+
+            // Lấy thông tin nhân viên từ DB để kiểm tra quyền
+            var nhanVien = await _context.Nhanviens
+                .Include(nv => nv.MaChucVuNavigation)
+                .ThenInclude(cv => cv.MaPhongBanNavigation)
+                .Where(nv => nv.MaNhanVien == maNhanVien)
+                .Select(nv => new
+                {
+                    nv.MaChucVu,
+                    nv.MaChucVuNavigation.MaPhongBan
+                })
+                .FirstOrDefaultAsync();
+
+            if (nhanVien == null)
+            {
+                return RedirectToAction("Auth", "Login");
+            }
+
+            bool isAdmin = nhanVien.MaChucVu == "CV001" && nhanVien.MaPhongBan == "PB001";
+            string userPhongBan = nhanVien.MaPhongBan;
+
+            // Kiểm tra quyền admin: Nếu là admin (CV001, PB001) thì cho phép xem tất cả tài khoản
+            if (isAdmin)
+            {
+                var allTK = await _context.Taikhoans.ToListAsync();
+                ViewBag.IsAdmin = true;
+                return View(allTK);
+            }
+
+            // Nếu không phải admin, chỉ cho phép xem tài khoản thuộc cùng phòng ban
+            var tkInSamePhongBan = await _context.Taikhoans
+                .Include(tk => tk.MaNhanVienNavigation)
+                .Where(tk => tk.MaNhanVienNavigation.MaChucVuNavigation.MaPhongBan == userPhongBan)
+                .ToListAsync();
+
+            ViewBag.IsAdmin = false;
+            return View(tkInSamePhongBan);
         }
 
+
         // Tạo tài khoản
+        [CustomAuth(maChucVu: new string[] { "CV001" }, maPhongBan: new string[] { "PB001" })]
         public IActionResult Register()
         {
+            var maNhanVien = HttpContext.Session.GetString("MaNhanVien");
+            if (string.IsNullOrEmpty(maNhanVien))
+            {
+                return RedirectToAction("Login", "Auth");
+            }
+
             ViewBag.NhanVienList = _context.Nhanviens.Select(e => new SelectListItem
             {
                 Value = e.MaNhanVien,
@@ -100,6 +150,7 @@ namespace HR_Management.Controllers
         }
 
         // Chỉnh sửa tài khoản
+        [CustomAuth(maChucVu: new string[] { "CV001" }, maPhongBan: new string[] { "PB001" })]
         public async Task<IActionResult> EditTaiKhoan(string userName)
         {
             if (userName == null)
@@ -111,6 +162,11 @@ namespace HR_Management.Controllers
             if (taiKhoan == null)
             {
                 return NotFound();
+            }
+            var maNhanVien = HttpContext.Session.GetString("MaNhanVien");
+            if (string.IsNullOrEmpty(maNhanVien))
+            {
+                return RedirectToAction("Login", "Auth");
             }
 
             ViewBag.NhanVienList = new SelectList(await _context.Nhanviens.ToListAsync(), "MaNhanVien", "TenNhanVien", taiKhoan.MaNhanVien);
@@ -175,6 +231,7 @@ namespace HR_Management.Controllers
         }
 
         // Xóa tài khoản
+        [CustomAuth(maChucVu: new string[] { "CV001" }, maPhongBan: new string[] { "PB001" })]
         public async Task<IActionResult> DeleteTaiKhoan(string userName)
         {
             if (userName == null)
@@ -187,6 +244,13 @@ namespace HR_Management.Controllers
             {
                 return NotFound();
             }
+
+            var maNhanVien = HttpContext.Session.GetString("MaNhanVien");
+            if (string.IsNullOrEmpty(maNhanVien))
+            {
+                return RedirectToAction("Login", "Auth");
+            }
+
             return View(taiKhoan);
         }
 

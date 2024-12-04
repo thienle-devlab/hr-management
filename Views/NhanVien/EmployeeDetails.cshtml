@@ -1,0 +1,64 @@
+﻿@model HR_Management.Models.Nhanvien
+
+<div class="container mx-auto p-4 bg-white rounded-lg shadow-md">
+    <div class="flex items-center justify-center space-x-6">
+        <!-- Ảnh đại diện -->
+        <div class="w-full h-full">
+            @if (!string.IsNullOrEmpty(Model.AnhDaiDien))
+            {
+                <img src="@Model.AnhDaiDien" alt="Ảnh đại diện" class="w-25 h-25 object-cover rounded-full border border-gray-300">
+            }
+            else
+            {
+                <img src="https://via.placeholder.com/150" alt="Ảnh đại diện mặc định" class="w-full h-full object-cover rounded-full border border-gray-300">
+            }
+        </div>
+
+        <!-- Thông tin nhân viên -->
+        <div class="space-y-2 text-center">
+            <h2 class="text-xl font-semibold text-gray-800">Thông Tin Nhân Viên</h2>
+            <div class="grid grid-cols-2 gap-x-4 gap-y-2 mx-auto">
+                <div class="col-span-1">
+                    <p><strong class="font-medium text-gray-700">Mã Nhân Viên:</strong> @Model.MaNhanVien</p>
+                </div>
+                <div class="col-span-1">
+                    <p><strong class="font-medium text-gray-700">Tên Nhân Viên:</strong> @Model.TenNhanVien</p>
+                </div>
+                <div class="col-span-1">
+                    <p><strong class="font-medium text-gray-700">Ngày Sinh:</strong> @Model.NgaySinh.ToShortDateString()</p>
+                </div>
+                <div class="col-span-1">
+                    <p><strong class="font-medium text-gray-700">Giới Tính:</strong> @Model.GioiTinh</p>
+                </div>
+                <div class="col-span-1">
+                    <p><strong class="font-medium text-gray-700">Địa Chỉ:</strong> @Model.DiaChi</p>
+                </div>
+                <div class="col-span-1">
+                    <p><strong class="font-medium text-gray-700">Số Điện Thoại:</strong> @Model.SoDienThoai</p>
+                </div>
+                <div class="col-span-1">
+                    <p><strong class="font-medium text-gray-700">Email:</strong> @Model.Email</p>
+                </div>
+                <div class="col-span-1">
+                    <p><strong class="font-medium text-gray-700">CCCD:</strong> @Model.Cccd</p>
+                </div>
+                <div class="col-span-1">
+                    <p><strong class="font-medium text-gray-700">Chức Vụ:</strong> @Model.MaChucVuNavigation.TenChucVu</p>
+                </div>
+                <div class="col-span-1">
+                    <p><strong class="font-medium text-gray-700">Phòng Ban:</strong> @Model.MaChucVuNavigation.MaPhongBanNavigation.TenPhongBan</p>
+                </div>
+            </div>
+            <div class="mt-4 flex justify-center space-x-4">
+                @if (ViewBag.IsAdmin)
+                {
+                    <div class="flex justify-center mt-4">
+                        <a href="@Url.Action("EditNV", new { maNhanVien = Model.MaNhanVien })" class="btn btn-warning btn-sm">Sửa</a>
+                        <a href="@Url.Action("DeleteNV", new { maNhanVien = Model.MaNhanVien })" class="btn btn-danger btn-sm">Xóa</a>
+                    </div>
+                }
+            </div>
+
+        </div>
+    </div>
+</div>

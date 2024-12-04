@@ -8,9 +8,12 @@
 <div class="container mt-4">
     <h2 class="mb-4">@ViewData["Title"]</h2>
 
-    <p>
-        <a asp-action="CreateLuong" class="btn btn-primary mb-3">Thêm Mới Lương</a>
-    </p>
+    @if (ViewBag.IsAdmin)
+    {
+        <p>
+            <a asp-action="CreateLuong" class="btn btn-primary mb-3">Thêm Mới Lương</a>
+        </p>
+    }
 
     <div class="table-responsive">
         <table class="table table-striped table-bordered">
@@ -21,7 +24,10 @@
                     <th scope="col">Lương Cơ Bản</th>
                     <th scope="col">Ngày Nhận Lương</th>
                     <th scope="col">Trạng Thái</th>
-                    <th scope="col">Hành Động</th>
+                    @if (ViewBag.IsAdmin)
+                    {
+                        <th scope="col">Hành Động</th>
+                    }
                 </tr>
             </thead>
             <tbody>
@@ -33,12 +39,15 @@
                         <td>@item.LuongCoBan</td>
                         <td>@item.NgayNhanLuong.ToString("dd/MM/yyyy")</td>
                         <td>@item.TrangThai</td>
-                        <td>
-                            <div class="btn-group" role="group">
-                                <a href="@Url.Action("EditLuong", new { maLuong = item.MaLuong })" class="btn btn-warning btn-sm">Sửa</a>
-                                <a href="@Url.Action("DeleteLuong", new { maLuong = item.MaLuong })" class="btn btn-danger btn-sm">Xóa</a>
-                            </div>
-                        </td>
+                        @if (ViewBag.IsAdmin)
+                        {
+                            <td>
+                                <div class="btn-group" role="group">
+                                    <a href="@Url.Action("EditLuong", new { maLuong = item.MaLuong })" class="btn btn-warning btn-sm">Sửa</a>
+                                    <a href="@Url.Action("DeleteLuong", new { maLuong = item.MaLuong })" class="btn btn-danger btn-sm">Xóa</a>
+                                </div>
+                            </td>
+                        }
                     </tr>
                 }
             </tbody>

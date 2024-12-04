@@ -1,4 +1,5 @@
-﻿using HR_Management.Models;
+﻿using HR_Management.Class;
+using HR_Management.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -16,15 +17,64 @@ namespace HR_Management.Controllers
         }
 
         // GET: ChamCong
-        public IActionResult ListChamCong()
+        public async Task<IActionResult> ListChamCong()
         {
-            var chamCongs = _context.Chamcongs.ToList();
-            return View(chamCongs);
+            var maNhanVien = HttpContext.Session.GetString("MaNhanVien");
+            if (string.IsNullOrEmpty(maNhanVien))
+            {
+                return RedirectToAction("Login", "Auth");
+            }
+
+            // Lấy thông tin nhân viên từ DB để kiểm tra quyền
+            var nhanVien = await _context.Nhanviens
+                .Include(nv => nv.MaChucVuNavigation)
+                .ThenInclude(cv => cv.MaPhongBanNavigation)
+                .Where(nv => nv.MaNhanVien == maNhanVien)
+                .Select(nv => new
+                {
+                    nv.MaChucVu,
+                    nv.MaChucVuNavigation.MaPhongBan
+                })
+                .FirstOrDefaultAsync();
+
+            if (nhanVien == null)
+            {
+                return RedirectToAction("Auth", "Login");
+            }
+
+            bool isAdmin = nhanVien.MaChucVu == "CV001" && nhanVien.MaPhongBan == "PB001";
+            string userPhongBan = nhanVien.MaPhongBan;
+
+            // Kiểm tra quyền admin: Nếu là admin (CV001, PB001) thì cho phép xem tất cả tài khoản
+            if (isAdmin)
+            {
+                var allCC = await _context.Chamcongs.ToListAsync();
+                ViewBag.IsAdmin = true;
+                return View(allCC);
+            }
+
+            // Nếu không phải admin, chỉ cho phép xem tài khoản thuộc cùng phòng ban
+            var ccInSamePhongBan = await _context.Chamcongs
+                .Include(cc => cc.MaNhanVienNavigation)
+                .Where(cc => cc.MaNhanVienNavigation.MaChucVuNavigation.MaPhongBan == userPhongBan)
+                .ToListAsync();
+
+            ViewBag.IsAdmin = false;
+            return View(ccInSamePhongBan);
+            //var chamCongs = _context.Chamcongs.ToList();
+            //return View(chamCongs);
         }
 
         // Create chấm công
+        [CustomAuth(maChucVu: new string[] { "CV001" }, maPhongBan: new string[] { "PB001" })]
         public IActionResult CreateChamCong()
         {
+            var maNhanVien = HttpContext.Session.GetString("MaNhanVien");
+            if (string.IsNullOrEmpty(maNhanVien))
+            {
+                return RedirectToAction("Login", "Auth");
+            }
+
             ViewBag.NhanVienList = new SelectList(_context.Nhanviens, "MaNhanVien", "TenNhanVien");
             return View();
         }
@@ -107,6 +157,7 @@ namespace HR_Management.Controllers
 
         // Sửa Chấm Công
         // Hiển thị form sửa chấm công
+        [CustomAuth(maChucVu: new string[] { "CV001" }, maPhongBan: new string[] { "PB001" })]
         [HttpGet]
         public async Task<IActionResult> EditChamCong(string maChamCong)
         {
@@ -116,6 +167,12 @@ namespace HR_Management.Controllers
             {
                 Console.WriteLine("ID is null or empty");
                 return NotFound();
+            }
+
+            var maNhanVien = HttpContext.Session.GetString("MaNhanVien");
+            if (string.IsNullOrEmpty(maNhanVien))
+            {
+                return RedirectToAction("Login", "Auth");
             }
 
             var chamCong = await _context.Chamcongs.FirstOrDefaultAsync(m => m.MaChamCong == maChamCong);
@@ -238,8 +295,15 @@ namespace HR_Management.Controllers
         }
 
         // Delete chấm công
+        [CustomAuth(maChucVu: new string[] { "CV001" }, maPhongBan: new string[] { "PB001" })]
         public async Task<IActionResult> DeleteChamCong(string maChamCong)
         {
+            var maNhanVien = HttpContext.Session.GetString("MaNhanVien");
+            if (string.IsNullOrEmpty(maNhanVien))
+            {
+                return RedirectToAction("Login", "Auth");
+            }
+
             if (maChamCong == null)
             {
                 return NotFound();

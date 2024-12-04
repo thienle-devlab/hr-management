@@ -1,0 +1,249 @@
+﻿body {
+    font-family: Arial, sans-serif;
+    background-color: #f8f9fa;
+    margin: 0;
+    padding: 0;
+    height: 100vh;
+}
+/* Sidebar */
+.sidebar {
+    width: 250px;
+    transition: width 0.3s ease;
+    background-color: #f8f9fa;
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 1000;
+    border-right: 1px solid #ddd;
+}
+/* style.css */
+#sidebar {
+    width: 250px;
+    transition: width 0.3s;
+}
+
+#sidebar {
+    height: 100vh;
+    overflow-y: auto;
+}
+
+
+    #sidebar.collapsed .collapse {
+        display: none !important;
+    }
+
+    #sidebar.collapsed {
+        width: 80px; /* Thay đổi chiều rộng khi sidebar bị ẩn */
+    }
+
+.sidebar-header .menu-text {
+    display: inline-block;
+}
+
+#sidebar.collapsed .menu-text {
+    display: none;
+}
+
+.nav-item .nav-link {
+    display: flex;
+    align-items: center;
+}
+
+    .nav-item .nav-link i {
+        margin-right: 10px;
+    }
+
+.nav-item .collapse {
+    display: none;
+}
+
+    .nav-item .collapse.show {
+        display: block;
+    }
+
+.sidebar.collapsed {
+    width: 80px;
+}
+
+.sidebar .nav-link {
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    transition: all 0.3s ease;
+}
+
+    .sidebar .nav-link i {
+        font-size: 18px;
+    }
+
+    .sidebar .nav-link .menu-text {
+        margin-left: 10px;
+    }
+
+.sidebar.collapsed .menu-text {
+    display: none;
+}
+
+.sidebar.collapsed .sidebar-header h4 {
+    display: none;
+}
+
+.flex-grow-1 {
+    margin-left: 250px;
+    transition: margin-left 0.3s ease;
+}
+
+.sidebar.collapsed + .flex-grow-1 {
+    margin-left: 80px;
+}
+/* style.css */
+
+/* Căn chỉnh các phần tử trong navbar */
+.navbar-nav {
+    display: flex;
+    align-items: center; /* Đảm bảo các mục trong navbar được căn giữa theo chiều dọc */
+}
+
+    /* Căn chỉnh các mục navbar về phía bên phải */
+    .navbar-nav .nav-item {
+        margin-right: 10px; /* Tạo khoảng cách giữa các mục */
+    }
+
+        /* Tăng kích thước của form tìm kiếm và avatar để tránh bị che */
+        .navbar-nav .nav-item form {
+            flex-grow: 1; /* Tạo không gian rộng cho input tìm kiếm */
+        }
+
+        /* Avatar người dùng */
+        .navbar-nav .nav-item img {
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            cursor: pointer;
+        }
+
+.navbar {
+    border-bottom: 1px solid #ddd; /* Line phân cách với content */
+}
+
+/* Line phân cách */
+.navbar-nav .separator {
+    border-left: 1px solid #ddd;
+    height: 30px; /* Chiều cao của line phân cách */
+    margin: 0 15px; /* Khoảng cách từ các phần tử bên cạnh */
+}
+
+/* Cải thiện dropdown menu */
+.navbar-nav .dropdown-menu {
+    min-width: 180px;
+    padding: 10px 0;
+}
+
+/* Mở dropdown về phía bên trái */
+.navbar-nav .dropdown-menu-end {
+    right: 0; /* Đảm bảo dropdown mở về bên trái */
+}
+
+/* Hover effect cho các item trong dropdown */
+.navbar-nav .dropdown-item:hover {
+    background-color: #f1f1f1;
+    color: #007bff;
+}
+
+/* Điều chỉnh chiều rộng của các item trong navbar */
+.navbar-nav .nav-item {
+    padding-right: 10px; /* Giảm khoảng cách để các phần tử không bị lệch */
+}
+
+/* Đảm bảo navbar và các phần tử không bị đẩy vào khi thu nhỏ màn hình */
+@media (max-width: 991px) {
+    .navbar-nav .nav-item {
+        padding-right: 0;
+    }
+
+    .navbar-nav {
+        display: block;
+        width: 100%;
+    }
+}
+
+
+
+#btnThem, #btnCapNhat, #btnClean {
+    width: 120px;
+    margin: 5px;
+}
+
+#btnThem {
+    background-color: #28a745;
+}
+
+#btnCapNhat {
+    background-color: #007bff;
+}
+
+#btnClean {
+    background-color: #dc3545;
+}
+
+    #btnThem:hover, #btnCapNhat:hover, #btnClean:hover {
+        opacity: 0.9;
+    }
+
+.content-wrapper {
+    padding: 20px;
+    background-color: #f9f9f9;
+}
+
+.content-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.content-table table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: white;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.content-table th, .content-table td {
+    padding: 10px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+
+.content-table th {
+    background-color: #007bff;
+    color: white;
+}
+/* Modal Styling */
+.modal {
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 1000;
+    background-color: white;
+    width: 50%;
+    padding: 20px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    border-radius: 10px;
+}
+
+.modal-content {
+    position: relative;
+}
+
+.close-btn {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    cursor: pointer;
+    font-size: 20px;
+    color: #333;
+}

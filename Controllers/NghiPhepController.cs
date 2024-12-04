@@ -1,4 +1,5 @@
-﻿using HR_Management.Models;
+﻿using HR_Management.Class;
+using HR_Management.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -18,8 +19,51 @@ namespace HR_Management.Controllers
         // Hiển thị danh sách nhân viên nghỉ phép
         public async Task<IActionResult> ListNghiPhep()
         {
-            var nghiPhep = await _context.Nghipheps.ToListAsync();
-            return View(nghiPhep);
+            var maNhanVien = HttpContext.Session.GetString("MaNhanVien");
+            if (string.IsNullOrEmpty(maNhanVien))
+            {
+                return RedirectToAction("Login", "Auth");
+            }
+
+            // Lấy thông tin nhân viên từ DB để kiểm tra quyền
+            var nhanVien = await _context.Nhanviens
+                .Include(nv => nv.MaChucVuNavigation)
+                .ThenInclude(cv => cv.MaPhongBanNavigation)
+                .Where(nv => nv.MaNhanVien == maNhanVien)
+                .Select(nv => new
+                {
+                    nv.MaChucVu,
+                    nv.MaChucVuNavigation.MaPhongBan
+                })
+                .FirstOrDefaultAsync();
+
+            if (nhanVien == null)
+            {
+                return RedirectToAction("Auth", "Login");
+            }
+
+            bool isAdmin = nhanVien.MaChucVu == "CV001" && nhanVien.MaPhongBan == "PB001";
+            string userPhongBan = nhanVien.MaPhongBan;
+
+            // Kiểm tra quyền admin: Nếu là admin (CV001, PB001) thì cho phép xem tất cả tài khoản
+            if (isAdmin)
+            {
+                var allNP = await _context.Nghipheps.ToListAsync();
+                ViewBag.IsAdmin = true;
+                return View(allNP);
+            }
+
+            // Nếu không phải admin, chỉ cho phép xem tài khoản thuộc cùng phòng ban
+            var npInSamePhongBan = await _context.Nghipheps
+                .Include(np => np.MaNhanVienNavigation)
+                .Where(np => np.MaNhanVienNavigation.MaChucVuNavigation.MaPhongBan == userPhongBan)
+                .ToListAsync();
+
+            ViewBag.IsAdmin = false;
+            return View(npInSamePhongBan);
+
+            //var nghiPhep = await _context.Nghipheps.ToListAsync();
+            //return View(nghiPhep);
         }
 
         // Thêm nghỉ phép
@@ -74,8 +118,15 @@ namespace HR_Management.Controllers
         }
 
         // Sửa nghỉ phép
+        [CustomAuth(maChucVu: new string[] { "CV001" }, maPhongBan: new string[] { "PB001" })]
         public async Task<IActionResult> EditNghiPhep(string maNghiPhep)
         {
+            var maNhanVien = HttpContext.Session.GetString("MaNhanVien");
+            if (string.IsNullOrEmpty(maNhanVien))
+            {
+                return RedirectToAction("Login", "Auth");
+            }
+
             if (string.IsNullOrEmpty(maNghiPhep))
             {
                 return NotFound();
@@ -192,10 +243,17 @@ namespace HR_Management.Controllers
         }
 
         // Xóa nghỉ phép
+        [CustomAuth(maChucVu: new string[] { "CV001" }, maPhongBan: new string[] { "PB001" })]
         [HttpGet]
         public async Task<IActionResult> DeleteNghiPhep(string maNghiPhep)
         {
             Console.WriteLine("Starting DeleteNghiPhep method...");
+
+            var maNhanVien = HttpContext.Session.GetString("MaNhanVien");
+            if (string.IsNullOrEmpty(maNhanVien))
+            {
+                return RedirectToAction("Login", "Auth");
+            }
 
             if (string.IsNullOrEmpty(maNghiPhep))
             {

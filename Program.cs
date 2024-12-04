@@ -56,7 +56,7 @@ if (!app.Environment.IsDevelopment())
 
 // Sử dụng Session
 app.UseSession();
-
+app.UseMiddleware<SessionMiddleware>();
 
 
 app.UseHttpsRedirection();
@@ -68,7 +68,7 @@ app.UseAuthorization();
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}");
+    pattern: "{controller=Auth}/{action=Login}/{id?}");
 
 //--
 //app.MapControllers(); 

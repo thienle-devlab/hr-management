@@ -23,7 +23,10 @@
                     <th scope="col">Ngày Báo Cáo</th>
                     <th scope="col">Loại Báo Cáo</th>
                     <th scope="col">Trạng Thái</th>
-                    <th scope="col">Hành Động</th>
+                    @if (ViewBag.IsAdmin)
+                    {
+                        <th scope="col">Hành Động</th>
+                    }
                 </tr>
             </thead>
             <tbody>
@@ -37,12 +40,15 @@
                         <td>@Html.DisplayFor(modelItem => item.NgayTaoBaoCao)</td>
                         <td>@Html.DisplayFor(modelItem => item.LoaiBaoCao)</td>
                         <td>@Html.DisplayFor(modelItem => item.TrangThaiBaoCao)</td>
-                        <td>
-                            <div class="btn-group" role="group">
-                                <a href="@Url.Action("EditBaoCao", new { maBaoCao = item.MaBaoCao })" class="btn btn-warning btn-sm">Sửa</a>
-                                <a href="@Url.Action("DeleteBaoCao", new { maBaoCao = item.MaBaoCao })" class="btn btn-danger btn-sm">Xóa</a>
-                            </div>
-                        </td>
+                        @if (ViewBag.IsAdmin)
+                        {
+                            <td>
+                                <div class="btn-group" role="group">
+                                    <a href="@Url.Action("EditBaoCao", new { maBaoCao = item.MaBaoCao })" class="btn btn-warning btn-sm">Sửa</a>
+                                    <a href="@Url.Action("DeleteBaoCao", new { maBaoCao = item.MaBaoCao })" class="btn btn-danger btn-sm">Xóa</a>
+                                </div>
+                            </td>
+                        }
                     </tr>
                 }
             </tbody>

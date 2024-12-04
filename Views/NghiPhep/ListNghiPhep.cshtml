@@ -22,7 +22,10 @@
                     <th scope="col">Ngày Kết Thúc</th>
                     <th scope="col">Lý Do</th>
                     <th scope="col">Trạng Thái</th>
-                    <th scope="col">Hành Động</th>
+                    @if (ViewBag.IsAdmin)
+                    {
+                        <th scope="col">Hành Động</th>
+                    }
                 </tr>
             </thead>
             <tbody>
@@ -37,8 +40,11 @@
                         <td>@Html.DisplayFor(modelItem => item.TrangThai)</td>
                         <td>
                             <div class="btn-group" role="group">
-                                <a href="@Url.Action("EditNghiPhep", new { maNghiPhep = item.MaNghiPhep })" class="btn btn-warning btn-sm">Sửa</a>
-                                <a href="@Url.Action("DeleteNghiPhep", new { maNghiPhep = item.MaNghiPhep })" class="btn btn-danger btn-sm">Xóa</a>
+                                @if (ViewBag.IsAdmin)
+                                {
+                                    <a href="@Url.Action("EditNghiPhep", new { maNghiPhep = item.MaNghiPhep })" class="btn btn-warning btn-sm">Sửa</a>
+                                    <a href="@Url.Action("DeleteNghiPhep", new { maNghiPhep = item.MaNghiPhep })" class="btn btn-danger btn-sm">Xóa</a>   
+                                }                                
                             </div>
                         </td>
                     </tr>

@@ -1,4 +1,5 @@
-﻿using HR_Management.Models;
+﻿using HR_Management.Class;
+using HR_Management.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -17,16 +18,67 @@ namespace HR_Management.Controllers
         // Hiển thị danh sách phạt
         public async Task<IActionResult> ListPhat()
         {
-            var phat = await _context.Phats.ToListAsync();
-            return View(phat);
+            var maNhanVien = HttpContext.Session.GetString("MaNhanVien");
+            if (string.IsNullOrEmpty(maNhanVien))
+            {
+                return RedirectToAction("Login", "Auth");
+            }
+
+            // Lấy thông tin nhân viên từ DB để kiểm tra quyền
+            var nhanVien = await _context.Nhanviens
+                .Include(nv => nv.MaChucVuNavigation)
+                .ThenInclude(cv => cv.MaPhongBanNavigation)
+                .Where(nv => nv.MaNhanVien == maNhanVien)
+                .Select(nv => new
+                {
+                    nv.MaChucVu,
+                    nv.MaChucVuNavigation.MaPhongBan
+                })
+                .FirstOrDefaultAsync();
+
+            if (nhanVien == null)
+            {
+                return RedirectToAction("Auth", "Login");
+            }
+
+            bool isAdmin = nhanVien.MaChucVu == "CV001" && nhanVien.MaPhongBan == "PB001";
+            string userPhongBan = nhanVien.MaPhongBan;
+
+            // Kiểm tra quyền admin: Nếu là admin (CV001, PB001) thì cho phép xem tất cả tài khoản
+            if (isAdmin)
+            {
+                var allPhat = await _context.Phats.ToListAsync();
+                ViewBag.IsAdmin = true;
+                return View(allPhat);
+            }
+
+            // Nếu không phải admin, chỉ cho phép xem tài khoản thuộc cùng phòng ban
+            var phatInSamePhongBan = await _context.Phats
+                .Include(phat => phat.MaNhanVienNavigation)
+                .Where(phat => phat.MaNhanVienNavigation.MaChucVuNavigation.MaPhongBan == userPhongBan)
+                .ToListAsync();
+
+            ViewBag.IsAdmin = false;
+            return View(phatInSamePhongBan);
+
+
+            //var phat = await _context.Phats.ToListAsync();
+            //return View(phat);
         }
 
         // Hiển thị form thêm phạt
+        [CustomAuth(maChucVu: new string[] { "CV001" }, maPhongBan: new string[] { "PB001" })]
         [HttpGet]
         public IActionResult CreatePhat()
         {
+            var maNhanVien = HttpContext.Session.GetString("MaNhanVien");
+            if (string.IsNullOrEmpty(maNhanVien))
+            {
+                return RedirectToAction("Login", "Auth");
+
+            }
             // Truyền danh sách lương vào ViewBag
-            ViewBag.LuongList = new SelectList(_context.Luongs, "MaLuong", "MaLuong");
+            ViewBag.NhanVienList = new SelectList(_context.Nhanviens, "MaNhanVien", "TenNhanVien");
 
             // Trả về form thêm phạt
             return View();
@@ -35,27 +87,27 @@ namespace HR_Management.Controllers
         // Xử lý form thêm phạt
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> CreatePhat([Bind("MaPhat,MaLuong,NgayPhat,SoTienPhat,LyDoPhat")] Phat phat)
+        public async Task<IActionResult> CreatePhat([Bind("MaPhat,MaNhanVien,NgayPhat,SoTienPhat,LyDoPhat")] Phat phat)
         {
             // Kiểm tra model state hợp lệ
             if (ModelState.IsValid)
             {
                 try
                 {
-                    // Tắt validation cho MaLuongNavigation
-                    ModelState.Remove("MaLuongNavigation");
+                    // Tắt validation cho MaNhanVienNavigation
+                    ModelState.Remove("MaNhanVienNavigation");
 
                     // Kiểm tra xem mã lương có tồn tại không
-                    var luong = await _context.Luongs.FindAsync(phat.MaLuong);
-                    if (luong == null)
+                    var nhanVien = await _context.Nhanviens.FindAsync(phat.MaNhanVien);
+                    if (nhanVien == null)
                     {
-                        ModelState.AddModelError("MaLuong", "Mã lương không tồn tại.");
-                        ViewBag.LuongList = new SelectList(_context.Luongs, "MaLuong", "MaLuong", phat.MaLuong);
+                        ModelState.AddModelError("MaNhanVien", "Mã nhân không tồn tại.");
+                        ViewBag.NhanVienList = new SelectList(_context.Nhanviens, "MaNhanVien", "TenNhanVien", phat.MaNhanVien);
                         return View(phat);
                     }
 
-                    // Gán MaLuongNavigation cho phạt
-                    phat.MaLuongNavigation = luong;
+                    // Gán MaNhanVienNavigation cho phạt
+                    phat.MaNhanVienNavigation = nhanVien;
 
                     // Tạo mã phạt nếu không có
                     if (string.IsNullOrEmpty(phat.MaPhat))
@@ -80,14 +132,21 @@ namespace HR_Management.Controllers
             }
 
             // Nếu model không hợp lệ, trả lại form thêm phạt
-            ViewBag.LuongList = new SelectList(_context.Luongs, "MaLuong", "MaLuong", phat.MaLuong);
+            ViewBag.NhanVienList = new SelectList(_context.Nhanviens, "MaNhanVien", "TenNhanVien", phat.MaNhanVien);
             return View(phat);
         }
 
         // Hiển thị form sửa phạt
+        [CustomAuth(maChucVu: new string[] { "CV001" }, maPhongBan: new string[] { "PB001" })]
         [HttpGet]
         public async Task<IActionResult> EditPhat(string maPhat)
         {
+            var maNhanVien = HttpContext.Session.GetString("MaNhanVien");
+            if (string.IsNullOrEmpty(maNhanVien))
+            {
+                return RedirectToAction("Login", "Auth");
+            }
+
             if (string.IsNullOrEmpty(maPhat))
             {
                 return NotFound();
@@ -101,7 +160,7 @@ namespace HR_Management.Controllers
             }
 
             // Truyền danh sách lương vào ViewBag
-            ViewBag.LuongList = new SelectList(_context.Luongs, "MaLuong", "MaLuong", phat.MaLuong);
+            ViewBag.NhanVienList = new SelectList(_context.Nhanviens, "MaNhanVien", "TenNhanVien", phat.MaNhanVien);
 
             return View(phat); // Trả về view để người dùng có thể sửa phạt
         }
@@ -109,7 +168,7 @@ namespace HR_Management.Controllers
         // Xử lý form sửa phạt
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> EditPhat(string maPhat, [Bind("MaPhat,MaLuong,NgayPhat,SoTienPhat,LyDoPhat")] Phat phat)
+        public async Task<IActionResult> EditPhat(string maPhat, [Bind("MaPhat,MaNhanVien,NgayPhat,SoTienPhat,LyDoPhat")] Phat phat)
         {
             if (maPhat != phat.MaPhat)
             {
@@ -128,17 +187,17 @@ namespace HR_Management.Controllers
                         return NotFound();
                     }
 
-                    // Kiểm tra mã lương có tồn tại không
-                    var luong = await _context.Luongs.FindAsync(phat.MaLuong);
-                    if (luong == null)
+                    // Kiểm tra mã nv có tồn tại không
+                    var nhanVien = await _context.Nhanviens.FindAsync(phat.MaNhanVien);
+                    if (nhanVien == null)
                     {
-                        ModelState.AddModelError("MaLuong", "Mã lương không tồn tại.");
-                        ViewBag.LuongList = new SelectList(_context.Luongs, "MaLuong", "MaLuong", phat.MaLuong);
+                        ModelState.AddModelError("MaNhanVien", "Mã nhân viên không tồn tại.");
+                        ViewBag.NhanVienList = new SelectList(_context.Nhanviens, "MaNhanVien", "TenNhanVien", phat.MaNhanVien);
                         return View(phat);
                     }
 
                     // Cập nhật các trường từ phat sang existingPhat
-                    existingPhat.MaLuong = phat.MaLuong;
+                    existingPhat.MaNhanVien = phat.MaNhanVien;
                     existingPhat.NgayPhat = phat.NgayPhat;
                     existingPhat.SoTienPhat = phat.SoTienPhat;
                     existingPhat.LyDoPhat = phat.LyDoPhat;
@@ -160,7 +219,7 @@ namespace HR_Management.Controllers
             }
 
             // Nếu có lỗi, trả lại form sửa phạt
-            ViewBag.LuongList = new SelectList(_context.Luongs, "MaLuong", "MaLuong", phat.MaLuong);
+            ViewBag.NhanVienList = new SelectList(_context.Nhanviens, "MaNhanVien", "TenNhanVien", phat.MaNhanVien);
             return View(phat);
         }
 
@@ -171,15 +230,22 @@ namespace HR_Management.Controllers
         }
 
         // Xóa phạt (GET)
+        [CustomAuth(maChucVu: new string[] { "CV001" }, maPhongBan: new string[] { "PB001" })]
         public async Task<IActionResult> DeletePhat(string MaPhat)
         {
+            var maNhanVien = HttpContext.Session.GetString("MaNhanVien");
+            if (string.IsNullOrEmpty(maNhanVien))
+            {
+                return RedirectToAction("Login", "Auth");
+            }
+
             if (string.IsNullOrEmpty(MaPhat))
             {
                 return NotFound();
             }
 
             var phat = await _context.Phats
-                .Include(p => p.MaLuongNavigation)
+                .Include(p => p.MaNhanVienNavigation)
                 .FirstOrDefaultAsync(p => p.MaPhat == MaPhat);
 
             if (phat == null)

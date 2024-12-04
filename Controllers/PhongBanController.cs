@@ -14,15 +14,73 @@ namespace HR_Management.Controllers
         }
 
         // Hiển thị danh sách phòng ban
+        //public async Task<IActionResult> ListPhongBan()
+        //{
+        //    var phongBans = await _context.Phongbans.ToListAsync();
+        //    return View(phongBans);
+        //}
+
+        // Hiển thị danh sách phòng ban
+        [HttpGet]
         public async Task<IActionResult> ListPhongBan()
         {
+            var maNhanVien = HttpContext.Session.GetString("MaNhanVien");
+            if (string.IsNullOrEmpty(maNhanVien))
+            {
+                return RedirectToAction("Login", "Auth");
+            }
+
+            // Lấy thông tin nhân viên từ DB để kiểm tra quyền
+            var nhanVien = await _context.Nhanviens
+                .Include(nv => nv.MaChucVuNavigation)
+                .ThenInclude(cv => cv.MaPhongBanNavigation)
+                .Where(nv => nv.MaNhanVien == maNhanVien)
+                .Select(nv => new
+                {
+                    nv.MaChucVu,
+                    nv.MaChucVuNavigation.MaPhongBan
+                })
+                .FirstOrDefaultAsync();
+
+            if (nhanVien == null)
+            {
+                return RedirectToAction("Auth", "Login");
+            }
+
+            bool isAdmin = nhanVien.MaChucVu == "CV001" && nhanVien.MaPhongBan == "PB001";
+            string userPhongBan = nhanVien.MaPhongBan;
+
+            ViewBag.IsAdmin = isAdmin;
+
             var phongBans = await _context.Phongbans.ToListAsync();
             return View(phongBans);
         }
 
+
         // Tạo phòng ban mới (GET)
-        public IActionResult CreatePhongBan()
+        public async Task<IActionResult> CreatePhongBan()
         {
+            var maNhanVien = HttpContext.Session.GetString("MaNhanVien");
+            if (string.IsNullOrEmpty(maNhanVien))
+            {
+                return RedirectToAction("Login", "Auth");
+            }
+
+            // Lấy thông tin nhân viên từ DB để kiểm tra quyền
+            var nhanVien = await _context.Nhanviens
+                .Include(nv => nv.MaChucVuNavigation)
+                .ThenInclude(cv => cv.MaPhongBanNavigation)
+                .Where(nv => nv.MaNhanVien == maNhanVien)
+                .FirstOrDefaultAsync();
+
+            if (nhanVien == null || (nhanVien.MaChucVu != "CV001" && nhanVien.MaChucVuNavigation.MaPhongBan != "PB001"))
+            {
+                return RedirectToAction("Login", "Auth");
+            }
+
+            bool isAdmin = nhanVien.MaChucVu == "CV001" && nhanVien.MaChucVuNavigation.MaPhongBan == "PB001";
+            ViewBag.IsAdmin = isAdmin;
+
             return View(new Phongban());
         }
 
@@ -53,6 +111,27 @@ namespace HR_Management.Controllers
             {
                 return NotFound();
             }
+
+            var maNhanVien = HttpContext.Session.GetString("MaNhanVien");
+            if (string.IsNullOrEmpty(maNhanVien))
+            {
+                return RedirectToAction("Login", "Auth");
+            }
+
+            // Lấy thông tin nhân viên từ DB để kiểm tra quyền
+            var nhanVien = await _context.Nhanviens
+                .Include(nv => nv.MaChucVuNavigation)
+                .ThenInclude(cv => cv.MaPhongBanNavigation)
+                .Where(nv => nv.MaNhanVien == maNhanVien)
+                .FirstOrDefaultAsync();
+
+            if (nhanVien == null || (nhanVien.MaChucVu != "CV001" && nhanVien.MaChucVuNavigation.MaPhongBan != "PB001"))
+            {
+                return RedirectToAction("Login", "Auth");
+            }
+
+            bool isAdmin = nhanVien.MaChucVu == "CV001" && nhanVien.MaChucVuNavigation.MaPhongBan == "PB001";
+            ViewBag.IsAdmin = isAdmin;
 
             return View(phongBan);
         }
@@ -108,6 +187,27 @@ namespace HR_Management.Controllers
             {
                 return NotFound();
             }
+
+            var maNhanVien = HttpContext.Session.GetString("MaNhanVien");
+            if (string.IsNullOrEmpty(maNhanVien))
+            {
+                return RedirectToAction("Login", "Auth");
+            }
+
+            // Lấy thông tin nhân viên từ DB để kiểm tra quyền
+            var nhanVien = await _context.Nhanviens
+                .Include(nv => nv.MaChucVuNavigation)
+                .ThenInclude(cv => cv.MaPhongBanNavigation)
+                .Where(nv => nv.MaNhanVien == maNhanVien)
+                .FirstOrDefaultAsync();
+
+            if (nhanVien == null || (nhanVien.MaChucVu != "CV001" && nhanVien.MaChucVuNavigation.MaPhongBan != "PB001"))
+            {
+                return RedirectToAction("Login", "Auth");
+            }
+
+            bool isAdmin = nhanVien.MaChucVu == "CV001" && nhanVien.MaChucVuNavigation.MaPhongBan == "PB001";
+            ViewBag.IsAdmin = isAdmin;
 
             return View(phongBan);
         }

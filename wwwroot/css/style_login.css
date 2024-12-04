@@ -1,0 +1,117 @@
+﻿body {
+    background: linear-gradient(120deg, #2980b9, #8e44ad);
+    min-height: 100vh;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.container {
+    background: rgba(255, 255, 255, 0.95);
+    padding: 1.5rem;
+    border-radius: 8px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    max-width: 320px; /* Giảm độ rộng tối đa */
+    width: 90%;
+}
+
+/* Header styles */
+h2 {
+    color: #2c3e50;
+    text-align: center;
+    margin-bottom: 20px; /* Giảm margin */
+    font-size: 1.5rem; /* Giảm kích thước font */
+    font-weight: 600;
+}
+
+/* Form styles */
+.form-group {
+    margin-bottom: 15px; /* Giảm khoảng cách giữa các form-group */
+}
+
+    .form-group label {
+        color: #2c3e50;
+        font-weight: 500;
+        margin-bottom: 4px; /* Giảm margin dưới label */
+        display: block;
+        font-size: 0.9rem; /* Giảm kích thước font */
+    }
+
+.form-control {
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    padding: 8px 12px; /* Giảm padding */
+    transition: all 0.3s ease;
+    font-size: 0.9rem; /* Giảm kích thước font */
+}
+
+    .form-control:focus {
+        border-color: #2980b9;
+        box-shadow: 0 0 5px rgba(41, 128, 185, 0.2);
+    }
+
+/* Button styles */
+.btn-primary {
+    background-color: #2980b9;
+    border: none;
+    padding: 8px 15px; /* Giảm padding */
+    border-radius: 4px;
+    font-weight: 500;
+    font-size: 0.9rem; /* Giảm kích thước font */
+    width: 100%;
+}
+
+    .btn-primary:hover {
+        background-color: #3498db;
+        transform: translateY(-1px);
+        box-shadow: 0 3px 8px rgba(41, 128, 185, 0.3);
+    }
+
+/* Error message styles */
+.alert-danger {
+    font-size: 0.8rem;
+    padding: 8px;
+    border-radius: 4px;
+    margin-top: 15px;
+}
+
+/* Loading animation */
+.loading {
+    display: none;
+    text-align: center;
+    margin-top: 10px;
+}
+
+.loading-spinner {
+    width: 20px;
+    height: 20px;
+    border: 2px solid #f3f3f3;
+    border-top: 2px solid #2980b9;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+/* Responsive adjustments */
+@media (max-width: 380px) {
+    .container {
+        padding: 1rem;
+        width: 95%;
+    }
+
+    h2 {
+        font-size: 1.3rem;
+        margin-bottom: 15px;
+    }
+}

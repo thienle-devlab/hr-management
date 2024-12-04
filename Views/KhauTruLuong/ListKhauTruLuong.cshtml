@@ -8,20 +8,26 @@
 <div class="container mt-4">
     <h2 class="mb-4">@ViewData["Title"]</h2>
 
-    <p>
-        <a asp-action="CreateKhauTruLuong" class="btn btn-primary mb-3">Tạo Mới Khấu Trừ Lương</a>
-    </p>
+    @if (ViewBag.IsAdmin)
+    {
+        <p>
+            <a asp-action="CreateKhauTruLuong" class="btn btn-primary mb-3">Tạo Mới Khấu Trừ Lương</a>
+        </p>
+    }
 
     <div class="table-responsive">
         <table class="table table-striped table-bordered">
             <thead class="thead-light">
                 <tr>
                     <th scope="col">Mã Khấu Trừ Lương</th>
-                    <th scope="col">Mã Lương</th>
+                    <th scope="col">Mã Nhân Viên</th>
                     <th scope="col">Mã Khấu Trừ</th>
                     <th scope="col">Số Tiền</th>
                     <th scope="col">Ngày Áp Dụng</th>
-                    <th scope="col">Hành Động</th>
+                    @if (ViewBag.IsAdmin)
+                    {
+                        <th scope="col">Hành Động</th>
+                    }
                 </tr>
             </thead>
             <tbody>
@@ -29,16 +35,19 @@
                 {
                     <tr>
                         <td>@Html.DisplayFor(modelItem => item.MaKhauTruLuong)</td>
-                        <td>@Html.DisplayFor(modelItem => item.MaLuong)</td>
+                        <td>@Html.DisplayFor(modelItem => item.MaNhanVien)</td>
                         <td>@Html.DisplayFor(modelItem => item.MaKhauTru)</td>
                         <td>@Html.DisplayFor(modelItem => item.KhoanKhauTru)</td>
                         <td>@Html.DisplayFor(modelItem => item.NgayApDung)</td>
-                        <td>
-                            <div class="btn-group" role="group">
-                                <a href="@Url.Action("EditKhauTruLuong", new { maKhauTruLuong = item.MaKhauTruLuong })" class="btn btn-warning btn-sm">Sửa</a>
-                                <a href="@Url.Action("DeleteKhauTruLuong", new { maKhauTruLuong = item.MaKhauTruLuong })" class="btn btn-danger btn-sm">Xóa</a>
-                            </div>
-                        </td>
+                        @if (ViewBag.IsAdmin)
+                        {
+                            <td>
+                                <div class="btn-group" role="group">
+                                    <a href="@Url.Action("EditKhauTruLuong", new { maKhauTruLuong = item.MaKhauTruLuong })" class="btn btn-warning btn-sm">Sửa</a>
+                                    <a href="@Url.Action("DeleteKhauTruLuong", new { maKhauTruLuong = item.MaKhauTruLuong })" class="btn btn-danger btn-sm">Xóa</a>
+                                </div>
+                            </td>
+                        }
                     </tr>
                 }
             </tbody>
