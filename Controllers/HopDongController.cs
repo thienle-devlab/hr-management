@@ -1,4 +1,5 @@
-﻿using HR_Management.Models;
+﻿using HR_Management.Class;
+using HR_Management.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -15,15 +16,63 @@ namespace HR_Management.Controllers
         }
 
         // List Hợp Đồng
-        public IActionResult ListHD()
+        public async Task<IActionResult> ListHD()
         {
-            var hopdongs = _context.HopDongs.ToList();
-            return View(hopdongs);
+            var maNhanVien = HttpContext.Session.GetString("MaNhanVien");
+            if (string.IsNullOrEmpty(maNhanVien))
+            {
+                return RedirectToAction("Login", "Auth");
+            }
+
+            // Lấy thông tin nhân viên từ DB để kiểm tra quyền
+            var nhanVien = await _context.Nhanviens
+                .Include(nv => nv.MaChucVuNavigation)
+                .ThenInclude(cv => cv.MaPhongBanNavigation)
+                .Where(nv => nv.MaNhanVien == maNhanVien)
+                .Select(nv => new
+                {
+                    nv.MaChucVu,
+                    nv.MaChucVuNavigation.MaPhongBan
+                })
+                .FirstOrDefaultAsync();
+
+            if (nhanVien == null)
+            {
+                return RedirectToAction("Auth", "Login");
+            }
+
+            bool isAdmin = nhanVien.MaChucVu == "CV001" && nhanVien.MaPhongBan == "PB001";
+            string userPhongBan = nhanVien.MaPhongBan;
+
+            // Kiểm tra quyền admin: Nếu là admin (CV001, PB001) thì cho phép xem tất cả tài khoản
+            if (isAdmin)
+            {
+                var allHD = await _context.HopDongs.ToListAsync();
+                ViewBag.IsAdmin = true;
+                return View(allHD);
+            }
+
+            // Nếu không phải admin, chỉ cho phép xem tài khoản thuộc cùng phòng ban
+            var hdInSamePhongBan = await _context.HopDongs
+                .Include(hd => hd.MaNhanVienNavigation)
+                .Where(hd => hd.MaNhanVienNavigation.MaChucVuNavigation.MaPhongBan == userPhongBan)
+                .ToListAsync();
+
+            ViewBag.IsAdmin = false;
+            return View(hdInSamePhongBan);
+            //var hopdongs = _context.HopDongs.ToList();
+            //return View(hopdongs);
         }
 
         // Hiển thị form tạo hợp đồng
+    [CustomAuth(maChucVu: new string[] { "CV001" }, maPhongBan: new string[] { "PB001" })]
     public IActionResult CreateHD()
     {
+        var maNhanVien = HttpContext.Session.GetString("MaNhanVien");
+        if (string.IsNullOrEmpty(maNhanVien))
+        {
+            return RedirectToAction("Login", "Auth");
+        }
         ViewBag.NhanVienList = new SelectList(_context.Nhanviens, "MaNhanVien", "TenNhanVien");
         return View();
     }
@@ -90,10 +139,17 @@ namespace HR_Management.Controllers
 
         //Sửa Hợp đồng
         // Hiển thị form sửa hợp đồng
+        [CustomAuth(maChucVu: new string[] { "CV001" }, maPhongBan: new string[] { "PB001" })]
         [HttpGet]
         public async Task<IActionResult> EditHD(string maHopDong)
         {
             Console.WriteLine("Starting EditHD method...");
+
+            var maNhanVien = HttpContext.Session.GetString("MaNhanVien");
+            if (string.IsNullOrEmpty(maNhanVien))
+            {
+                return RedirectToAction("Login", "Auth");
+            }
 
             if (string.IsNullOrEmpty(maHopDong))
             {
@@ -225,8 +281,15 @@ namespace HR_Management.Controllers
 
         // Delete hợp đồng
         // GET: HopDong/DeleteHD/5
+        [CustomAuth(maChucVu: new string[] { "CV001" }, maPhongBan: new string[] { "PB001" })]
         public async Task<IActionResult> DeleteHD(string maHopDong)
         {
+            var maNhanVien = HttpContext.Session.GetString("MaNhanVien");
+            if (string.IsNullOrEmpty(maNhanVien))
+            {
+                return RedirectToAction("Login", "Auth");
+            }
+
             if (maHopDong == null)
             {
                 return NotFound();
