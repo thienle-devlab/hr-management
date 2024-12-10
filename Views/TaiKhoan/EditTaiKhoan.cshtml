@@ -5,14 +5,14 @@
 }
 
 <div class="container mt-4">
-    <h2 class="text-primary">Chỉnh Sửa Tài Khoản</h2>
+    <h2 class="text">Chỉnh Sửa Tài Khoản</h2>
 
     <form asp-action="EditTaiKhoan">
         <input type="hidden" asp-for="Username" />
         <input type="hidden" name="currentPasswordHash" value="@Model.Password" />
 
         <div class="card">
-            <div class="card-header bg-primary text-white">
+            <div class="card-header bg-warning text-white">
                 <h4 class="card-title">Thông Tin Tài Khoản</h4>
             </div>
             <div class="card-body">
